@@ -419,6 +419,11 @@ td { font-size: 14px; }
   touch-action: none !important;
 }
 
+
+.canvas-wrap canvas {
+  image-rendering: auto;
+  will-change: transform;
+}
 </style>
 </head>
 <body>
@@ -1466,7 +1471,8 @@ td { font-size: 14px; }
           const point = this.pointFromEvent(event);
           const last = this.currentStroke[this.currentStroke.length - 1];
 
-          if (distance(point, last) >= 0.8) {
+          // Ambil titik lebih rapat agar Apple Pencil tidak patah-patah
+          if (distance(point, last) >= 0.25) {
             this.currentStroke.push(point);
           }
         });
