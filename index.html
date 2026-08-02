@@ -2,20 +2,417 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#111827" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>KanjiWrite SRS</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-  <link rel="stylesheet" href="styles.css" />
+  
+<style>
+:root {
+  --bg: #f4f6fb;
+  --panel: #ffffff;
+  --text: #172033;
+  --muted: #6f7788;
+  --line: #e7eaf1;
+  --navy: #101827;
+  --primary: #5b5ce2;
+  --primary-dark: #494bc6;
+  --purple-soft: #eeeeff;
+  --green: #1da66f;
+  --green-soft: #e8f8f1;
+  --amber: #d89522;
+  --amber-soft: #fff6df;
+  --red: #dc4c64;
+  --red-soft: #fff0f3;
+  --shadow: 0 18px 50px rgba(28, 39, 65, .08);
+  --radius: 22px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+body.menu-open { overflow: hidden; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, label:focus-within { outline: 3px solid rgba(91, 92, 226, .25); outline-offset: 2px; }
+
+.app-shell { min-height: 100vh; display: grid; grid-template-columns: 260px minmax(0, 1fr); }
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: var(--navy);
+  color: white;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 40;
+}
+.sidebar-backdrop { display: none; }
+.brand { display: flex; gap: 13px; align-items: center; padding: 0 8px 28px; }
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #7c77ff, #4c4fd4);
+  font-size: 24px;
+  box-shadow: 0 12px 30px rgba(94, 91, 226, .35);
+}
+.brand strong { display: block; font-size: 18px; }
+.brand span { display: block; color: #aab3c7; font-size: 11px; margin-top: 3px; }
+.nav { display: grid; gap: 8px; }
+.nav-item {
+  width: 100%;
+  border: 0;
+  border-radius: 13px;
+  background: transparent;
+  color: #aeb7c8;
+  padding: 13px 15px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: .2s ease;
+}
+.nav-item:hover, .nav-item.active { color: white; background: rgba(255,255,255,.09); }
+.sidebar-foot { margin-top: auto; }
+.streak-card {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.streak-icon { font-size: 24px; }
+.streak-card strong, .streak-card small { display: block; }
+.streak-card small { color: #aab3c7; margin-top: 2px; }
+
+.main { min-width: 0; }
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 28px 36px 20px;
+}
+.topbar-title { min-width: 180px; }
+.topbar h1 { margin: 0; font-size: 25px; }
+.topbar p { margin: 5px 0 0; color: var(--muted); }
+.top-actions { margin-left: auto; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; }
+.menu-btn { display: none; border: 0; background: white; border-radius: 11px; padding: 10px 12px; box-shadow: 0 6px 20px rgba(28,39,65,.08); }
+.upload-btn, .primary-btn, .secondary-btn, .danger-btn, .icon-btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 11px 16px;
+  font-weight: 700;
+  transition: .2s ease;
+  min-height: 44px;
+}
+.upload-btn { display: inline-flex; align-items: center; justify-content: center; background: white; color: var(--text); border: 1px solid var(--line); cursor: pointer; }
+.primary-btn { background: var(--primary); color: white; box-shadow: 0 9px 24px rgba(91,92,226,.22); }
+.primary-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.secondary-btn { background: white; color: var(--text); border: 1px solid var(--line); }
+.secondary-btn:hover { background: #f8f9fd; }
+.danger-btn { background: var(--red-soft); color: var(--red); }
+.danger-btn:hover { background: #ffe4ea; }
+.icon-btn { min-height: 38px; padding: 8px 11px; font-size: 13px; }
+.large { padding: 13px 20px; }
+
+.view { display: none; padding: 0 36px 36px; }
+.view.active { display: block; }
+.hero-card {
+  min-height: 270px;
+  border-radius: 28px;
+  padding: 38px 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  overflow: hidden;
+  background: radial-gradient(circle at 78% 32%, rgba(255,255,255,.25), transparent 25%), linear-gradient(135deg, #6163e7, #854dc9);
+  color: white;
+  box-shadow: var(--shadow);
+}
+.hero-card .eyebrow { font-weight: 800; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
+.hero-card h2 { font-size: clamp(32px, 5vw, 53px); max-width: 700px; line-height: 1.02; margin: 18px 0 12px; }
+.hero-card p { color: rgba(255,255,255,.84); max-width: 680px; font-size: 16px; margin-bottom: 25px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-card .primary-btn { background: white; color: #5557d6; box-shadow: none; }
+.hero-secondary { background: rgba(255,255,255,.13); color: white; border-color: rgba(255,255,255,.22); }
+.hero-secondary:hover { background: rgba(255,255,255,.2); }
+.hero-kanji {
+  width: 180px;
+  height: 180px;
+  flex: 0 0 180px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 36px;
+  display: grid;
+  place-items: center;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+  font-size: 116px;
+  font-weight: 700;
+  transform: rotate(6deg);
+  background: rgba(255,255,255,.08);
+}
+.stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 20px 0; }
+.stat-card, .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.stat-card { padding: 22px; min-width: 0; }
+.stat-card span, .stat-card small { display: block; color: var(--muted); }
+.stat-card strong { display: block; font-size: 34px; margin: 7px 0 2px; }
+.dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 18px; }
+.panel { padding: 24px; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+.panel-head.wrap { flex-wrap: wrap; }
+.panel h3 { margin: 0; font-size: 18px; }
+.panel p { color: var(--muted); margin: 5px 0 0; }
+.level-bars { display: grid; gap: 11px; }
+.level-row { display: grid; grid-template-columns: 58px minmax(0, 1fr) 34px; gap: 10px; align-items: center; font-size: 13px; }
+.level-track { height: 9px; border-radius: 99px; background: #eef0f6; overflow: hidden; }
+.level-track i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #5b5ce2, #9c6ad8); }
+.activity-list { display: grid; gap: 12px; }
+.activity-item { display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 14px; background: #fafbfe; }
+.activity-badge { width: 38px; height: 38px; flex: 0 0 38px; display: grid; place-items: center; border-radius: 11px; font-family: serif; font-size: 20px; background: var(--purple-soft); color: var(--primary); }
+.activity-item strong, .activity-item small { display: block; }
+.activity-item small { color: var(--muted); margin-top: 2px; }
+
+.study-layout { display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 18px; align-items: start; }
+.study-card { background: white; border: 1px solid var(--line); border-radius: 28px; box-shadow: var(--shadow); padding: 28px; min-height: 700px; }
+.study-topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.study-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill, .level-pill, .mode-pill, .status-badge { padding: 8px 12px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+.pill { background: #f0f2f7; color: var(--muted); }
+.level-pill { background: var(--purple-soft); color: var(--primary); }
+.mode-pill { background: var(--amber-soft); color: #9a6515; }
+.mode-pill.srs { background: var(--green-soft); color: #14734e; }
+.prompt-area { text-align: center; padding: 32px 12px 22px; }
+.instruction { color: var(--muted); font-size: 13px; }
+.sentence { font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; font-size: clamp(25px, 4vw, 39px); font-weight: 700; line-height: 1.7; letter-spacing: .02em; overflow-wrap: anywhere; }
+.sentence .target-focus { color: var(--primary); background: var(--purple-soft); padding: 1px 8px 4px; border-radius: 10px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.sentence .training-target { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.1; color: #4f51ce; background: var(--purple-soft); padding: 8px 13px; border-radius: 13px; vertical-align: middle; }
+.sentence .training-target small { margin-top: 5px; font-size: .38em; letter-spacing: .08em; color: #7a70bf; font-weight: 800; }
+.meaning { margin-top: 12px; color: var(--muted); font-size: 16px; overflow-wrap: anywhere; }
+.meaning .target-focus { color: #6f49bf; font-weight: 800; background: #f4edff; padding: 2px 6px; border-radius: 6px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.target-gloss { display: inline-flex; align-items: center; gap: 7px; margin-left: 10px; color: #6f49bf; font-weight: 800; background: #f4edff; padding: 5px 9px; border-radius: 9px; }
+.target-gloss small { color: #876bb8; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.writing-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; padding: 12px 0 25px; }
+.writer { width: min(260px, 42vw); }
+.writer-label { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0 4px 8px; font-size: 12px; color: var(--muted); }
+.canvas-wrap { position: relative; aspect-ratio: 1; border: 2px solid #cfd5e2; border-radius: 20px; overflow: hidden; background: #fff; touch-action: none; }
+.canvas-wrap.grid::before, .canvas-wrap.grid::after { content: ""; position: absolute; pointer-events: none; z-index: 1; opacity: .45; }
+.canvas-wrap.grid::before { left: 50%; top: 0; height: 100%; border-left: 1px dashed #cbd1dc; }
+.canvas-wrap.grid::after { top: 50%; left: 0; width: 100%; border-top: 1px dashed #cbd1dc; }
+.canvas-wrap canvas { width: 100%; height: 100%; display: block; position: relative; z-index: 3; }
+.ghost-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+.ghost-svg path { fill: none; stroke: rgba(91,92,226,.22); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.ghost-svg.answer path { stroke: var(--green); opacity: .65; animation: drawStroke .7s ease forwards; }
+@keyframes drawStroke { from { stroke-dashoffset: var(--length); } to { stroke-dashoffset: 0; } }
+.writer.good .canvas-wrap { border-color: var(--green); box-shadow: 0 0 0 5px var(--green-soft); }
+.writer.warn .canvas-wrap { border-color: var(--amber); box-shadow: 0 0 0 5px var(--amber-soft); }
+.writer.bad .canvas-wrap { border-color: var(--red); box-shadow: 0 0 0 5px var(--red-soft); }
+.writer-score { margin-top: 9px; text-align: center; font-size: 12px; font-weight: 800; }
+.feedback-box { border-radius: 15px; padding: 15px 17px; margin: 0 auto 18px; max-width: 760px; line-height: 1.5; }
+.feedback-box.good { background: var(--green-soft); color: #13734e; }
+.feedback-box.bad { background: var(--red-soft); color: #a52f43; }
+.feedback-box strong { display: block; margin-bottom: 3px; }
+.study-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; }
+.check-btn { min-width: 190px; }
+.hidden { display: none !important; }
+.session-panel { position: sticky; top: 20px; }
+.session-progress { height: 9px; background: #eef0f6; border-radius: 999px; overflow: hidden; margin: 18px 0; }
+.session-progress div { width: 0; height: 100%; background: linear-gradient(90deg, #5b5ce2, #9a65d6); transition: width .3s; }
+.session-metrics { display: grid; grid-template-columns: repeat(3,1fr); text-align: center; gap: 8px; }
+.session-metrics span, .session-metrics strong { display: block; }
+.session-metrics span { color: var(--muted); font-size: 12px; }
+.session-metrics strong { margin-top: 5px; font-size: 22px; }
+.session-panel hr { border: 0; border-top: 1px solid var(--line); margin: 22px 0; }
+.session-panel h4 { margin: 0 0 12px; }
+.legend { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; color: var(--muted); font-size: 13px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+.dot.good { background: var(--green); }
+.dot.warn, .dot.training { background: var(--amber); }
+.dot.bad { background: var(--red); }
+
+.library-head { align-items: flex-start; }
+.library-actions { display: flex; flex-wrap: wrap; gap: 9px; justify-content: flex-end; }
+.selection-summary { display: none; padding: 10px 13px; margin: -6px 0 14px; border-radius: 12px; background: #fafbfe; color: var(--muted); font-size: 13px; }
+.selection-summary label { display: flex; align-items: center; gap: 9px; }
+.selection-summary input, .row-select, #selectAllCheckbox { width: 18px; height: 18px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 940px; }
+th, td { padding: 14px 13px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+td { font-size: 14px; }
+.target-cell { font-family: serif; font-size: 20px; font-weight: 700; }
+.missing-data { color: var(--muted); font-size: 12px; font-style: italic; }
+.selection-cell { display: none; width: 44px; }
+.library-panel.selection-mode .selection-cell { display: table-cell; }
+.status-stack { min-width: 155px; display: grid; gap: 7px; }
+.status-badge { display: inline-flex; width: fit-content; padding: 6px 9px; }
+.status-badge.locked { color: #9a6515; background: var(--amber-soft); }
+.status-badge.unlocked { color: #14734e; background: var(--green-soft); }
+.mini-progress { width: 100%; max-width: 170px; height: 6px; border-radius: 999px; background: #edf0f6; overflow: hidden; }
+.mini-progress i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #e0a13c, #6d6fe4); }
+.status-note { color: var(--muted); font-size: 12px; }
+.row-actions { display: flex; gap: 7px; }
+.row-delete { white-space: nowrap; }
+
+.settings-panel { max-width: 900px; }
+.setting-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(150px,260px) 58px; gap: 18px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.setting-row strong, .setting-row span { display: block; }
+.setting-row span { color: var(--muted); margin-top: 4px; font-size: 13px; }
+.setting-row input[type="checkbox"] { width: 22px; height: 22px; justify-self: end; }
+.setting-row input[type="number"] { width: 100%; min-height: 44px; border: 1px solid var(--line); border-radius: 11px; padding: 9px 12px; color: var(--text); background: white; }
+.settings-panel > .primary-btn { margin-top: 22px; }
+.toast { position: fixed; left: 50%; bottom: max(26px, env(safe-area-inset-bottom)); transform: translate(-50%, 30px); background: #172033; color: white; border-radius: 12px; padding: 12px 18px; opacity: 0; pointer-events: none; transition: .25s; z-index: 100; box-shadow: var(--shadow); max-width: min(92vw, 560px); text-align: center; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.empty { color: var(--muted); text-align: center; padding: 30px 12px; }
+
+@media (max-width: 1120px) {
+  .app-shell { grid-template-columns: 86px minmax(0,1fr); }
+  .sidebar { padding-inline: 14px; }
+  .brand > div:last-child, .nav-item span, .streak-card div { display: none; }
+  .brand { justify-content: center; padding-inline: 0; }
+  .nav-item { justify-content: center; font-size: 20px; }
+  .streak-card { justify-content: center; }
+  .study-layout { grid-template-columns: 1fr; }
+  .session-panel { position: static; }
+  .topbar { align-items: flex-start; flex-wrap: wrap; }
+  .top-actions { width: 100%; margin-left: 0; justify-content: flex-start; }
+}
+
+@media (max-width: 760px) {
+  .app-shell { display: block; }
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: min(82vw, 280px);
+    transform: translateX(-105%);
+    transition: transform .25s ease;
+    box-shadow: 20px 0 50px rgba(13,21,37,.24);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    border: 0;
+    padding: 0;
+    background: rgba(15, 23, 42, .46);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+  }
+  body.menu-open .sidebar-backdrop { opacity: 1; pointer-events: auto; }
+  .brand > div:last-child, .nav-item span, .streak-card div { display: block; }
+  .brand { justify-content: flex-start; }
+  .nav-item { justify-content: flex-start; font-size: inherit; }
+  .menu-btn { display: inline-block; flex: 0 0 auto; }
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 25;
+    padding: calc(14px + env(safe-area-inset-top)) 16px 13px;
+    align-items: flex-start;
+    background: rgba(244,246,251,.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(231,234,241,.85);
+  }
+  .topbar-title { flex: 1; min-width: 0; }
+  .topbar h1 { font-size: 21px; }
+  .topbar p { font-size: 12px; line-height: 1.4; }
+  .top-actions { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 8px; }
+  .top-actions .upload-btn { grid-column: 1 / -1; }
+  .top-actions > * { width: 100%; text-align: center; padding-inline: 10px; }
+  .view { padding: 0 14px calc(24px + env(safe-area-inset-bottom)); }
+  .hero-card { padding: 27px 22px; min-height: 0; border-radius: 22px; }
+  .hero-card h2 { font-size: clamp(33px, 10vw, 43px); }
+  .hero-card p { font-size: 14px; line-height: 1.55; }
+  .hero-kanji { display: none; }
+  .hero-actions { display: grid; grid-template-columns: 1fr; }
+  .hero-actions button { width: 100%; }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+  .stat-card { padding: 17px; }
+  .stat-card strong { font-size: 29px; }
+  .stat-card small { font-size: 11px; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .panel { padding: 18px; border-radius: 18px; }
+  .study-card { padding: 17px 12px 10px; min-height: auto; border-radius: 20px; }
+  .study-topline { align-items: flex-start; }
+  .prompt-area { padding: 24px 5px 16px; }
+  .sentence { font-size: clamp(24px, 7.5vw, 34px); line-height: 1.65; }
+  .meaning { font-size: 14px; }
+  .target-gloss { display: flex; width: fit-content; margin: 9px auto 0; }
+  .writing-area { gap: 13px; padding-bottom: 16px; }
+  .writer { width: min(310px, 82vw); }
+  .writer-label { font-size: 11px; }
+  .study-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    margin: 0 -12px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+  }
+  .study-actions > button { flex: 1 1 44%; padding-inline: 9px; }
+  .check-btn, #nextBtn { flex-basis: 100% !important; }
+  .session-panel { margin-top: 12px; }
+  .library-actions { width: 100%; display: grid; grid-template-columns: 1fr; }
+  .library-actions button { width: 100%; }
+  .selection-summary { display: block; }
+  .selection-summary.hidden { display: none !important; }
+  .table-wrap { overflow: visible; }
+  table { display: block; min-width: 0; }
+  thead { display: none; }
+  tbody { display: grid; gap: 12px; }
+  tr { display: block; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: #fff; box-shadow: 0 8px 24px rgba(28,39,65,.05); }
+  td { display: grid; grid-template-columns: 105px minmax(0,1fr); gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); overflow-wrap: anywhere; }
+  td:last-child { border-bottom: 0; }
+  td::before { content: attr(data-label); color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+  td.selection-cell { display: none; }
+  .library-panel.selection-mode td.selection-cell { display: flex; align-items: center; justify-content: flex-end; border-bottom: 1px dashed var(--line); }
+  td.selection-cell::before { content: "Pilih"; margin-right: auto; }
+  .target-cell { font-size: 23px; }
+  .status-stack { min-width: 0; }
+  .row-actions { justify-content: flex-start; }
+  .row-delete { width: 100%; }
+  .setting-row { grid-template-columns: 1fr; gap: 10px; }
+  .setting-row input[type="checkbox"] { justify-self: start; }
+  .setting-row b { justify-self: start; }
+  .toast { bottom: calc(18px + env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 430px) {
+  .study-pills { max-width: 70%; }
+  .level-pill { text-align: center; }
+  td { grid-template-columns: 88px minmax(0,1fr); }
+}
+
+</style>
 </head>
 <body>
   <div class="app-shell">
-    <aside class="sidebar">
+    <aside class="sidebar" aria-label="Navigasi utama">
       <div class="brand">
         <div class="brand-mark">書</div>
         <div>
           <strong>KanjiWrite</strong>
-          <span>SRS handwriting trainer</span>
+          <span>15× practice & SRS trainer</span>
         </div>
       </div>
 
@@ -33,48 +430,53 @@
         </div>
       </div>
     </aside>
+    <button class="sidebar-backdrop" id="sidebarBackdrop" aria-label="Tutup menu"></button>
 
     <main class="main">
       <header class="topbar">
         <button class="menu-btn" id="menuBtn" aria-label="Buka menu">☰</button>
-        <div>
+        <div class="topbar-title">
           <h1 id="pageTitle">Dashboard</h1>
-          <p id="pageSubtitle">Latihan menulis kanji dengan pengulangan terjadwal.</p>
+          <p id="pageSubtitle">Latih setiap kosakata 15 kali sebelum masuk ke SRS.</p>
         </div>
         <div class="top-actions">
           <label class="upload-btn">
             <input type="file" id="fileInput" accept=".csv,.json,.xlsx,.xls" hidden />
             <span>＋ Unggah Soal</span>
           </label>
-          <button class="primary-btn" id="startStudyBtn">Mulai latihan</button>
+          <button class="primary-btn" id="startTrainingBtn">Latihan 15×</button>
+          <button class="secondary-btn" id="startReviewBtn">Review SRS</button>
         </div>
       </header>
 
       <section id="dashboardView" class="view active">
         <div class="hero-card">
           <div>
-            <span class="eyebrow">今日の復習 • Review hari ini</span>
-            <h2>Tulis, ingat, lalu kuasai.</h2>
-            <p>Setiap jawaban dinilai dari jumlah, urutan, arah, dan kemiripan goresan.</p>
-            <button class="primary-btn large" id="heroStartBtn">Mulai sesi hari ini</button>
+            <span class="eyebrow">基礎練習 • Latihan dasar</span>
+            <h2>Latih 15 kali, lalu buka SRS.</h2>
+            <p>Kosakata baru tetap terkunci sampai berhasil ditulis 15 kali. Setelah itu, kartu masuk ke jadwal review SRS.</p>
+            <div class="hero-actions">
+              <button class="primary-btn large" id="heroTrainingBtn">Mulai latihan 15×</button>
+              <button class="secondary-btn large hero-secondary" id="heroReviewBtn">Review SRS</button>
+            </div>
           </div>
           <div class="hero-kanji" aria-hidden="true">習</div>
         </div>
 
         <div class="stats-grid">
-          <article class="stat-card"><span>Jatuh tempo</span><strong id="dueStat">0</strong><small>kartu perlu diulang</small></article>
-          <article class="stat-card"><span>Kartu baru</span><strong id="newStat">0</strong><small>belum pernah dipelajari</small></article>
-          <article class="stat-card"><span>Akurasi</span><strong id="accuracyStat">0%</strong><small>jawaban sepanjang waktu</small></article>
-          <article class="stat-card"><span>Dikuasai</span><strong id="masteredStat">0</strong><small>kartu di level 12</small></article>
+          <article class="stat-card"><span>Perlu latihan</span><strong id="trainingStat">0</strong><small>kosakata belum mencapai 15×</small></article>
+          <article class="stat-card"><span>SRS siap</span><strong id="dueStat">0</strong><small>kartu jatuh tempo sekarang</small></article>
+          <article class="stat-card"><span>Akurasi</span><strong id="accuracyStat">0%</strong><small>semua jawaban latihan</small></article>
+          <article class="stat-card"><span>Dikuasai</span><strong id="masteredStat">0</strong><small>kartu SRS level 12</small></article>
         </div>
 
         <div class="dashboard-grid">
           <article class="panel level-panel">
-            <div class="panel-head"><div><h3>Distribusi level SRS</h3><p>Perkembangan kartu dari level 1 sampai 12.</p></div></div>
+            <div class="panel-head"><div><h3>Distribusi level SRS</h3><p>Hanya menampilkan kosakata yang sudah menyelesaikan latihan 15×.</p></div></div>
             <div id="levelBars" class="level-bars"></div>
           </article>
           <article class="panel">
-            <div class="panel-head"><div><h3>Aktivitas terakhir</h3><p>Ringkasan latihan terbaru.</p></div></div>
+            <div class="panel-head"><div><h3>Aktivitas terakhir</h3><p>Ringkasan latihan dasar dan review terbaru.</p></div></div>
             <div id="recentActivity" class="activity-list"></div>
           </article>
         </div>
@@ -84,19 +486,21 @@
         <div class="study-layout">
           <article class="study-card">
             <div class="study-topline">
-              <span class="pill" id="progressPill">Soal 0/0</span>
-              <span class="level-pill" id="levelPill">Level 1</span>
+              <div class="study-pills">
+                <span class="mode-pill" id="modePill">Latihan 15×</span>
+                <span class="pill" id="progressPill">Soal 0/0</span>
+              </div>
+              <span class="level-pill" id="levelPill">Latihan 0/15</span>
             </div>
 
             <div class="prompt-area">
-              <p class="instruction">Tulislah kanji yang tepat untuk bagian berwarna.</p>
-              <div class="sentence" id="sentenceText">Unggah soal atau gunakan data contoh.</div>
+              <p class="instruction" id="studyInstruction">Tulis kosakata yang terlihat sampai progres mencapai 15 kali.</p>
+              <div class="sentence" id="sentenceText">Unggah soal terlebih dahulu untuk memulai latihan.</div>
               <div class="meaning" id="meaningText">—</div>
             </div>
 
             <div id="writingArea" class="writing-area"></div>
-
-            <div id="feedbackBox" class="feedback-box hidden"></div>
+            <div id="feedbackBox" class="feedback-box hidden" role="status"></div>
 
             <div class="study-actions">
               <button class="secondary-btn" id="undoBtn">↶ Hapus goresan</button>
@@ -108,7 +512,7 @@
           </article>
 
           <aside class="session-panel panel">
-            <h3>Sesi hari ini</h3>
+            <h3 id="sessionTitle">Sesi latihan 15×</h3>
             <div class="session-progress"><div id="sessionProgressBar"></div></div>
             <div class="session-metrics">
               <div><span>Benar</span><strong id="sessionCorrect">0</strong></div>
@@ -116,28 +520,42 @@
               <div><span>Sisa</span><strong id="sessionRemaining">0</strong></div>
             </div>
             <hr />
-            <h4>Legenda penilaian</h4>
-            <ul class="legend">
-              <li><i class="dot good"></i>Bentuk dan goresan sesuai</li>
-              <li><i class="dot warn"></i>Masih terbaca, perlu dirapikan</li>
-              <li><i class="dot bad"></i>Urutan atau bentuk belum sesuai</li>
+            <h4>Alur belajar</h4>
+            <ul class="legend mode-legend" id="modeLegend">
+              <li><i class="dot training"></i>Latihan benar dihitung menuju 15×</li>
+              <li><i class="dot good"></i>Setelah 15×, SRS otomatis terbuka</li>
+              <li><i class="dot bad"></i>Jawaban salah tidak menambah progres</li>
             </ul>
           </aside>
         </div>
       </section>
 
       <section id="libraryView" class="view">
-        <article class="panel">
-          <div class="panel-head wrap">
-            <div><h3>Koleksi soal</h3><p>Data tersimpan di browser perangkat ini.</p></div>
+        <article class="panel library-panel" id="libraryPanel">
+          <div class="panel-head wrap library-head">
+            <div><h3>Koleksi soal</h3><p>Data dan progres tersimpan di browser perangkat ini.</p></div>
             <div class="library-actions">
-              <button class="secondary-btn" id="downloadSampleBtn">Unduh contoh CSV</button>
+              <button class="secondary-btn" id="selectionToggleBtn">☑ Pilih beberapa</button>
+              <button class="danger-btn hidden" id="deleteSelectedBtn">Hapus terpilih (<span id="selectedCount">0</span>)</button>
               <button class="danger-btn" id="resetDataBtn">Hapus semua data</button>
             </div>
           </div>
+          <div class="selection-summary hidden" id="selectionSummary">
+            <label><input type="checkbox" id="selectAllMobile" /> Pilih semua soal</label>
+          </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Kalimat</th><th>Target</th><th>Arti target</th><th>Bacaan</th><th>Level</th><th>Review berikutnya</th></tr></thead>
+              <thead>
+                <tr>
+                  <th class="selection-cell"><input type="checkbox" id="selectAllCheckbox" aria-label="Pilih semua soal" /></th>
+                  <th>Kalimat</th>
+                  <th>Target</th>
+                  <th>Arti target</th>
+                  <th>Bacaan</th>
+                  <th>Status</th>
+                  <th>Tindakan</th>
+                </tr>
+              </thead>
               <tbody id="libraryTable"></tbody>
             </table>
           </div>
@@ -147,18 +565,1174 @@
       <section id="settingsView" class="view">
         <article class="panel settings-panel">
           <h3>Pengaturan latihan</h3>
-          <label class="setting-row"><div><strong>Ambang kemiripan</strong><span>Semakin tinggi, penilaian semakin ketat.</span></div><input type="range" id="thresholdInput" min="45" max="80" value="58" /><b id="thresholdValue">58%</b></label>
-          <label class="setting-row"><div><strong>Kartu baru per sesi</strong><span>Batas kartu yang belum pernah dipelajari.</span></div><input type="number" id="newLimitInput" min="1" max="100" value="20" /></label>
+          <label class="setting-row"><div><strong>Ambang kemiripan</strong><span>Semakin tinggi, penilaian tulisan semakin ketat.</span></div><input type="range" id="thresholdInput" min="45" max="80" value="58" /><b id="thresholdValue">58%</b></label>
+          <label class="setting-row"><div><strong>Kosakata latihan per sesi</strong><span>Setiap kosakata akan diulang sampai total latihan benarnya mencapai 15×.</span></div><input type="number" id="trainingLimitInput" min="1" max="20" value="3" /></label>
+          <label class="setting-row"><div><strong>Kartu review SRS per sesi</strong><span>Batas kartu jatuh tempo yang dimasukkan ke satu sesi.</span></div><input type="number" id="reviewLimitInput" min="1" max="200" value="50" /></label>
           <label class="setting-row"><div><strong>Tampilkan kisi kanji</strong><span>Garis bantu pada kotak menulis.</span></div><input type="checkbox" id="gridToggle" checked /></label>
-          <label class="setting-row"><div><strong>Review salah di sesi yang sama</strong><span>Kartu salah kembali muncul di akhir antrean.</span></div><input type="checkbox" id="retryToggle" checked /></label>
+          <label class="setting-row"><div><strong>Ulangi jawaban salah</strong><span>Kartu salah kembali muncul di akhir sesi yang sama.</span></div><input type="checkbox" id="retryToggle" checked /></label>
           <button class="primary-btn" id="saveSettingsBtn">Simpan pengaturan</button>
         </article>
       </section>
     </main>
   </div>
 
-  <div id="toast" class="toast"></div>
+  <div id="toast" class="toast" role="status"></div>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="app.js"></script>
+  
+<script>
+(() => {
+  'use strict';
+
+  const STORAGE = {
+    cards: 'kanjiwrite.cards.v1',
+    progress: 'kanjiwrite.progress.v1',
+    settings: 'kanjiwrite.settings.v1',
+    stats: 'kanjiwrite.stats.v1',
+    activity: 'kanjiwrite.activity.v1'
+  };
+
+  const TRAINING_REQUIRED = 15;
+  const DAY = 24 * 60 * 60 * 1000;
+  const LEVEL_INTERVALS = [
+    0,
+    10 * 60 * 1000,
+    8 * 60 * 60 * 1000,
+    1 * DAY,
+    3 * DAY,
+    7 * DAY,
+    14 * DAY,
+    30 * DAY,
+    60 * DAY,
+    120 * DAY,
+    240 * DAY,
+    365 * DAY
+  ];
+
+  const DEFAULT_SETTINGS = {
+    threshold: 58,
+    trainingLimit: 3,
+    reviewLimit: 50,
+    showGrid: true,
+    retryWrong: true
+  };
+
+  const EMPTY_STATS = { correct: 0, wrong: 0, lastStudyDate: null, streak: 0 };
+  const SAMPLE_IDS = new Set(['sample-1', 'sample-2', 'sample-3', 'sample-4', 'sample-5']);
+  const SAMPLE_SIGNATURES = new Set([
+    '彼は毎朝新聞を読みます。|新聞',
+    '駅で友達を待ちます。|駅',
+    '日本語を勉強しています。|勉強',
+    '図書館で本を借りました。|図書館',
+    '来週京都へ旅行します。|旅行'
+  ]);
+
+  const state = {
+    cards: load(STORAGE.cards, []),
+    progress: load(STORAGE.progress, {}),
+    settings: load(STORAGE.settings, DEFAULT_SETTINGS),
+    stats: load(STORAGE.stats, EMPTY_STATS),
+    activity: load(STORAGE.activity, []),
+    session: [],
+    sessionMode: null,
+    sessionIndex: 0,
+    sessionCorrect: 0,
+    sessionWrong: 0,
+    currentPads: [],
+    checked: false,
+    selectionMode: false,
+    selectedCards: new Set()
+  };
+
+  const els = Object.fromEntries([
+    'pageTitle','pageSubtitle','fileInput','startTrainingBtn','startReviewBtn','heroTrainingBtn','heroReviewBtn',
+    'trainingStat','dueStat','accuracyStat','masteredStat','levelBars','recentActivity','streakCount',
+    'modePill','progressPill','levelPill','studyInstruction','sentenceText','meaningText','writingArea','feedbackBox',
+    'undoBtn','clearBtn','hintBtn','checkBtn','nextBtn','sessionTitle','sessionCorrect','sessionWrong','sessionRemaining',
+    'sessionProgressBar','modeLegend','libraryPanel','libraryTable','selectionToggleBtn','deleteSelectedBtn','selectedCount',
+    'selectionSummary','selectAllCheckbox','selectAllMobile','resetDataBtn','thresholdInput','thresholdValue',
+    'trainingLimitInput','reviewLimitInput','gridToggle','retryToggle','saveSettingsBtn','toast','menuBtn','sidebarBackdrop'
+  ].map(id => [id, document.getElementById(id)]));
+
+  init();
+
+  function init() {
+    migrateStoredData();
+    ensureProgress();
+    bindNavigation();
+    bindActions();
+    hydrateSettings();
+    renderDashboard();
+    renderLibrary();
+  }
+
+  function migrateStoredData() {
+    const originalLength = state.cards.length;
+    state.cards = state.cards.filter(card => {
+      const signature = `${card?.sentence || ''}|${card?.target || ''}`;
+      return !SAMPLE_IDS.has(String(card?.id || '')) && !SAMPLE_SIGNATURES.has(signature);
+    });
+    if (state.cards.length !== originalLength) save(STORAGE.cards, state.cards);
+
+    state.settings = {
+      ...DEFAULT_SETTINGS,
+      ...(state.settings && typeof state.settings === 'object' ? state.settings : {})
+    };
+    state.settings.threshold = clamp(Number(state.settings.threshold) || DEFAULT_SETTINGS.threshold, 45, 80);
+    state.settings.trainingLimit = clamp(Number(state.settings.trainingLimit) || DEFAULT_SETTINGS.trainingLimit, 1, 20);
+    state.settings.reviewLimit = clamp(Number(state.settings.reviewLimit) || DEFAULT_SETTINGS.reviewLimit, 1, 200);
+    state.settings.showGrid = state.settings.showGrid !== false;
+    state.settings.retryWrong = state.settings.retryWrong !== false;
+    delete state.settings.newLimit;
+    save(STORAGE.settings, state.settings);
+
+    state.stats = { ...EMPTY_STATS, ...(state.stats && typeof state.stats === 'object' ? state.stats : {}) };
+    state.activity = Array.isArray(state.activity) ? state.activity : [];
+  }
+
+  function createProgress() {
+    return {
+      trainingCount: 0,
+      trainingCorrect: 0,
+      trainingWrong: 0,
+      srsUnlocked: false,
+      unlockedAt: null,
+      level: 1,
+      dueAt: 0,
+      seen: false,
+      correct: 0,
+      wrong: 0,
+      lastTrained: null,
+      lastReviewed: null
+    };
+  }
+
+  function normalizeProgress(progress) {
+    const base = createProgress();
+    const p = { ...base, ...(progress && typeof progress === 'object' ? progress : {}) };
+    const previouslyStudied = Boolean(progress?.seen || Number(progress?.correct) > 0 || Number(progress?.level) > 1);
+    if (progress?.trainingCount == null) p.trainingCount = previouslyStudied ? TRAINING_REQUIRED : 0;
+    p.trainingCount = clamp(Number(p.trainingCount) || 0, 0, TRAINING_REQUIRED);
+    if (progress?.srsUnlocked == null) p.srsUnlocked = previouslyStudied || p.trainingCount >= TRAINING_REQUIRED;
+    p.srsUnlocked = Boolean(p.srsUnlocked || p.trainingCount >= TRAINING_REQUIRED);
+    p.level = clamp(Number(p.level) || 1, 1, 12);
+    p.dueAt = Number(p.dueAt) || 0;
+    p.correct = Number(p.correct) || 0;
+    p.wrong = Number(p.wrong) || 0;
+    p.trainingCorrect = Number(p.trainingCorrect) || p.trainingCount;
+    p.trainingWrong = Number(p.trainingWrong) || 0;
+    if (p.srsUnlocked) {
+      p.trainingCount = TRAINING_REQUIRED;
+      p.seen = p.seen !== false || previouslyStudied;
+      if (!p.seen) {
+        p.seen = true;
+        p.dueAt = Date.now() + LEVEL_INTERVALS[1];
+      }
+    } else {
+      p.seen = false;
+      p.level = 1;
+      p.dueAt = 0;
+    }
+    return p;
+  }
+
+  function ensureProgress() {
+    state.cards.forEach(card => {
+      state.progress[card.id] = normalizeProgress(state.progress[card.id]);
+    });
+    Object.keys(state.progress).forEach(id => {
+      if (!state.cards.some(card => card.id === id)) delete state.progress[id];
+    });
+    save(STORAGE.progress, state.progress);
+  }
+
+  function bindNavigation() {
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.view === 'study') startSmartSession();
+        else switchView(btn.dataset.view);
+      });
+    });
+    els.menuBtn.addEventListener('click', openMenu);
+    els.sidebarBackdrop.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeMenu();
+    });
+  }
+
+  function openMenu() {
+    document.querySelector('.sidebar').classList.add('open');
+    document.body.classList.add('menu-open');
+  }
+
+  function closeMenu() {
+    document.querySelector('.sidebar').classList.remove('open');
+    document.body.classList.remove('menu-open');
+  }
+
+  function switchView(name) {
+    const titles = {
+      dashboard: ['Dashboard', 'Latih setiap kosakata 15 kali sebelum masuk ke SRS.'],
+      study: ['Latihan Menulis', 'Tulis menggunakan stylus, jari, atau mouse.'],
+      library: ['Koleksi Soal', 'Kelola soal, progres latihan, dan status SRS.'],
+      settings: ['Pengaturan', 'Sesuaikan penilaian dan ukuran sesi belajar.']
+    };
+    document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(btn => btn.classList.toggle('active', btn.dataset.view === name));
+    document.getElementById(`${name}View`).classList.add('active');
+    els.pageTitle.textContent = titles[name][0];
+    els.pageSubtitle.textContent = titles[name][1];
+    closeMenu();
+    if (name === 'dashboard') renderDashboard();
+    if (name === 'library') renderLibrary();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function bindActions() {
+    els.fileInput.addEventListener('change', handleFileUpload);
+    [els.startTrainingBtn, els.heroTrainingBtn].forEach(btn => btn.addEventListener('click', () => startSession('training')));
+    [els.startReviewBtn, els.heroReviewBtn].forEach(btn => btn.addEventListener('click', () => startSession('srs')));
+    els.undoBtn.addEventListener('click', () => activePad()?.undo());
+    els.clearBtn.addEventListener('click', () => state.currentPads.forEach(pad => pad.clear()));
+    els.hintBtn.addEventListener('click', () => state.currentPads.forEach(pad => pad.showHint()));
+    els.checkBtn.addEventListener('click', checkAnswer);
+    els.nextBtn.addEventListener('click', nextCard);
+    els.resetDataBtn.addEventListener('click', resetData);
+    els.thresholdInput.addEventListener('input', () => els.thresholdValue.textContent = `${els.thresholdInput.value}%`);
+    els.saveSettingsBtn.addEventListener('click', saveSettings);
+
+    els.selectionToggleBtn.addEventListener('click', toggleSelectionMode);
+    els.deleteSelectedBtn.addEventListener('click', deleteSelectedCards);
+    els.selectAllCheckbox.addEventListener('change', event => selectAllCards(event.target.checked));
+    els.selectAllMobile.addEventListener('change', event => selectAllCards(event.target.checked));
+    els.libraryTable.addEventListener('change', handleLibrarySelection);
+    els.libraryTable.addEventListener('click', handleLibraryClick);
+  }
+
+  function hydrateSettings() {
+    els.thresholdInput.value = state.settings.threshold;
+    els.thresholdValue.textContent = `${state.settings.threshold}%`;
+    els.trainingLimitInput.value = state.settings.trainingLimit;
+    els.reviewLimitInput.value = state.settings.reviewLimit;
+    els.gridToggle.checked = state.settings.showGrid;
+    els.retryToggle.checked = state.settings.retryWrong;
+  }
+
+  function saveSettings() {
+    state.settings = {
+      threshold: clamp(Number(els.thresholdInput.value), 45, 80),
+      trainingLimit: clamp(Number(els.trainingLimitInput.value), 1, 20),
+      reviewLimit: clamp(Number(els.reviewLimitInput.value), 1, 200),
+      showGrid: els.gridToggle.checked,
+      retryWrong: els.retryToggle.checked
+    };
+    save(STORAGE.settings, state.settings);
+    hydrateSettings();
+    toast('Pengaturan berhasil disimpan.');
+  }
+
+  function renderDashboard() {
+    const now = Date.now();
+    const progressList = state.cards.map(card => state.progress[card.id]).filter(Boolean);
+    const locked = progressList.filter(p => !p.srsUnlocked).length;
+    const due = progressList.filter(p => p.srsUnlocked && p.seen && p.dueAt <= now).length;
+    const totalAnswers = state.stats.correct + state.stats.wrong;
+    const accuracy = totalAnswers ? Math.round((state.stats.correct / totalAnswers) * 100) : 0;
+    const mastered = progressList.filter(p => p.srsUnlocked && p.level >= 12).length;
+
+    els.trainingStat.textContent = locked;
+    els.dueStat.textContent = due;
+    els.accuracyStat.textContent = `${accuracy}%`;
+    els.masteredStat.textContent = mastered;
+    els.streakCount.textContent = `${state.stats.streak || 0} hari`;
+
+    const counts = Array(12).fill(0);
+    progressList.filter(p => p.srsUnlocked).forEach(p => counts[clamp(p.level, 1, 12) - 1]++);
+    const max = Math.max(1, ...counts);
+    els.levelBars.innerHTML = counts.map((count, i) => `
+      <div class="level-row">
+        <span>Level ${i + 1}</span>
+        <div class="level-track"><i style="width:${(count / max) * 100}%"></i></div>
+        <strong>${count}</strong>
+      </div>`).join('');
+
+    if (!state.activity.length) {
+      els.recentActivity.innerHTML = '<div class="empty">Belum ada aktivitas latihan.</div>';
+    } else {
+      els.recentActivity.innerHTML = state.activity.slice(0, 6).map(item => {
+        const isTraining = item.mode === 'training';
+        const outcome = item.correct ? 'Benar' : 'Perlu diulang';
+        const detail = isTraining
+          ? `Latihan ${clamp(Number(item.trainingCount) || 0, 0, TRAINING_REQUIRED)}/${TRAINING_REQUIRED}`
+          : `SRS Level ${item.level || 1}`;
+        return `
+          <div class="activity-item">
+            <div class="activity-badge">${escapeHtml(String(item.target || '?').charAt(0))}</div>
+            <div><strong>${escapeHtml(item.target || '')} · ${outcome}</strong><small>${formatRelative(item.time)} · ${detail}</small></div>
+          </div>`;
+      }).join('');
+    }
+  }
+
+  function renderLibrary() {
+    state.selectedCards = new Set([...state.selectedCards].filter(id => state.cards.some(card => card.id === id)));
+    renderSelectionUI();
+
+    if (!state.cards.length) {
+      els.libraryTable.innerHTML = '<tr><td colspan="7" class="empty">Belum ada soal. Unggah CSV, JSON, atau Excel untuk mulai belajar.</td></tr>';
+      return;
+    }
+
+    const now = Date.now();
+    els.libraryTable.innerHTML = state.cards.map(card => {
+      const p = state.progress[card.id];
+      const checked = state.selectedCards.has(card.id) ? 'checked' : '';
+      const status = p.srsUnlocked
+        ? `<div class="status-stack"><span class="status-badge unlocked">SRS terbuka · L${p.level}</span><span class="status-note">${p.dueAt <= now ? 'Review: sekarang' : `Review: ${formatDate(p.dueAt)}`}</span></div>`
+        : `<div class="status-stack"><span class="status-badge locked">Latihan ${p.trainingCount}/${TRAINING_REQUIRED}</span><div class="mini-progress"><i style="width:${(p.trainingCount / TRAINING_REQUIRED) * 100}%"></i></div><span class="status-note">SRS masih terkunci</span></div>`;
+      return `<tr data-card-id="${escapeAttr(card.id)}">
+        <td class="selection-cell" data-label="Pilih"><input class="row-select" type="checkbox" value="${escapeAttr(card.id)}" aria-label="Pilih ${escapeAttr(card.target)}" ${checked} /></td>
+        <td data-label="Kalimat">${escapeHtml(card.sentence)}</td>
+        <td class="target-cell" data-label="Target">${escapeHtml(card.target)}</td>
+        <td data-label="Arti target">${card.target_meaning ? escapeHtml(card.target_meaning) : '<span class="missing-data">Belum diisi</span>'}</td>
+        <td data-label="Bacaan">${escapeHtml(card.reading)}</td>
+        <td data-label="Status">${status}</td>
+        <td data-label="Tindakan"><div class="row-actions"><button class="danger-btn icon-btn row-delete" data-delete-id="${escapeAttr(card.id)}">Hapus</button></div></td>
+      </tr>`;
+    }).join('');
+    syncSelectAllState();
+  }
+
+  function renderSelectionUI() {
+    els.libraryPanel.classList.toggle('selection-mode', state.selectionMode);
+    els.selectionToggleBtn.textContent = state.selectionMode ? '✕ Batal memilih' : '☑ Pilih beberapa';
+    els.deleteSelectedBtn.classList.toggle('hidden', !state.selectionMode);
+    els.selectionSummary.classList.toggle('hidden', !state.selectionMode);
+    els.selectedCount.textContent = state.selectedCards.size;
+    syncSelectAllState();
+  }
+
+  function syncSelectAllState() {
+    const total = state.cards.length;
+    const selected = state.selectedCards.size;
+    [els.selectAllCheckbox, els.selectAllMobile].forEach(input => {
+      input.checked = total > 0 && selected === total;
+      input.indeterminate = selected > 0 && selected < total;
+      input.disabled = total === 0;
+    });
+  }
+
+  function toggleSelectionMode() {
+    state.selectionMode = !state.selectionMode;
+    if (!state.selectionMode) state.selectedCards.clear();
+    renderLibrary();
+  }
+
+  function selectAllCards(checked) {
+    state.selectedCards = checked ? new Set(state.cards.map(card => card.id)) : new Set();
+    renderLibrary();
+  }
+
+  function handleLibrarySelection(event) {
+    if (!event.target.classList.contains('row-select')) return;
+    if (event.target.checked) state.selectedCards.add(event.target.value);
+    else state.selectedCards.delete(event.target.value);
+    renderSelectionUI();
+  }
+
+  function handleLibraryClick(event) {
+    const button = event.target.closest('[data-delete-id]');
+    if (!button) return;
+    const card = state.cards.find(item => item.id === button.dataset.deleteId);
+    if (!card) return;
+    if (!confirm(`Hapus kosakata “${card.target}” dari koleksi?`)) return;
+    deleteCards([card.id]);
+  }
+
+  function deleteSelectedCards() {
+    const ids = [...state.selectedCards];
+    if (!ids.length) {
+      toast('Belum ada soal yang dipilih.');
+      return;
+    }
+    if (!confirm(`Hapus ${ids.length} soal yang dipilih beserta seluruh progresnya?`)) return;
+    deleteCards(ids);
+  }
+
+  function deleteCards(ids) {
+    const idSet = new Set(ids);
+    state.cards = state.cards.filter(card => !idSet.has(card.id));
+    ids.forEach(id => delete state.progress[id]);
+    state.activity = state.activity.filter(item => !item.cardId || !idSet.has(item.cardId));
+    state.session = state.session.filter(card => !idSet.has(card.id));
+    state.selectedCards = new Set([...state.selectedCards].filter(id => !idSet.has(id)));
+    if (!state.cards.length) state.selectionMode = false;
+    save(STORAGE.cards, state.cards);
+    save(STORAGE.progress, state.progress);
+    save(STORAGE.activity, state.activity);
+    renderDashboard();
+    renderLibrary();
+    toast(`${ids.length} soal berhasil dihapus.`);
+  }
+
+  function buildTrainingSession() {
+    const selected = state.cards
+      .filter(card => !state.progress[card.id].srsUnlocked)
+      .sort((a, b) => state.progress[b.id].trainingCount - state.progress[a.id].trainingCount)
+      .slice(0, state.settings.trainingLimit);
+
+    if (!selected.length) return [];
+    const queue = [];
+    const maxRemaining = Math.max(...selected.map(card => TRAINING_REQUIRED - state.progress[card.id].trainingCount));
+    for (let round = 0; round < maxRemaining; round++) {
+      selected.forEach(card => {
+        const remaining = TRAINING_REQUIRED - state.progress[card.id].trainingCount;
+        if (round < remaining) queue.push(card);
+      });
+    }
+    return queue;
+  }
+
+  function buildSrsSession() {
+    const now = Date.now();
+    return state.cards
+      .filter(card => {
+        const p = state.progress[card.id];
+        return p.srsUnlocked && p.seen && p.dueAt <= now;
+      })
+      .sort((a, b) => state.progress[a.id].dueAt - state.progress[b.id].dueAt)
+      .slice(0, state.settings.reviewLimit);
+  }
+
+  function startSmartSession() {
+    const hasTraining = state.cards.some(card => !state.progress[card.id].srsUnlocked);
+    startSession(hasTraining ? 'training' : 'srs');
+  }
+
+  function startSession(mode) {
+    state.sessionMode = mode;
+    state.session = mode === 'training' ? buildTrainingSession() : buildSrsSession();
+    state.sessionIndex = 0;
+    state.sessionCorrect = 0;
+    state.sessionWrong = 0;
+
+    if (!state.session.length) {
+      switchView('dashboard');
+      if (!state.cards.length) toast('Belum ada soal. Unggah file terlebih dahulu.');
+      else if (mode === 'training') toast('Semua kosakata sudah menyelesaikan latihan 15×. Lanjutkan ke Review SRS.');
+      else toast('Belum ada kartu SRS yang jatuh tempo saat ini.');
+      return;
+    }
+
+    switchView('study');
+    renderCurrentCard();
+  }
+
+  async function renderCurrentCard() {
+    const card = currentCard();
+    if (!card) return finishSession();
+
+    if (state.sessionMode === 'training' && state.progress[card.id].srsUnlocked) {
+      state.session.splice(state.sessionIndex, 1);
+      return renderCurrentCard();
+    }
+
+    state.checked = false;
+    state.currentPads.forEach(pad => pad.destroy());
+    state.currentPads = [];
+    els.feedbackBox.className = 'feedback-box hidden';
+    els.feedbackBox.innerHTML = '';
+    els.checkBtn.classList.remove('hidden');
+    els.nextBtn.classList.add('hidden');
+
+    const p = state.progress[card.id];
+    const trainingMode = state.sessionMode === 'training';
+    els.modePill.textContent = trainingMode ? 'Latihan 15×' : 'Review SRS';
+    els.modePill.classList.toggle('srs', !trainingMode);
+    els.progressPill.textContent = `Soal ${state.sessionIndex + 1}/${state.session.length}`;
+    els.levelPill.textContent = trainingMode ? `Latihan ${p.trainingCount}/${TRAINING_REQUIRED}` : `Level ${p.level}`;
+    els.studyInstruction.textContent = trainingMode
+      ? 'Lihat kosakatanya, lalu tulis dengan bentuk dan urutan goresan yang tepat.'
+      : 'Ingat kembali kanji yang tepat untuk bagian berwarna.';
+    els.sessionTitle.textContent = trainingMode ? 'Sesi latihan 15×' : 'Sesi review SRS';
+    els.modeLegend.innerHTML = trainingMode
+      ? '<li><i class="dot training"></i>Jawaban benar dihitung menuju 15×</li><li><i class="dot good"></i>Setelah 15×, SRS otomatis terbuka</li><li><i class="dot bad"></i>Jawaban salah tidak menambah progres</li>'
+      : '<li><i class="dot good"></i>Benar: level dan interval meningkat</li><li><i class="dot warn"></i>Perhatikan bentuk serta jumlah goresan</li><li><i class="dot bad"></i>Salah: kartu dijadwalkan lebih cepat</li>';
+    els.sentenceText.innerHTML = trainingMode ? buildTrainingPromptHtml(card) : buildSrsPromptHtml(card);
+    els.meaningText.innerHTML = buildMeaningHtml(card);
+    els.writingArea.innerHTML = '';
+
+    const chars = Array.from(card.target).filter(isKanjiCharacter);
+    if (!chars.length) {
+      els.feedbackBox.className = 'feedback-box bad';
+      els.feedbackBox.innerHTML = '<strong>Target tidak memiliki karakter kanji.</strong>Periksa kolom target pada data soal.';
+      els.checkBtn.classList.add('hidden');
+      els.nextBtn.classList.remove('hidden');
+      updateSessionMetrics();
+      return;
+    }
+
+    chars.forEach((char, index) => {
+      const writer = document.createElement('div');
+      writer.className = 'writer';
+      writer.innerHTML = `
+        <div class="writer-label"><span>Kanji ${index + 1}</span><span class="stroke-status">Memuat data goresan…</span></div>
+        <div class="canvas-wrap ${state.settings.showGrid ? 'grid' : ''}">
+          <svg class="ghost-svg hidden" viewBox="0 0 109 109" aria-hidden="true"></svg>
+          <canvas aria-label="Kotak menulis kanji ${index + 1}"></canvas>
+        </div>
+        <div class="writer-score"></div>`;
+      els.writingArea.appendChild(writer);
+      state.currentPads.push(new DrawingPad(writer, char));
+    });
+
+    updateSessionMetrics();
+    await Promise.all(state.currentPads.map(pad => pad.loadTarget()));
+  }
+
+  function buildTrainingPromptHtml(card) {
+    const sentence = String(card.sentence || '');
+    const target = String(card.target || '');
+    const index = sentence.indexOf(target);
+    const targetHtml = `<span class="training-target">${escapeHtml(target)}<small>${escapeHtml(card.reading)}</small></span>`;
+    if (index === -1) return `${targetHtml}<br><small>${escapeHtml(sentence)}</small>`;
+    return escapeHtml(sentence.slice(0, index)) + targetHtml + escapeHtml(sentence.slice(index + target.length));
+  }
+
+  function buildSrsPromptHtml(card) {
+    const replaced = replaceFirst(card.sentence, card.target, `\u0000${card.reading}\u0001`);
+    return escapeHtml(replaced)
+      .replace('\u0000', '<span class="target-focus">')
+      .replace('\u0001', '</span>');
+  }
+
+  function buildMeaningHtml(card) {
+    const meaning = String(card.meaning || '');
+    const targetMeaning = String(card.target_meaning || '').trim();
+    if (!targetMeaning) return escapeHtml(meaning);
+
+    const index = meaning.toLocaleLowerCase('id-ID').indexOf(targetMeaning.toLocaleLowerCase('id-ID'));
+    if (index !== -1) {
+      return escapeHtml(meaning.slice(0, index))
+        + `<span class="target-focus">${escapeHtml(meaning.slice(index, index + targetMeaning.length))}</span>`
+        + escapeHtml(meaning.slice(index + targetMeaning.length));
+    }
+    return `${escapeHtml(meaning)}<span class="target-gloss"><small>Arti target</small>${escapeHtml(targetMeaning)}</span>`;
+  }
+
+  async function checkAnswer() {
+    if (state.checked || !state.currentPads.length) return;
+    if (state.currentPads.some(pad => !pad.ready)) {
+      toast('Data goresan masih dimuat atau tidak tersedia.');
+      return;
+    }
+    if (state.currentPads.some(pad => !pad.strokes.length)) {
+      toast('Tulislah semua kanji terlebih dahulu.');
+      return;
+    }
+
+    const scores = state.currentPads.map(pad => pad.evaluate());
+    const threshold = state.settings.threshold / 100;
+    const allPass = scores.every(score => score.total >= threshold && score.strokeCountMatch);
+    const avg = scores.reduce((sum, item) => sum + item.total, 0) / scores.length;
+    const card = currentCard();
+    const trainingMode = state.sessionMode === 'training';
+
+    state.checked = true;
+    state.currentPads.forEach((pad, index) => pad.showResult(scores[index], threshold, !allPass));
+    const result = trainingMode ? applyTraining(card, allPass, avg) : applyReview(card, allPass, avg);
+
+    if (allPass) {
+      els.feedbackBox.className = 'feedback-box good';
+      if (trainingMode && result.unlockedNow) {
+        els.feedbackBox.innerHTML = `<strong>Latihan 15/15 selesai — SRS terbuka!</strong>${escapeHtml(card.target)} berhasil dibuka dan akan masuk jadwal review SRS. Kemiripan ${Math.round(avg * 100)}%.`;
+        state.session = state.session.filter((item, index) => index <= state.sessionIndex || item.id !== card.id);
+      } else if (trainingMode) {
+        els.feedbackBox.innerHTML = `<strong>Benar — latihan ${result.trainingCount}/${TRAINING_REQUIRED}</strong>Kemiripan ${Math.round(avg * 100)}%. Lanjutkan sampai 15 kali untuk membuka SRS.`;
+      } else {
+        els.feedbackBox.innerHTML = `<strong>Benar — ${escapeHtml(card.target)}</strong>Rata-rata kemiripan ${Math.round(avg * 100)}%. Kartu naik ke Level ${state.progress[card.id].level}.`;
+      }
+      state.sessionCorrect++;
+    } else {
+      els.feedbackBox.className = 'feedback-box bad';
+      const details = scores.map((s, i) => `Kanji ${i + 1}: ${Math.round(s.total * 100)}%${s.strokeCountMatch ? '' : `, goresan ${s.userStrokeCount}/${s.targetStrokeCount}`}`).join(' · ');
+      const progressText = trainingMode ? ` Progres tetap ${state.progress[card.id].trainingCount}/${TRAINING_REQUIRED}.` : '';
+      els.feedbackBox.innerHTML = `<strong>Belum tepat. Jawaban yang benar: ${escapeHtml(card.target)}</strong>${details}. Perhatikan bentuk, arah, dan urutan goresannya.${progressText}`;
+      state.sessionWrong++;
+      if (state.settings.retryWrong) state.session.push(card);
+    }
+
+    els.checkBtn.classList.add('hidden');
+    els.nextBtn.classList.remove('hidden');
+    updateSessionMetrics();
+    renderDashboard();
+    renderLibrary();
+  }
+
+  function applyTraining(card, correct, score) {
+    const p = state.progress[card.id];
+    const now = Date.now();
+    const wasUnlocked = p.srsUnlocked;
+    p.lastTrained = now;
+
+    if (correct) {
+      p.trainingCorrect += 1;
+      p.trainingCount = clamp(p.trainingCount + 1, 0, TRAINING_REQUIRED);
+      state.stats.correct += 1;
+      if (p.trainingCount >= TRAINING_REQUIRED && !p.srsUnlocked) {
+        p.srsUnlocked = true;
+        p.unlockedAt = now;
+        p.seen = true;
+        p.level = 1;
+        p.dueAt = now + LEVEL_INTERVALS[1];
+      }
+    } else {
+      p.trainingWrong += 1;
+      state.stats.wrong += 1;
+    }
+
+    updateStreak(now);
+    state.activity.unshift({ cardId: card.id, target: card.target, mode: 'training', correct, score, trainingCount: p.trainingCount, level: p.level, time: now });
+    state.activity = state.activity.slice(0, 30);
+    persistLearningData();
+    return { trainingCount: p.trainingCount, unlockedNow: !wasUnlocked && p.srsUnlocked };
+  }
+
+  function applyReview(card, correct, score) {
+    const p = state.progress[card.id];
+    const now = Date.now();
+    p.seen = true;
+    p.lastReviewed = now;
+
+    if (correct) {
+      p.correct += 1;
+      p.level = clamp(p.level + 1, 1, 12);
+      const qualityFactor = score >= .78 ? 1.2 : score >= .68 ? 1 : .82;
+      p.dueAt = now + Math.round(LEVEL_INTERVALS[p.level - 1] * qualityFactor);
+      state.stats.correct += 1;
+    } else {
+      p.wrong += 1;
+      p.level = clamp(p.level - 2, 1, 12);
+      p.dueAt = now + 5 * 60 * 1000;
+      state.stats.wrong += 1;
+    }
+
+    updateStreak(now);
+    state.activity.unshift({ cardId: card.id, target: card.target, mode: 'srs', correct, score, trainingCount: p.trainingCount, level: p.level, time: now });
+    state.activity = state.activity.slice(0, 30);
+    persistLearningData();
+    return { level: p.level };
+  }
+
+  function persistLearningData() {
+    save(STORAGE.progress, state.progress);
+    save(STORAGE.stats, state.stats);
+    save(STORAGE.activity, state.activity);
+  }
+
+  function updateStreak(now) {
+    const today = dayKey(now);
+    const last = state.stats.lastStudyDate;
+    if (!last) state.stats.streak = 1;
+    else if (last === today) return;
+    else {
+      const diff = (new Date(`${today}T00:00:00`) - new Date(`${last}T00:00:00`)) / DAY;
+      state.stats.streak = diff === 1 ? (state.stats.streak || 0) + 1 : 1;
+    }
+    state.stats.lastStudyDate = today;
+  }
+
+  function nextCard() {
+    state.sessionIndex += 1;
+    renderCurrentCard();
+  }
+
+  function finishSession() {
+    state.currentPads.forEach(pad => pad.destroy());
+    state.currentPads = [];
+    const label = state.sessionMode === 'training' ? 'Latihan 15×' : 'Review SRS';
+    switchView('dashboard');
+    toast(`${label} selesai: ${state.sessionCorrect} benar, ${state.sessionWrong} salah.`);
+  }
+
+  function updateSessionMetrics() {
+    const total = Math.max(1, state.session.length);
+    const completed = Math.min(state.sessionIndex + (state.checked ? 1 : 0), total);
+    els.sessionCorrect.textContent = state.sessionCorrect;
+    els.sessionWrong.textContent = state.sessionWrong;
+    els.sessionRemaining.textContent = Math.max(0, total - completed);
+    els.sessionProgressBar.style.width = `${(completed / total) * 100}%`;
+  }
+
+  function currentCard() {
+    return state.session[state.sessionIndex] || null;
+  }
+
+  function activePad() {
+    return [...state.currentPads].reverse().find(pad => pad.strokes.length) || state.currentPads[0];
+  }
+
+  async function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+      const rows = await parseUploadedFile(file);
+      const cards = normalizeRows(rows);
+      if (!cards.length) throw new Error('Tidak ada baris valid. Pastikan kolom sentence, target, reading, dan meaning tersedia.');
+      const before = state.cards.length;
+      state.cards = mergeCards(state.cards, cards);
+      ensureProgress();
+      save(STORAGE.cards, state.cards);
+      renderDashboard();
+      renderLibrary();
+      const added = state.cards.length - before;
+      toast(`${cards.length} baris diproses · ${added} soal baru ditambahkan.`);
+      switchView('library');
+    } catch (error) {
+      console.error(error);
+      toast(error.message || 'File tidak dapat dibaca.');
+    } finally {
+      event.target.value = '';
+    }
+  }
+
+  async function parseUploadedFile(file) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (ext === 'json') {
+      const parsed = JSON.parse(await file.text());
+      return Array.isArray(parsed) ? parsed : parsed.cards || parsed.data || [];
+    }
+    if (ext === 'csv') return parseCSV(await file.text());
+    if (['xlsx', 'xls'].includes(ext)) {
+      if (!window.XLSX) throw new Error('Library Excel belum termuat. Periksa koneksi internet lalu coba kembali.');
+      const data = await file.arrayBuffer();
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      return XLSX.utils.sheet_to_json(sheet, { defval: '' });
+    }
+    throw new Error('Format file belum didukung. Gunakan CSV, JSON, XLSX, atau XLS.');
+  }
+
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = '', quoted = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (ch === '"') {
+        if (quoted && text[i + 1] === '"') { field += '"'; i++; }
+        else quoted = !quoted;
+      } else if (ch === ',' && !quoted) {
+        row.push(field); field = '';
+      } else if ((ch === '\n' || ch === '\r') && !quoted) {
+        if (ch === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); field = '';
+        if (row.some(cell => cell.trim())) rows.push(row);
+        row = [];
+      } else field += ch;
+    }
+    row.push(field);
+    if (row.some(cell => cell.trim())) rows.push(row);
+    if (!rows.length) return [];
+    const headers = rows.shift().map(h => h.replace(/^\uFEFF/, '').trim());
+    return rows.map(values => Object.fromEntries(headers.map((h, i) => [h, values[i] ?? ''])));
+  }
+
+  function normalizeRows(rows) {
+    const aliases = {
+      sentence: ['sentence','kalimat','contoh kalimat','contoh_kalimat','example'],
+      target: ['target','kanji','answer','jawaban','kanji target','kanji_target'],
+      reading: ['reading','hiragana','bacaan','yomi','furigana'],
+      meaning: ['meaning','arti','translation','terjemahan'],
+      target_meaning: ['target_meaning','target meaning','arti target','arti_target','meaning target','makna target','makna_target'],
+      id: ['id','no','nomor']
+    };
+
+    return rows.map((row, index) => {
+      const lowered = Object.fromEntries(Object.entries(row).map(([key, value]) => [String(key).trim().toLowerCase(), value]));
+      const pick = key => {
+        const alias = aliases[key].find(name => Object.prototype.hasOwnProperty.call(lowered, name));
+        return alias ? String(lowered[alias] ?? '').trim() : '';
+      };
+      const sentence = pick('sentence');
+      const target = pick('target');
+      const reading = pick('reading');
+      const meaning = pick('meaning');
+      const targetMeaning = pick('target_meaning');
+      if (!sentence || !target || !reading || !meaning || !sentence.includes(target)) return null;
+      return {
+        id: pick('id') || stableId(`${sentence}|${target}|${reading}|${index}`),
+        sentence,
+        target,
+        reading,
+        meaning,
+        target_meaning: targetMeaning
+      };
+    }).filter(Boolean);
+  }
+
+  function mergeCards(existing, incoming) {
+    const map = new Map(existing.map(card => [`${card.sentence}|${card.target}`, card]));
+    incoming.forEach(card => {
+      const key = `${card.sentence}|${card.target}`;
+      const old = map.get(key);
+      map.set(key, old ? { ...old, ...card, id: old.id } : card);
+    });
+    return [...map.values()];
+  }
+
+  function resetData() {
+    if (!confirm('Hapus semua soal, progres latihan 15×, progres SRS, dan riwayat aktivitas?')) return;
+    Object.values(STORAGE).forEach(key => localStorage.removeItem(key));
+    state.cards = [];
+    state.progress = {};
+    state.settings = { ...DEFAULT_SETTINGS };
+    state.stats = { ...EMPTY_STATS };
+    state.activity = [];
+    state.session = [];
+    state.sessionMode = null;
+    state.selectedCards.clear();
+    state.selectionMode = false;
+    save(STORAGE.cards, state.cards);
+    save(STORAGE.progress, state.progress);
+    save(STORAGE.settings, state.settings);
+    save(STORAGE.stats, state.stats);
+    save(STORAGE.activity, state.activity);
+    hydrateSettings();
+    renderDashboard();
+    renderLibrary();
+    toast('Semua data telah dihapus. Koleksi sekarang kosong.');
+  }
+
+  class DrawingPad {
+    constructor(root, char) {
+      this.root = root;
+      this.char = char;
+      this.canvas = root.querySelector('canvas');
+      this.ctx = this.canvas.getContext('2d');
+      this.wrap = root.querySelector('.canvas-wrap');
+      this.svg = root.querySelector('.ghost-svg');
+      this.status = root.querySelector('.stroke-status');
+      this.scoreEl = root.querySelector('.writer-score');
+      this.strokes = [];
+      this.currentStroke = null;
+      this.targetStrokes = [];
+      this.targetPaths = [];
+      this.ready = false;
+      this.drawing = false;
+      this.resizeObserver = new ResizeObserver(() => this.resize());
+      this.resizeObserver.observe(this.wrap);
+      this.bind();
+      this.resize();
+    }
+
+    bind() {
+      this.onDown = e => {
+        if (state.checked) return;
+        e.preventDefault();
+        this.canvas.setPointerCapture?.(e.pointerId);
+        this.drawing = true;
+        const point = this.pointFromEvent(e);
+        this.currentStroke = [point];
+        this.strokes.push(this.currentStroke);
+        this.redraw();
+      };
+      this.onMove = e => {
+        if (!this.drawing || !this.currentStroke) return;
+        e.preventDefault();
+        const point = this.pointFromEvent(e);
+        const last = this.currentStroke[this.currentStroke.length - 1];
+        if (distance(point, last) >= 1.5) {
+          this.currentStroke.push(point);
+          this.redraw();
+        }
+      };
+      this.onUp = e => {
+        if (!this.drawing) return;
+        e.preventDefault();
+        this.drawing = false;
+        if (this.currentStroke?.length === 1) {
+          const p = this.currentStroke[0];
+          this.currentStroke.push({ x: p.x + .1, y: p.y + .1 });
+        }
+        this.currentStroke = null;
+        this.redraw();
+      };
+      this.canvas.addEventListener('pointerdown', this.onDown);
+      this.canvas.addEventListener('pointermove', this.onMove);
+      this.canvas.addEventListener('pointerup', this.onUp);
+      this.canvas.addEventListener('pointercancel', this.onUp);
+    }
+
+    resize() {
+      const rect = this.wrap.getBoundingClientRect();
+      const ratio = Math.max(1, window.devicePixelRatio || 1);
+      this.width = rect.width;
+      this.height = rect.height;
+      this.canvas.width = Math.round(rect.width * ratio);
+      this.canvas.height = Math.round(rect.height * ratio);
+      this.ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      this.redraw();
+    }
+
+    pointFromEvent(e) {
+      const rect = this.canvas.getBoundingClientRect();
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    redraw() {
+      if (!this.ctx || !this.width) return;
+      this.ctx.clearRect(0, 0, this.width, this.height);
+      this.ctx.strokeStyle = '#172033';
+      this.ctx.lineWidth = Math.max(5, this.width * .027);
+      this.ctx.lineCap = 'round';
+      this.ctx.lineJoin = 'round';
+      this.strokes.forEach(stroke => {
+        if (!stroke.length) return;
+        this.ctx.beginPath();
+        this.ctx.moveTo(stroke[0].x, stroke[0].y);
+        for (let i = 1; i < stroke.length; i++) this.ctx.lineTo(stroke[i].x, stroke[i].y);
+        this.ctx.stroke();
+      });
+    }
+
+    async loadTarget() {
+      try {
+        const hex = this.char.codePointAt(0).toString(16).padStart(5, '0');
+        const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`KanjiVG ${response.status}`);
+        const text = await response.text();
+        const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+        const paths = [...doc.querySelectorAll('path')].filter(path => path.getAttribute('d'));
+        if (!paths.length) throw new Error('Tidak ada path');
+        this.targetPaths = paths.map(path => path.getAttribute('d'));
+        this.svg.innerHTML = this.targetPaths.map(d => `<path d="${escapeAttr(d)}"></path>`).join('');
+        this.targetStrokes = this.targetPaths.map(d => sampleSvgPath(d, 48));
+        this.ready = true;
+        this.status.textContent = `${this.targetStrokes.length} goresan`;
+      } catch (error) {
+        console.error(`Gagal memuat ${this.char}`, error);
+        this.ready = false;
+        this.status.textContent = 'Data tidak tersedia';
+        this.status.style.color = 'var(--red)';
+      }
+    }
+
+    undo() {
+      if (state.checked) return;
+      this.strokes.pop();
+      this.redraw();
+    }
+
+    clear() {
+      if (state.checked) return;
+      this.strokes = [];
+      this.root.classList.remove('good','warn','bad');
+      this.scoreEl.textContent = '';
+      this.svg.classList.add('hidden');
+      this.svg.classList.remove('answer');
+      this.redraw();
+    }
+
+    showHint() {
+      if (!this.ready || state.checked) return;
+      this.svg.classList.remove('hidden');
+      setTimeout(() => {
+        if (!state.checked) this.svg.classList.add('hidden');
+      }, 1600);
+    }
+
+    evaluate() {
+      const user = normalizeStrokeGroup(this.strokes, 12, 97).map(stroke => resamplePolyline(stroke, 48));
+      const target = normalizeStrokeGroup(this.targetStrokes, 12, 97).map(stroke => resamplePolyline(stroke, 48));
+      const targetStrokeCount = target.length;
+      const userStrokeCount = user.length;
+      const strokeCountMatch = targetStrokeCount === userStrokeCount;
+      const countPenalty = Math.min(.55, Math.abs(targetStrokeCount - userStrokeCount) * .13);
+      const compared = Math.min(targetStrokeCount, userStrokeCount);
+      const strokeScores = [];
+
+      for (let i = 0; i < compared; i++) {
+        const u = user[i], t = target[i];
+        const meanDist = u.reduce((sum, p, idx) => sum + distance(p, t[idx]), 0) / u.length / 120;
+        const startDist = distance(u[0], t[0]) / 120;
+        const endDist = distance(u[u.length - 1], t[t.length - 1]) / 120;
+        const anglePenalty = vectorAngle(
+          { x: u[u.length - 1].x - u[0].x, y: u[u.length - 1].y - u[0].y },
+          { x: t[t.length - 1].x - t[0].x, y: t[t.length - 1].y - t[0].y }
+        ) / Math.PI;
+        const shape = 1 - clamp(meanDist * 2.4 + startDist * .35 + endDist * .25 + anglePenalty * .18, 0, 1);
+        strokeScores.push(shape);
+      }
+
+      const shapeAverage = strokeScores.length ? strokeScores.reduce((a,b) => a+b,0) / strokeScores.length : 0;
+      const coverage = targetStrokeCount ? compared / targetStrokeCount : 0;
+      const total = clamp(shapeAverage * .78 + coverage * .22 - countPenalty, 0, 1);
+      return { total, shapeAverage, coverage, strokeCountMatch, userStrokeCount, targetStrokeCount };
+    }
+
+    showResult(score, threshold, showAnswer) {
+      const pct = Math.round(score.total * 100);
+      this.root.classList.remove('good','warn','bad');
+      if (score.total >= threshold && score.strokeCountMatch) this.root.classList.add('good');
+      else if (score.total >= Math.max(.42, threshold - .14)) this.root.classList.add('warn');
+      else this.root.classList.add('bad');
+      this.scoreEl.textContent = `Kemiripan ${pct}% · ${score.userStrokeCount}/${score.targetStrokeCount} goresan`;
+      if (showAnswer) {
+        this.svg.classList.remove('hidden');
+        this.svg.classList.add('answer');
+        [...this.svg.querySelectorAll('path')].forEach((path, i) => {
+          let length = 300;
+          try { length = path.getTotalLength(); } catch (_) {}
+          path.style.strokeDasharray = length;
+          path.style.strokeDashoffset = length;
+          path.style.setProperty('--length', length);
+          path.style.animationDelay = `${i * .18}s`;
+        });
+      }
+    }
+
+    destroy() {
+      this.resizeObserver.disconnect();
+      this.canvas.removeEventListener('pointerdown', this.onDown);
+      this.canvas.removeEventListener('pointermove', this.onMove);
+      this.canvas.removeEventListener('pointerup', this.onUp);
+      this.canvas.removeEventListener('pointercancel', this.onUp);
+    }
+  }
+
+  function sampleSvgPath(d, count) {
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('width', '0');
+    svg.setAttribute('height', '0');
+    svg.style.position = 'absolute';
+    svg.style.visibility = 'hidden';
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', d);
+    svg.appendChild(path);
+    document.body.appendChild(svg);
+    const length = path.getTotalLength();
+    const points = Array.from({ length: count }, (_, i) => {
+      const p = path.getPointAtLength(length * (i / (count - 1)));
+      return { x: p.x, y: p.y };
+    });
+    svg.remove();
+    return points;
+  }
+
+  function normalizeStrokeGroup(strokes, min, max) {
+    const all = strokes.flat();
+    if (!all.length) return strokes.map(() => []);
+    const xs = all.map(p => p.x), ys = all.map(p => p.y);
+    const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+    const width = Math.max(1, maxX - minX), height = Math.max(1, maxY - minY);
+    const box = max - min;
+    const scale = box / Math.max(width, height);
+    const drawW = width * scale, drawH = height * scale;
+    const offsetX = min + (box - drawW) / 2;
+    const offsetY = min + (box - drawH) / 2;
+    return strokes.map(stroke => stroke.map(p => ({
+      x: offsetX + (p.x - minX) * scale,
+      y: offsetY + (p.y - minY) * scale
+    })));
+  }
+
+  function resamplePolyline(points, count) {
+    if (!points.length) return Array.from({ length: count }, () => ({ x: 0, y: 0 }));
+    if (points.length === 1) return Array.from({ length: count }, () => ({ ...points[0] }));
+    const cumulative = [0];
+    for (let i = 1; i < points.length; i++) cumulative.push(cumulative[i - 1] + distance(points[i - 1], points[i]));
+    const total = cumulative[cumulative.length - 1] || 1;
+    const result = [];
+    for (let i = 0; i < count; i++) {
+      const target = total * (i / (count - 1));
+      let j = 1;
+      while (j < cumulative.length && cumulative[j] < target) j++;
+      if (j >= cumulative.length) result.push({ ...points[points.length - 1] });
+      else {
+        const span = cumulative[j] - cumulative[j - 1] || 1;
+        const ratio = (target - cumulative[j - 1]) / span;
+        result.push({
+          x: points[j - 1].x + (points[j].x - points[j - 1].x) * ratio,
+          y: points[j - 1].y + (points[j].y - points[j - 1].y) * ratio
+        });
+      }
+    }
+    return result;
+  }
+
+  function vectorAngle(a, b) {
+    const magA = Math.hypot(a.x, a.y) || 1;
+    const magB = Math.hypot(b.x, b.y) || 1;
+    const cos = clamp((a.x * b.x + a.y * b.y) / (magA * magB), -1, 1);
+    return Math.acos(cos);
+  }
+
+
+  function isKanjiCharacter(char) {
+    return /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/.test(char);
+  }
+
+  function replaceFirst(text, search, replacement) {
+    const idx = text.indexOf(search);
+    return idx === -1 ? text : text.slice(0, idx) + replacement + text.slice(idx + search.length);
+  }
+
+  function stableId(input) {
+    let hash = 2166136261;
+    for (let i = 0; i < input.length; i++) {
+      hash ^= input.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+    return `card-${(hash >>> 0).toString(16)}`;
+  }
+
+  function dayKey(time) {
+    const d = new Date(time);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function formatDate(time) {
+    return new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(time));
+  }
+
+  function formatRelative(time) {
+    const diff = Date.now() - time;
+    if (diff < 60_000) return 'Baru saja';
+    if (diff < 3_600_000) return `${Math.floor(diff / 60_000)} menit lalu`;
+    if (diff < DAY) return `${Math.floor(diff / 3_600_000)} jam lalu`;
+    return `${Math.floor(diff / DAY)} hari lalu`;
+  }
+
+  function distance(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+  function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
+  function escapeRegExp(value) { return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[c])); }
+  function escapeAttr(value) { return String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+
+  function load(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value ? JSON.parse(value) : structuredCloneSafe(fallback);
+    } catch (_) { return structuredCloneSafe(fallback); }
+  }
+
+  function save(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function structuredCloneSafe(value) {
+    return window.structuredClone ? structuredClone(value) : JSON.parse(JSON.stringify(value));
+  }
+
+  function toast(message) {
+    els.toast.textContent = message;
+    els.toast.classList.add('show');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => els.toast.classList.remove('show'), 3000);
+  }
+})();
+
+</script>
 </body>
 </html>
