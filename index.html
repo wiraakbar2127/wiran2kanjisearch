@@ -403,6 +403,22 @@ td { font-size: 14px; }
   td { grid-template-columns: 88px minmax(0,1fr); }
 }
 
+
+/* Apple Pencil optimization */
+.canvas-wrap,
+.canvas-wrap canvas {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  overscroll-behavior: contain;
+}
+
+.canvas-wrap canvas {
+  cursor: crosshair;
+  touch-action: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -1427,6 +1443,11 @@ td { font-size: 14px; }
     bind() {
       this.onDown = e => {
         if (state.checked) return;
+
+        // Prioritaskan Apple Pencil dan stylus.
+        // Mencegah sentuhan telapak tangan menjadi goresan.
+        if (e.pointerType === 'touch' && e.pressure === 0) return;
+
         e.preventDefault();
         this.canvas.setPointerCapture?.(e.pointerId);
         this.drawing = true;
@@ -1438,12 +1459,19 @@ td { font-size: 14px; }
       this.onMove = e => {
         if (!this.drawing || !this.currentStroke) return;
         e.preventDefault();
-        const point = this.pointFromEvent(e);
-        const last = this.currentStroke[this.currentStroke.length - 1];
-        if (distance(point, last) >= 1.5) {
-          this.currentStroke.push(point);
-          this.redraw();
-        }
+
+        const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+
+        events.forEach(event => {
+          const point = this.pointFromEvent(event);
+          const last = this.currentStroke[this.currentStroke.length - 1];
+
+          if (distance(point, last) >= 0.8) {
+            this.currentStroke.push(point);
+          }
+        });
+
+        this.redraw();
       };
       this.onUp = e => {
         if (!this.drawing) return;
