@@ -227,7 +227,8 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
 
 /* JLPT */
 .jlptFolders{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;flex:0 0 auto}
-.jlptFolder{border:1px solid #d8e4da;background:#fff;border-radius:12px;padding:8px 9px;display:flex;align-items:center;justify-content:space-between;gap:6px;cursor:pointer}
+.jlptFolder{border:1px solid #d8e4da;background:#fff;border-radius:12px;padding:8px 9px;display:flex;align-items:center;justify-content:space-between;gap:6px;cursor:pointer;user-select:none;transition:.15s ease}
+.jlptFolder:active{transform:translateY(1px)}
 .jlptFolder:hover{background:#f4f8f5}.jlptFolder.active{background:#edf6ef;border-color:#7fb08c;box-shadow:inset 0 0 0 1px #a7cbb0}
 .jlptFolderName{font-size:14px;font-weight:900;color:#25402d}.jlptFolderText{font-size:8px;color:#718078;margin-top:1px}.jlptFolderCount{font-size:9px;font-weight:800;color:#50705a;background:#edf4ef;border-radius:999px;padding:4px 6px}
 .jlptItemsPanel{flex:1;display:flex;flex-direction:column}
@@ -265,11 +266,11 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
 .srsShell{gap:12px}
 .srsPageHead{align-items:center}
 .srsLevelWrap{flex:0 0 auto;padding:4px 4px 7px}
-.srsLevelCircles{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;align-items:center;max-width:920px;margin:0 auto;padding:9px 10px 2px}
-.srsLevelCircleWrap{position:relative;display:grid;place-items:center;min-width:0}
-.srsLevelCircle{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid #cad9cd;color:#27342b;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(40,70,50,.05);transition:.18s ease}
+.srsLevelCircles{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(3px,.7vw,10px);align-items:center;width:min(100%,980px);margin:0 auto;padding:9px 4px 3px}
+.srsLevelCircleWrap{position:relative;display:grid;place-items:center;min-width:0;width:100%}
+.srsLevelCircle{width:clamp(26px,3.4vw,46px);height:clamp(26px,3.4vw,46px);border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid #cad9cd;color:#27342b;font-size:clamp(9px,1.1vw,14px);font-weight:900;box-shadow:0 3px 10px rgba(40,70,50,.05);transition:.18s ease}
 .srsLevelCircle.current{background:#e7f3e9;border-color:#6eac7f;color:#376044;box-shadow:0 0 0 4px rgba(110,172,127,.12)}
-.srsLevelBadge{position:absolute;z-index:2;top:-8px;right:calc(50% - 29px);min-width:22px;height:19px;padding:0 5px;border-radius:999px;background:#5e9c70;color:#fff;border:2px solid #fff;display:grid;place-items:center;font-size:7.5px;font-weight:900;line-height:1}
+.srsLevelBadge{position:absolute;z-index:2;top:-7px;left:calc(50% + clamp(6px,1.15vw,15px));transform:translateX(-15%);min-width:18px;height:17px;padding:0 4px;border-radius:999px;background:#5e9c70;color:#fff;border:2px solid #fff;display:grid;place-items:center;font-size:7px;font-weight:900;line-height:1}
 .srsQuestionPanel{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px 6px 5px}
 .srsQueueLine{font-size:10px;color:#667168;margin-bottom:8px;text-align:center;min-height:15px}
 .srsQuestionCard{width:min(620px,94%);min-height:310px;background:#fff;border:1px solid #d9e5db;border-radius:22px;box-shadow:0 10px 28px rgba(40,70,50,.07);padding:18px 26px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
@@ -278,19 +279,23 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
 .srsQuestionMeta{font-size:9.5px;color:#6d7970;margin-bottom:12px}
 .srsAnswerBox{width:100%;max-width:500px;background:#f5f9f6;border:1px solid #dce8de;border-radius:14px;padding:11px 14px;margin-bottom:13px}
 .srsAnswerMeaning{font-size:17px;font-weight:850;line-height:1.35;color:#151a16}
-.srsAnswerReadings{font-size:10.5px;line-height:1.5;color:#5a675e;margin-top:5px;white-space:pre-wrap}
+.srsAnswerReadings{font-size:15px;line-height:1.55;color:#25332a;margin-top:9px;display:grid;gap:5px}
+.srsReadingRow{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:baseline;text-align:left}
+.srsReadingLabel{font-size:10px;font-weight:800;color:#718078;text-transform:none}
+.srsReadingValue{font-size:16px;font-weight:850;color:#111;word-break:break-word}
 .srsControls{display:flex;justify-content:center;align-items:center;min-height:40px}
 .srsRevealBtn,.srsForgetBtn,.srsRememberBtn{min-height:38px;border-radius:11px;padding:0 20px;font-size:11px;box-shadow:none}
-.srsRevealBtn{background:#6eac7f;border-color:#609d72;color:#fff}
+.srsRevealBtn{width:42px;min-width:42px;padding:0;display:grid;place-items:center;background:#6eac7f;border-color:#609d72;color:#fff}
+.srsRevealBtn svg{width:19px;height:19px;display:block;stroke:currentColor}
 .srsGradeActions{display:flex;gap:12px}
 .srsForgetBtn{background:#fff;color:#8b4e4e;border-color:#dfc6c6;min-width:110px}
 .srsRememberBtn{background:#6eac7f;color:#fff;border-color:#609d72;min-width:110px}
 
 @media(max-width:900px){
-  .srsLevelCircles{grid-template-columns:repeat(6,1fr);gap:12px 8px}.srsQuestionChar{font-size:96px}.jlptGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .srsLevelCircles{grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}.srsQuestionChar{font-size:96px}.jlptGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:700px){
-  .srsLevelCircles{grid-template-columns:repeat(6,1fr);padding:6px 2px}.srsLevelCircle{width:40px;height:40px;font-size:12px}.srsLevelBadge{right:calc(50% - 26px)}
+  .srsLevelCircles{grid-template-columns:repeat(12,minmax(0,1fr));gap:2px;padding:6px 0}.srsLevelCircle{width:clamp(24px,7vw,32px);height:clamp(24px,7vw,32px);font-size:9px}.srsLevelBadge{top:-6px;left:calc(50% + 7px);min-width:16px;height:15px;font-size:6px;padding:0 3px}
   .srsQuestionCard{min-height:300px;padding:16px}.srsQuestionChar{font-size:88px}.jlptGrid{grid-template-columns:1fr}.jlptKanjiCard{grid-template-columns:58px minmax(0,1fr)}.jlptChar{width:58px;height:58px;font-size:38px}
 }
 
@@ -341,7 +346,7 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
           <div class="srsAnswerReadings" id="srsAnswerReadings"></div>
         </div>
         <div class="srsControls" id="srsControls">
-          <button class="srsRevealBtn" id="srsRevealBtn">Tampilkan Jawaban</button>
+          <button class="srsRevealBtn" id="srsRevealBtn" type="button" aria-label="Tampilkan jawaban" title="Tampilkan jawaban"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" stroke-width="1.8"/></svg></button>
           <div class="srsGradeActions" id="srsGradeActions" hidden>
             <button class="srsForgetBtn" id="srsForgetBtn">Lupa</button>
             <button class="srsRememberBtn" id="srsRememberBtn">Ingat</button>
@@ -615,8 +620,13 @@ async function hydrateSRSAnswer(entry){
     if(tr&&srsCurrent&&srsCurrent.entry.kanji===entry.kanji)$('#srsAnswerMeaning').textContent=tr;
   }
   if((!d.on||d.on==='–')&&(!d.kun||d.kun==='–')){
-    try{const ex=await enrichKanji(entry.kanji);if(srsCurrent&&srsCurrent.entry.kanji===entry.kanji){$('#srsAnswerMeaning').textContent=ex.id||$('#srsAnswerMeaning').textContent;$('#srsAnswerReadings').textContent=`On’yomi: ${ex.on||'–'}   ·   Kun’yomi: ${ex.kun||'–'}`}}catch(e){}
+    try{const ex=await enrichKanji(entry.kanji);if(srsCurrent&&srsCurrent.entry.kanji===entry.kanji){$('#srsAnswerMeaning').textContent=ex.id||$('#srsAnswerMeaning').textContent;setSRSReadings(ex.on||'–',ex.kun||'–')}}catch(e){}
   }
+}
+function setSRSReadings(on,kun){
+  const box=$('#srsAnswerReadings');
+  if(!box)return;
+  box.innerHTML=`<div class="srsReadingRow"><span class="srsReadingLabel">On’yomi</span><span class="srsReadingValue">${esc(on||'–')}</span></div><div class="srsReadingRow"><span class="srsReadingLabel">Kun’yomi</span><span class="srsReadingValue">${esc(kun||'–')}</span></div>`;
 }
 function renderSRSLevels(entries,db,currentLevel){
   const counts=srsCounts(entries,db);
@@ -640,13 +650,13 @@ async function renderSRS(){
   if(!pick.entry){
     $('#srsQuestionChar').textContent='✓';$('#srsQuestionMeta').textContent='Tidak ada soal yang jatuh tempo saat ini.';
     $('#srsAnswerBox').hidden=false;$('#srsAnswerMeaning').textContent=pick.next?`Review berikutnya dalam ${formatWait((db[pick.next.kanji].nextReview||0)-Date.now())}.`:'Semua kanji sudah mencapai Level 12.';
-    $('#srsAnswerReadings').textContent='';$('#srsRevealBtn').hidden=true;$('#srsQueueLine').textContent='Antrean latihan selesai untuk saat ini.';return;
+    $('#srsAnswerReadings').innerHTML='';$('#srsRevealBtn').hidden=true;$('#srsQueueLine').textContent='Antrean latihan selesai untuk saat ini.';return;
   }
   const st=srsStateFor(pick.entry.kanji,db),d=displaySRSData(pick.entry);
   $('#srsQuestionChar').textContent=d.k;
   $('#srsQuestionMeta').textContent=`${d.jlpt} · Level ${st.level} · ${pick.kind==='review'?'Review jatuh tempo':'Kanji baru'}`;
   $('#srsAnswerMeaning').textContent=d.meaning;
-  $('#srsAnswerReadings').textContent=`On’yomi: ${d.on}   ·   Kun’yomi: ${d.kun}`;
+  setSRSReadings(d.on,d.kun);
   $('#srsQueueLine').textContent=pick.kind==='review'?`Prioritas review: ${pick.dueCount} kanji sudah jatuh tempo.`:'Tidak ada review jatuh tempo. Menampilkan kanji yang belum pernah dites.';
   hydrateSRSAnswer(pick.entry);
 }
@@ -683,16 +693,25 @@ async function loadJLPTData(){
 }
 function jlptEntries(level){if(!jlptData)return[];return Object.values(jlptData).filter(x=>Number(x.jlpt)===Number(level)).sort((a,b)=>(a.freq_mainichi_shinbun??99999)-(b.freq_mainichi_shinbun??99999))}
 async function localizeJLPTCard(k,en){const el=document.querySelector(`[data-jlpt-meaning="${CSS.escape(k)}"]`);if(!el)return;const mapped=kanjiLocal[k]?.id||localGloss(en);if(mapped&&mapped.toLowerCase()!==String(en).toLowerCase()){el.textContent=mapped;return}const tr=await translate(en,'en','id');if(el&&tr)el.textContent=tr}
-function renderJLPTFolders(){const counts={};for(let l=1;l<=5;l++)counts[l]=jlptEntries(l).length;$('#jlptFolders').innerHTML=[5,4,3,2,1].map(l=>`<div class="jlptFolder ${l===jlptSelected?'active':''}" data-jlpt-level="${l}"><div><div class="jlptFolderName">N${l}</div><div class="jlptFolderText">Folder kanji</div></div><div class="jlptFolderCount">${counts[l]||'…'}</div></div>`).join('');document.querySelectorAll('.jlptFolder').forEach(x=>x.onclick=()=>{jlptSelected=Number(x.dataset.jlptLevel);jlptPageIndex=0;renderJLPT()})}
+function renderJLPTFolders(){const counts={};for(let l=1;l<=5;l++)counts[l]=jlptEntries(l).length;$('#jlptFolders').innerHTML=[5,4,3,2,1].map(l=>`<div class="jlptFolder ${l===jlptSelected?'active':''}" data-jlpt-level="${l}" role="button" tabindex="0"><div><div class="jlptFolderName">N${l}</div><div class="jlptFolderText">Folder kanji</div></div><div class="jlptFolderCount">${counts[l]||'…'}</div></div>`).join('')}
 function renderJLPT(){
   renderJLPTFolders();const arr=jlptEntries(jlptSelected),per=9,pages=Math.max(1,Math.ceil(arr.length/per));jlptPageIndex=Math.min(jlptPageIndex,pages-1);const page=arr.slice(jlptPageIndex*per,(jlptPageIndex+1)*per);
   $('#jlptSelectedTitle').textContent=`JLPT N${jlptSelected}`;$('#jlptSelectedSub').textContent=`${arr.length} kanji · arti dan cara baca`;
   $('#jlptGrid').innerHTML=page.length?page.map(x=>{const k=x.kanji||'',en=(x.meanings||[]).slice(0,3).join(', '),mapped=kanjiLocal[k]?.id||localGloss(en)||'menerjemahkan…';const on=(x.on_readings||[]).slice(0,4).join('・')||'–',kun=(x.kun_readings||[]).slice(0,4).join('・')||'–';return `<div class="jlptKanjiCard" data-open-kanji="${esc(k)}"><div class="jlptChar">${esc(k)}</div><div class="jlptCardBody"><div class="jlptMeaning" data-jlpt-meaning="${esc(k)}">${esc(mapped)}</div><div class="jlptReading"><b>On:</b> ${esc(on)}</div><div class="jlptReading"><b>Kun:</b> ${esc(kun)}</div></div></div>`}).join(''):'<div class="emptyState">Data level ini belum tersedia.</div>';
   page.forEach(x=>{const en=(x.meanings||[]).slice(0,3).join(', ');if(en)localizeJLPTCard(x.kanji,en)});
-  $('#jlptPager').innerHTML=arr.length>per?`<button class="pagerBtn" id="jlptPrev">‹</button><span class="pagerInfo">${jlptPageIndex+1} / ${pages}</span><button class="pagerBtn" id="jlptNext">›</button>`:'';
-  if($('#jlptPrev'))$('#jlptPrev').onclick=()=>{jlptPageIndex=Math.max(0,jlptPageIndex-1);renderJLPT()};if($('#jlptNext'))$('#jlptNext').onclick=()=>{jlptPageIndex=Math.min(pages-1,jlptPageIndex+1);renderJLPT()};
+  $('#jlptPager').innerHTML=arr.length>per?`<button type="button" class="pagerBtn" id="jlptPrev" aria-label="Halaman sebelumnya">‹</button><span class="pagerInfo">${jlptPageIndex+1} / ${pages}</span><button type="button" class="pagerBtn" id="jlptNext" aria-label="Halaman berikutnya">›</button>`:'';
   document.querySelectorAll('[data-open-kanji]').forEach(card=>card.addEventListener('dblclick',()=>{input.value=card.dataset.openKanji;switchPage('searchPage');searchWord()}));
 }
+function selectJLPTLevel(level){
+  const n=Number(level);if(!Number.isFinite(n)||n<1||n>5)return;
+  jlptSelected=n;jlptPageIndex=0;renderJLPT();
+}
+$('#jlptFolders').addEventListener('click',e=>{const folder=e.target.closest('[data-jlpt-level]');if(folder)selectJLPTLevel(folder.dataset.jlptLevel)});
+$('#jlptFolders').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const folder=e.target.closest('[data-jlpt-level]');if(folder){e.preventDefault();selectJLPTLevel(folder.dataset.jlptLevel)}});
+$('#jlptPager').addEventListener('click',e=>{
+  if(e.target.closest('#jlptPrev')){jlptPageIndex=Math.max(0,jlptPageIndex-1);renderJLPT();return}
+  if(e.target.closest('#jlptNext')){const pages=Math.max(1,Math.ceil(jlptEntries(jlptSelected).length/9));jlptPageIndex=Math.min(pages-1,jlptPageIndex+1);renderJLPT()}
+});
 async function initJLPT(){if(!jlptData){$('#jlptDataStatus').textContent='Memuat dataset…';$('#jlptGrid').innerHTML='<div class="emptyState">Memuat folder JLPT…</div>';await loadJLPTData()}renderJLPT()}
 
 
