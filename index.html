@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kanji Dictionary</title>
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%231f7a4c"/><text x="32" y="44" font-size="38" text-anchor="middle" fill="white" font-family="serif">漢</text></svg>'>
+<link rel="apple-touch-icon" sizes="180x180" href="kanji-icon-180.png">
+<link rel="apple-touch-icon-precomposed" sizes="180x180" href="data:image/png;base64,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">
+<link rel="icon" type="image/png" sizes="192x192" href="kanji-icon-192.png">
+<link rel="manifest" href="kanji-manifest.webmanifest">
+<meta name="theme-color" content="#1f7a4c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kanji">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
@@ -299,6 +308,83 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
   .srsQuestionCard{min-height:300px;padding:16px}.srsQuestionChar{font-size:88px}.jlptGrid{grid-template-columns:1fr}.jlptKanjiCard{grid-template-columns:58px minmax(0,1fr)}.jlptChar{width:58px;height:58px;font-size:38px}
 }
 
+
+
+/* ===== V25: JLPT fit, icon-only SRS controls, mobile app icon ===== */
+/* JLPT cards use the available panel evenly, with readable spacing. */
+#jlptPage .secondaryShell{gap:12px}
+#jlptPage .jlptFolders{gap:10px}
+#jlptPage .jlptItemsPanel{padding:12px 14px}
+#jlptPage .panelBar{margin-bottom:10px}
+#jlptPage .jlptGrid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(3,minmax(0,1fr));
+  gap:14px;
+  align-content:stretch;
+  height:100%;
+  min-height:0;
+}
+#jlptPage .jlptKanjiCard{
+  height:100%;
+  min-height:0;
+  grid-template-columns:68px minmax(0,1fr);
+  gap:13px;
+  padding:clamp(10px,1.35vh,15px) 15px;
+  border-radius:15px;
+  align-items:center;
+}
+#jlptPage .jlptChar{
+  width:68px;height:68px;border-radius:13px;font-size:44px;
+}
+#jlptPage .jlptMeaning{
+  font-size:13px;line-height:1.42;margin-bottom:7px;
+  overflow-wrap:anywhere;word-break:normal;
+}
+#jlptPage .jlptReading{font-size:10px;line-height:1.45;margin-top:3px}
+#jlptPage .pager{margin-top:9px;min-height:29px}
+
+/* All SRS action controls are equal-size icons with deliberate spacing. */
+.srsControls{min-height:48px;margin-top:2px}
+.srsGradeActions{display:flex;align-items:center;justify-content:center;gap:18px}
+.srsIconBtn,
+.srsRevealBtn.srsIconBtn,
+.srsForgetBtn.srsIconBtn,
+.srsRememberBtn.srsIconBtn{
+  width:44px;min-width:44px;height:44px;min-height:44px;padding:0;
+  border-radius:12px;display:grid;place-items:center;box-shadow:none;
+}
+.srsIconBtn svg{width:20px;height:20px;display:block;stroke:currentColor}
+.srsRevealBtn.srsIconBtn{background:#6eac7f;color:#fff;border-color:#609d72}
+.srsForgetBtn.srsIconBtn{background:#fff;color:#965a5a;border:1px solid #dfc6c6}
+.srsRememberBtn.srsIconBtn{background:#6eac7f;color:#fff;border:1px solid #609d72}
+.srsIconBtn:hover{transform:translateY(-1px);filter:none}
+.srsIconBtn:active{transform:translateY(0)}
+.srsIconBtn:focus-visible{outline:3px solid rgba(110,172,127,.22);outline-offset:2px}
+
+@media(max-width:900px){
+  #jlptPage .jlptGrid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;height:auto}
+  #jlptPage .jlptKanjiCard{min-height:108px;height:auto}
+}
+@media(max-width:620px){
+  #jlptPage .jlptGrid{grid-template-columns:1fr;gap:10px}
+  #jlptPage .jlptKanjiCard{grid-template-columns:60px minmax(0,1fr);padding:11px 12px}
+  #jlptPage .jlptChar{width:60px;height:60px;font-size:40px}
+  #jlptPage .jlptMeaning{font-size:12.5px}
+  #jlptPage .jlptReading{font-size:10px}
+  .srsGradeActions{gap:16px}
+  .srsIconBtn,.srsRevealBtn.srsIconBtn,.srsForgetBtn.srsIconBtn,.srsRememberBtn.srsIconBtn{width:42px;min-width:42px;height:42px;min-height:42px}
+}
+
+
+/* V26: spacing tombol SRS */
+.srsControls{gap:22px}
+.srsGradeActions{gap:22px}
+.srsRevealBtn.srsIconBtn{margin-right:8px}
+@media(max-width:720px){
+  .srsControls{gap:18px}
+  .srsGradeActions{gap:18px}
+  .srsRevealBtn.srsIconBtn{margin-right:6px}
+}
 </style>
 </head>
 <body>
@@ -346,10 +432,14 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
           <div class="srsAnswerReadings" id="srsAnswerReadings"></div>
         </div>
         <div class="srsControls" id="srsControls">
-          <button class="srsRevealBtn" id="srsRevealBtn" type="button" aria-label="Tampilkan jawaban" title="Tampilkan jawaban"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" stroke-width="1.8"/></svg></button>
+          <button class="srsRevealBtn srsIconBtn" id="srsRevealBtn" type="button" aria-label="Tampilkan jawaban" title="Tampilkan jawaban"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" stroke-width="1.8"/></svg></button>
           <div class="srsGradeActions" id="srsGradeActions" hidden>
-            <button class="srsForgetBtn" id="srsForgetBtn">Lupa</button>
-            <button class="srsRememberBtn" id="srsRememberBtn">Ingat</button>
+            <button class="srsForgetBtn srsIconBtn" id="srsForgetBtn" type="button" aria-label="Lupa" title="Lupa">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 8V3.5M3.5 3.5H8M3.5 3.5 7 7a8 8 0 1 1-1.7 8.7" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="srsRememberBtn srsIconBtn" id="srsRememberBtn" type="button" aria-label="Ingat" title="Ingat">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.1 4.1L19 6.8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
         </div>
       </div>
