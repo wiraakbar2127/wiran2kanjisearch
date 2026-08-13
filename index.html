@@ -386,6 +386,94 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
   .srsRevealBtn.srsIconBtn{margin-right:6px}
 }
 </style>
+
+<style>
+/* ===== V27: compact JLPT cards + always-visible pager ===== */
+#jlptPage .secondaryShell{gap:9px}
+#jlptPage .jlptFolders{gap:7px}
+#jlptPage .jlptFolder{padding:6px 8px;border-radius:10px}
+#jlptPage .jlptFolderName{font-size:13px}
+#jlptPage .jlptFolderText{font-size:7.5px}
+#jlptPage .jlptFolderCount{font-size:8px;padding:3px 5px}
+
+#jlptPage .jlptItemsPanel{
+  position:relative;
+  padding:10px 12px 44px!important;
+  overflow:hidden;
+}
+#jlptPage .panelBar{margin-bottom:7px}
+#jlptPage .jlptGrid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(3,minmax(0,1fr));
+  gap:9px;
+  height:auto;
+  flex:1 1 auto;
+  min-height:0;
+  align-content:stretch;
+}
+#jlptPage .jlptKanjiCard{
+  min-height:0;
+  height:100%;
+  grid-template-columns:54px minmax(0,1fr);
+  gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  align-items:center;
+}
+#jlptPage .jlptChar{
+  width:54px;
+  height:54px;
+  border-radius:10px;
+  font-size:36px;
+}
+#jlptPage .jlptMeaning{
+  font-size:11px;
+  line-height:1.32;
+  margin-bottom:4px;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+}
+#jlptPage .jlptReading{
+  font-size:8.8px;
+  line-height:1.32;
+  margin-top:1px;
+}
+/* Keep pagination reachable even when the one-screen layout is tight. */
+#jlptPage #jlptPager{
+  position:absolute;
+  left:50%;
+  bottom:8px;
+  transform:translateX(-50%);
+  z-index:50;
+  margin:0;
+  min-height:28px;
+  padding:2px 6px;
+  border-radius:10px;
+  background:rgba(255,255,255,.96);
+  border:1px solid #dce6de;
+  box-shadow:0 3px 10px rgba(41,65,48,.08);
+  pointer-events:auto;
+}
+#jlptPage #jlptPager .pagerBtn{
+  min-width:34px;
+  min-height:26px;
+  cursor:pointer;
+  pointer-events:auto;
+}
+#jlptPage #jlptPager .pagerInfo{font-size:8.5px}
+@media(max-width:900px){
+  #jlptPage .jlptItemsPanel{padding-bottom:46px!important;overflow:visible}
+  #jlptPage .jlptGrid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;height:auto}
+  #jlptPage .jlptKanjiCard{min-height:82px;height:auto}
+  #jlptPage #jlptPager{position:sticky;left:auto;bottom:6px;transform:none;margin:8px auto 0;width:max-content}
+}
+@media(max-width:620px){
+  #jlptPage .jlptGrid{grid-template-columns:1fr;gap:8px}
+  #jlptPage .jlptKanjiCard{grid-template-columns:50px minmax(0,1fr);padding:7px 9px}
+  #jlptPage .jlptChar{width:50px;height:50px;font-size:33px}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
