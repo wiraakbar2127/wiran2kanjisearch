@@ -124,6 +124,67 @@ button{border-radius:10px;padding:0 16px;min-width:66px;min-height:36px;font-siz
   .strokeLoading{min-height:94px}
 }
 
+
+/* ===== V21: BALANCED COMPACT LAYOUT ===== */
+.wrap{max-width:1280px;padding:12px 18px 10px}
+.top{margin-bottom:10px;gap:10px}
+.logo{width:40px;height:40px;font-size:25px}
+.brand h1{font-size:17px}.brand p{font-size:10.5px}
+.search{padding:13px 16px}
+.search h2{font-size:22px;margin-bottom:4px}
+.search p{font-size:10.5px;line-height:1.4;margin-bottom:9px}
+input{font-size:17px;padding:9px 12px;min-height:38px}
+button{font-size:12.5px;min-height:38px;padding:0 18px}
+.results{margin-top:11px;gap:12px}
+.wordCard{padding:12px 15px}
+.word{font-size:48px}
+.reading{font-size:13px;margin-top:4px}
+.tag{font-size:8.5px;margin-top:5px}
+.meaningBox{margin-top:9px;padding:8px 11px}
+.label{font-size:8.5px}
+.meaning{font-size:16px;line-height:1.3}
+.exampleBox{margin-top:8px;padding-top:8px}
+.exampleHead{margin-bottom:5px}.exampleTitle{font-size:11px}.exampleHint{font-size:8.5px}
+.exampleItem{padding:7px 10px;border-radius:9px}
+.exampleJP{font-size:14px;line-height:1.45}
+.exampleID{font-size:10px;line-height:1.4;margin-top:3px}
+.breakdown{padding:12px 14px}
+.breakdown h3{font-size:14.5px;margin-bottom:2px}
+.sub{font-size:9.5px;line-height:1.35;margin-bottom:9px}
+.charList{gap:12px 14px;align-items:stretch}
+.charCard{
+  grid-template-columns:minmax(0,1fr) 142px;
+  column-gap:11px;row-gap:6px;
+  border-radius:13px;padding:10px 11px;
+  box-shadow:0 3px 10px rgba(40,70,50,.035)
+}
+.charHead{gap:9px;padding-bottom:7px}
+.char{width:46px;height:46px;border-radius:10px;font-size:31px}
+.charMeaning{font-size:11.5px;line-height:1.32}
+.meta{grid-template-columns:66px minmax(0,1fr);gap:4px 7px;font-size:10px;line-height:1.35}
+.jlpt{font-size:8.5px;padding:2px 7px}
+.strokeSection{padding-left:10px}
+.strokeTitle{font-size:10.5px;gap:4px;margin-bottom:5px}
+.strokeSource{font-size:7.5px;padding:2px 5px}
+.strokeViewer{width:132px;max-width:132px;padding:4px;border-radius:10px}
+.strokeViewer img{width:122px;max-width:122px;max-height:122px}
+.strokeViewer kaki-jun{width:122px;max-width:122px;padding:2px}
+.strokeLoading{font-size:8.5px;min-height:116px}
+.note{margin-top:7px;font-size:8.5px}
+@media(max-width:980px){
+  .wrap{padding:9px 10px 7px}
+  .charCard{grid-template-columns:minmax(0,1fr) 120px;column-gap:8px}
+  .strokeViewer{width:111px;max-width:111px}.strokeViewer img,.strokeViewer kaki-jun{width:103px;max-width:103px;max-height:103px}.strokeLoading{min-height:97px}
+}
+@media(max-width:700px){
+  html,body{overflow:auto}
+  .wrap{zoom:1!important}
+  .search p,.brand p{display:none}
+  .charList{grid-template-columns:1fr!important;gap:11px}
+  .charCard{grid-template-columns:minmax(0,1fr) 126px}
+  .strokeViewer{width:116px;max-width:116px}.strokeViewer img,.strokeViewer kaki-jun{width:108px;max-width:108px;max-height:108px}
+}
+
 </style>
 </head>
 <body>
@@ -271,8 +332,16 @@ async function enrichKanji(k){const cached=cacheGet('kanji:'+k);if(cached)return
 
 function setKanjiGrid(count){
   const list=$('#charList');if(!list)return;
-  const cols=count<=1?1:count===2?2:count<=4?count:count<=6?3:count<=8?4:5;
-  list.style.gridTemplateColumns=`repeat(${cols},minmax(0,1fr))`;
+  const w=window.innerWidth;
+  let cols=1;
+  if(w>=1180){
+    cols=count<=1?1:count===2?2:count===3?3:count>=4?4:1;
+  }else if(w>=900){
+    cols=count<=1?1:count===2?2:count===3?3:2;
+  }else if(w>=700){
+    cols=count<=1?1:2;
+  }
+  list.style.gridTemplateColumns=`repeat(${Math.min(cols,count)},minmax(0,1fr))`;
 }
 let fitTimer=0;
 function fitPage(){
@@ -288,7 +357,7 @@ function fitPage(){
   },35);
 }
 const fitObserver=new MutationObserver(()=>fitPage());
-window.addEventListener('resize',fitPage);
+window.addEventListener('resize',()=>{setKanjiGrid(kanjiChars(input.value.trim()).length||1);fitPage()});
 window.addEventListener('load',()=>{const w=document.querySelector('.wrap');if(w)fitObserver.observe(w,{subtree:true,childList:true,characterData:true});fitPage()});
 
 async function searchWord(){
