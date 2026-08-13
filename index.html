@@ -246,6 +246,54 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
   .top{align-items:flex-start}.navTabs{gap:4px}.navBtn{padding:0 7px;min-height:29px}.brand p{display:none}.secondaryPage{overflow:auto}.srsItems{grid-template-columns:1fr}.levelGrid{grid-template-columns:repeat(3,1fr)}.jlptFolders{grid-template-columns:repeat(5,minmax(54px,1fr))}.jlptGrid{grid-template-columns:repeat(2,1fr)}
 }
 
+
+/* ===== V23: FOCUSED SRS + CLEAN JLPT ===== */
+/* Remove obsolete SRS add controls everywhere. */
+.miniSrsBtn,.jlptAdd,.jlptAddBtn{display:none!important}
+
+/* JLPT: larger, cleaner, no truncation. */
+.jlptGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;align-content:start}
+.jlptKanjiCard{grid-template-columns:64px minmax(0,1fr);gap:12px;padding:13px 14px;border-radius:14px;cursor:default;min-height:112px;align-items:center}
+.jlptKanjiCard:hover{background:#fff;border-color:#dce6de}
+.jlptChar{width:64px;height:64px;border-radius:12px;font-size:42px}
+.jlptCardBody{min-width:0}
+.jlptMeaning{font-size:12.5px;line-height:1.42;white-space:normal;overflow:visible;text-overflow:clip;word-break:normal;overflow-wrap:anywhere;margin-bottom:7px}
+.jlptReading{font-size:9.5px;line-height:1.45;white-space:normal;overflow:visible;text-overflow:clip;margin-top:2px}
+.jlptReading b{color:#3c4c40}
+
+/* SRS: one-question review mode. */
+.srsShell{gap:12px}
+.srsPageHead{align-items:center}
+.srsLevelWrap{flex:0 0 auto;padding:4px 4px 7px}
+.srsLevelCircles{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;align-items:center;max-width:920px;margin:0 auto;padding:9px 10px 2px}
+.srsLevelCircleWrap{position:relative;display:grid;place-items:center;min-width:0}
+.srsLevelCircle{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid #cad9cd;color:#27342b;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(40,70,50,.05);transition:.18s ease}
+.srsLevelCircle.current{background:#e7f3e9;border-color:#6eac7f;color:#376044;box-shadow:0 0 0 4px rgba(110,172,127,.12)}
+.srsLevelBadge{position:absolute;z-index:2;top:-8px;right:calc(50% - 29px);min-width:22px;height:19px;padding:0 5px;border-radius:999px;background:#5e9c70;color:#fff;border:2px solid #fff;display:grid;place-items:center;font-size:7.5px;font-weight:900;line-height:1}
+.srsQuestionPanel{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px 6px 5px}
+.srsQueueLine{font-size:10px;color:#667168;margin-bottom:8px;text-align:center;min-height:15px}
+.srsQuestionCard{width:min(620px,94%);min-height:310px;background:#fff;border:1px solid #d9e5db;border-radius:22px;box-shadow:0 10px 28px rgba(40,70,50,.07);padding:18px 26px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.srsPrompt{font-size:11px;color:#718078;font-weight:700;margin-bottom:5px}
+.srsQuestionChar{font:700 112px/1.05 "Yu Mincho","Noto Serif JP",serif;color:#111;margin:4px 0 5px}
+.srsQuestionMeta{font-size:9.5px;color:#6d7970;margin-bottom:12px}
+.srsAnswerBox{width:100%;max-width:500px;background:#f5f9f6;border:1px solid #dce8de;border-radius:14px;padding:11px 14px;margin-bottom:13px}
+.srsAnswerMeaning{font-size:17px;font-weight:850;line-height:1.35;color:#151a16}
+.srsAnswerReadings{font-size:10.5px;line-height:1.5;color:#5a675e;margin-top:5px;white-space:pre-wrap}
+.srsControls{display:flex;justify-content:center;align-items:center;min-height:40px}
+.srsRevealBtn,.srsForgetBtn,.srsRememberBtn{min-height:38px;border-radius:11px;padding:0 20px;font-size:11px;box-shadow:none}
+.srsRevealBtn{background:#6eac7f;border-color:#609d72;color:#fff}
+.srsGradeActions{display:flex;gap:12px}
+.srsForgetBtn{background:#fff;color:#8b4e4e;border-color:#dfc6c6;min-width:110px}
+.srsRememberBtn{background:#6eac7f;color:#fff;border-color:#609d72;min-width:110px}
+
+@media(max-width:900px){
+  .srsLevelCircles{grid-template-columns:repeat(6,1fr);gap:12px 8px}.srsQuestionChar{font-size:96px}.jlptGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .srsLevelCircles{grid-template-columns:repeat(6,1fr);padding:6px 2px}.srsLevelCircle{width:40px;height:40px;font-size:12px}.srsLevelBadge{right:calc(50% - 26px)}
+  .srsQuestionCard{min-height:300px;padding:16px}.srsQuestionChar{font-size:88px}.jlptGrid{grid-template-columns:1fr}.jlptKanjiCard{grid-template-columns:58px minmax(0,1fr)}.jlptChar{width:58px;height:58px;font-size:38px}
+}
+
 </style>
 </head>
 <body>
@@ -262,7 +310,7 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
 <div class="appPage active" id="searchPage">
 <section class="card search">
 <h2>Cari kosakata kanji</h2>
-<p>Masukkan satu kanji atau kosakata Jepang.</p>
+<p>Masukkan satu kanji atau kosakata Jepang. Arti kata utuh akan ditampilkan lebih dahulu, lalu setiap kanji dijelaskan dengan arti, On’yomi, Kun’yomi, jumlah stroke, dan level JLPT.</p>
 <div class="inputRow"><input id="wordInput" maxlength="20" placeholder="Ketik Kanji" autocomplete="off"><button id="goBtn">Cari</button></div>
 <div class="status" id="status">Mencari arti...</div><div class="error" id="error"></div>
 </section>
@@ -274,11 +322,32 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
 </div>
 
 <div class="appPage secondaryPage" id="srsPage">
-  <section class="card secondaryShell">
-    <div class="pageHead"><div><h2>SRS 12 Level</h2><p>Simpan kanji dari halaman Cari atau JLPT, kemudian naikkan levelnya saat sudah ingat.</p></div><div class="pageStat"><span class="statPill" id="srsTotalStat">0 kanji</span><span class="statPill" id="srsDueStat">0 perlu review</span></div></div>
-    <div class="srsLayout">
-      <div class="levelPanel"><div class="panelTitle">Level SRS</div><div class="levelGrid" id="srsLevelGrid"></div></div>
-      <div class="srsItemsPanel"><div class="panelBar"><div><div class="panelBarTitle" id="srsSelectedTitle">Level 1</div><div class="panelBarSub" id="srsSelectedSub">Kanji baru</div></div></div><div class="srsItems" id="srsItems"></div><div class="pager" id="srsPager"></div></div>
+  <section class="card secondaryShell srsShell">
+    <div class="pageHead srsPageHead">
+      <div><h2>SRS Kanji N5 → N1</h2><p>Satu kanji per soal. Review yang sudah jatuh tempo selalu diprioritaskan sebelum kanji yang belum pernah dites.</p></div>
+      <div class="pageStat"><span class="statPill" id="srsTotalStat">Memuat target…</span><span class="statPill" id="srsDueStat">0 review jatuh tempo</span></div>
+    </div>
+    <div class="srsLevelWrap">
+      <div class="srsLevelCircles" id="srsLevelGrid"></div>
+    </div>
+    <div class="srsQuestionPanel">
+      <div class="srsQueueLine" id="srsQueueLine">Menyiapkan antrean latihan…</div>
+      <div class="srsQuestionCard" id="srsQuestionCard">
+        <div class="srsPrompt">Ingat arti dan cara baca kanji ini</div>
+        <div class="srsQuestionChar" id="srsQuestionChar">漢</div>
+        <div class="srsQuestionMeta" id="srsQuestionMeta"></div>
+        <div class="srsAnswerBox" id="srsAnswerBox" hidden>
+          <div class="srsAnswerMeaning" id="srsAnswerMeaning"></div>
+          <div class="srsAnswerReadings" id="srsAnswerReadings"></div>
+        </div>
+        <div class="srsControls" id="srsControls">
+          <button class="srsRevealBtn" id="srsRevealBtn">Tampilkan Jawaban</button>
+          <div class="srsGradeActions" id="srsGradeActions" hidden>
+            <button class="srsForgetBtn" id="srsForgetBtn">Lupa</button>
+            <button class="srsRememberBtn" id="srsRememberBtn">Ingat</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -387,7 +456,7 @@ async function loadExamples(word){
   renderExamples(word,rows);
 }
 function initialKanji(k){const local=kanjiLocal[k]||{};return{char:k,id:local.id||'memuat arti…',on:local.on||'…',kun:local.kun||'…',strokes:local.strokes??'…',jlpt:'…'}}
-function renderChar(c,i){return `<div class="charCard" id="charCard-${i}"><div class="charHead"><div class="char">${esc(c.char)}</div><div><div class="label">ARTI KANJI</div><div class="charMeaning" data-f="id">${esc(c.id)}</div><button class="miniSrsBtn" data-srs-kanji="${esc(c.char)}">＋ SRS</button></div></div><div class="meta"><div class="k">On’yomi</div><div class="v" data-f="on">${esc(c.on)}</div><div class="k">Kun’yomi</div><div class="v" data-f="kun">${esc(c.kun)}</div><div class="k">Stroke</div><div class="v" data-f="strokes">${esc(c.strokes)}</div><div class="k">JLPT</div><div class="v"><span class="jlpt na" data-f="jlpt">${esc(c.jlpt)}</span></div></div><div class="strokeSection"><div class="strokeTitle"><span>Urutan penulisan</span><span class="strokeSource" id="strokeSource-${i}">memuat…</span></div><div class="strokeViewer" id="stroke-${i}"><div class="strokeLoading">Memuat animasi stroke ${esc(c.char)}…</div></div></div></div>`}
+function renderChar(c,i){return `<div class="charCard" id="charCard-${i}"><div class="charHead"><div class="char">${esc(c.char)}</div><div><div class="label">ARTI KANJI</div><div class="charMeaning" data-f="id">${esc(c.id)}</div></div></div><div class="meta"><div class="k">On’yomi</div><div class="v" data-f="on">${esc(c.on)}</div><div class="k">Kun’yomi</div><div class="v" data-f="kun">${esc(c.kun)}</div><div class="k">Stroke</div><div class="v" data-f="strokes">${esc(c.strokes)}</div><div class="k">JLPT</div><div class="v"><span class="jlpt na" data-f="jlpt">${esc(c.jlpt)}</span></div></div><div class="strokeSection"><div class="strokeTitle"><span>Urutan penulisan</span><span class="strokeSource" id="strokeSource-${i}">memuat…</span></div><div class="strokeViewer" id="stroke-${i}"><div class="strokeLoading">Memuat animasi stroke ${esc(c.char)}…</div></div></div></div>`}
 function updateChar(i,c){const box=document.getElementById(`charCard-${i}`);if(!box||!c)return;for(const f of ['id','on','kun','strokes']){const el=box.querySelector(`[data-f="${f}"]`);if(el)el.textContent=c[f]??'–'}const j=box.querySelector('[data-f="jlpt"]');if(j){j.textContent=c.jlpt||'–';j.className=(c.jlpt&&c.jlpt!=='–')?'jlpt':'jlpt na'}}
 async function getCommonsStrokeGif(k){
   const cached=cacheGet('stroke-gif:'+k);if(cached?.url)return cached;
@@ -484,37 +553,120 @@ function switchPage(id){
 }
 navButtons.forEach(b=>b.addEventListener('click',()=>switchPage(b.dataset.page)));
 
-const SRS_KEY='kanji-srs-v1';
-const srsIntervals=[0,0,4,8,24,48,96,168,336,720,1440,2880,999999];
-const srsLabels=['','Baru','4 jam','8 jam','1 hari','2 hari','4 hari','1 minggu','2 minggu','1 bulan','2 bulan','4 bulan','Master'];
-let srsSelectedLevel=1,srsPageIndex=0;
-function getSRS(){try{return JSON.parse(localStorage.getItem(SRS_KEY)||'{}')}catch(e){return{}}}
+const SRS_KEY='kanji-srs-v2-all-jlpt';
+const SRS_OLD_KEY='kanji-srs-v1';
+const SRS_LEVEL_LABELS=['','Baru','4 jam','8 jam','1 hari','2 hari','4 hari','1 minggu','2 minggu','1 bulan','2 bulan','4 bulan','Master'];
+const SRS_LEVEL_MS=[0,0,4*3600000,8*3600000,24*3600000,48*3600000,96*3600000,7*86400000,14*86400000,30*86400000,60*86400000,120*86400000,0];
+let srsCurrent=null;
+function getSRS(){
+  try{
+    const existing=JSON.parse(localStorage.getItem(SRS_KEY)||'null');
+    if(existing&&typeof existing==='object')return existing;
+    const old=JSON.parse(localStorage.getItem(SRS_OLD_KEY)||'{}');
+    const migrated={};
+    for(const [k,v] of Object.entries(old||{})) migrated[k]={level:Math.max(1,Math.min(12,Number(v.level)||1)),tested:true,nextReview:v.nextReview??Date.now(),lastReviewed:v.addedAt||Date.now()};
+    localStorage.setItem(SRS_KEY,JSON.stringify(migrated));
+    return migrated;
+  }catch(e){return{}}
+}
 function saveSRS(data){try{localStorage.setItem(SRS_KEY,JSON.stringify(data))}catch(e){}}
-function nextReviewFor(level){if(level>=12)return null;return Date.now()+srsIntervals[Math.max(2,level+1)]*3600000}
-async function addKanjiToSRS(k){
-  if(!k)return;const db=getSRS();
-  if(db[k]){srsSelectedLevel=db[k].level||1;renderSRS();return}
-  let d=cacheGet('kanji:'+k)||await enrichKanji(k);
-  db[k]={char:k,level:1,addedAt:Date.now(),nextReview:Date.now(),data:d};saveSRS(db);
-  document.querySelectorAll(`[data-srs-kanji="${CSS.escape(k)}"]`).forEach(b=>{b.textContent='✓ SRS';b.classList.add('added')});
-  srsSelectedLevel=1;srsPageIndex=0;renderSRS();
+function srsAllEntries(){
+  if(!jlptData)return[];
+  return Object.values(jlptData).filter(x=>x&&x.kanji&&Number(x.jlpt)>=1&&Number(x.jlpt)<=5).sort((a,b)=>{
+    const la=Number(a.jlpt)||0,lb=Number(b.jlpt)||0;
+    if(la!==lb)return lb-la;
+    return (a.freq_mainichi_shinbun??999999)-(b.freq_mainichi_shinbun??999999);
+  });
 }
-function moveSRS(k,delta){const db=getSRS(),it=db[k];if(!it)return;it.level=Math.max(1,Math.min(12,(it.level||1)+delta));it.nextReview=delta>0?nextReviewFor(it.level):Date.now();db[k]=it;saveSRS(db);srsPageIndex=0;renderSRS()}
-function removeSRS(k){const db=getSRS();delete db[k];saveSRS(db);renderSRS()}
-function renderSRS(){
-  const db=getSRS(),items=Object.values(db),now=Date.now();
-  $('#srsTotalStat').textContent=`${items.length} kanji`;$('#srsDueStat').textContent=`${items.filter(x=>x.level<12&&(!x.nextReview||x.nextReview<=now)).length} perlu review`;
-  $('#srsLevelGrid').innerHTML=Array.from({length:12},(_,i)=>{const lv=i+1,c=items.filter(x=>(x.level||1)===lv).length;return `<div class="levelCard ${lv===srsSelectedLevel?'active':''}" data-level="${lv}"><div><div class="levelNum">Level ${lv}</div><div class="levelMeta">${srsLabels[lv]}</div></div><div class="levelCount">${c}</div></div>`}).join('');
-  document.querySelectorAll('.levelCard').forEach(x=>x.onclick=()=>{srsSelectedLevel=Number(x.dataset.level);srsPageIndex=0;renderSRS()});
-  const filtered=items.filter(x=>(x.level||1)===srsSelectedLevel).sort((a,b)=>(a.nextReview||0)-(b.nextReview||0));
-  $('#srsSelectedTitle').textContent=`Level ${srsSelectedLevel}`;$('#srsSelectedSub').textContent=srsLabels[srsSelectedLevel]+` · ${filtered.length} kanji`;
-  const per=6,pages=Math.max(1,Math.ceil(filtered.length/per));srsPageIndex=Math.min(srsPageIndex,pages-1);const page=filtered.slice(srsPageIndex*per,(srsPageIndex+1)*per);
-  $('#srsItems').innerHTML=page.length?page.map(it=>{const d=it.data||{},due=it.level>=12?'Selesai':(!it.nextReview||it.nextReview<=now?'Review sekarang':'Terjadwal');return `<div class="srsItem"><div class="srsChar">${esc(it.char)}</div><div><div class="srsMeaning">${esc(d.id||'arti belum tersedia')}</div><div class="srsReading">On: ${esc(d.on||'–')} · Kun: ${esc(d.kun||'–')}</div><div class="srsReading">${due}</div></div><div class="srsActions"><button class="srsAction srsRemove" data-remove="${esc(it.char)}">Hapus</button><button class="srsAction srsForget" data-forget="${esc(it.char)}">Lupa</button><button class="srsAction srsRemember" data-remember="${esc(it.char)}">Ingat</button></div></div>`}).join(''):'<div class="emptyState">Belum ada kanji di level ini.<br>Tambahkan kanji dari halaman Cari atau folder JLPT.</div>';
-  $('#srsItems').querySelectorAll('[data-remember]').forEach(b=>b.onclick=()=>moveSRS(b.dataset.remember,1));$('#srsItems').querySelectorAll('[data-forget]').forEach(b=>b.onclick=()=>moveSRS(b.dataset.forget,-1));$('#srsItems').querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeSRS(b.dataset.remove));
-  $('#srsPager').innerHTML=filtered.length>per?`<button class="pagerBtn" id="srsPrev">‹</button><span class="pagerInfo">${srsPageIndex+1} / ${pages}</span><button class="pagerBtn" id="srsNext">›</button>`:'';
-  if($('#srsPrev'))$('#srsPrev').onclick=()=>{srsPageIndex=Math.max(0,srsPageIndex-1);renderSRS()};if($('#srsNext'))$('#srsNext').onclick=()=>{srsPageIndex=Math.min(pages-1,srsPageIndex+1);renderSRS()};
+function srsStateFor(k,db){return db[k]||{level:1,tested:false,nextReview:null}}
+function srsCounts(entries,db){
+  const c=Array(13).fill(0);
+  entries.forEach(e=>{const st=srsStateFor(e.kanji,db);c[Math.max(1,Math.min(12,Number(st.level)||1))]++});
+  return c;
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-srs-kanji]');if(b){e.preventDefault();addKanjiToSRS(b.dataset.srsKanji)}});
+function formatWait(ms){
+  if(ms<=0)return'sekarang';
+  const min=Math.ceil(ms/60000);if(min<60)return`${min} menit`;
+  const h=Math.ceil(min/60);if(h<24)return`${h} jam`;
+  const d=Math.ceil(h/24);return`${d} hari`;
+}
+function nextSRSQuestion(entries,db){
+  const now=Date.now();
+  const due=entries.filter(e=>{const st=db[e.kanji];return st&&st.tested&&Number(st.level)<12&&Number(st.nextReview||0)<=now}).sort((a,b)=>(db[a.kanji].nextReview||0)-(db[b.kanji].nextReview||0));
+  if(due.length)return{entry:due[0],kind:'review',dueCount:due.length};
+  const fresh=entries.filter(e=>!db[e.kanji]||!db[e.kanji].tested);
+  if(fresh.length)return{entry:fresh[0],kind:'new',dueCount:0};
+  const future=entries.filter(e=>{const st=db[e.kanji];return st&&st.tested&&Number(st.level)<12&&st.nextReview}).sort((a,b)=>db[a.kanji].nextReview-db[b.kanji].nextReview);
+  return{entry:null,kind:'waiting',dueCount:0,next:future[0]||null};
+}
+function displaySRSData(entry){
+  const k=entry?.kanji||'';const local=kanjiLocal[k]||{};
+  const en=(entry?.meanings||[]).slice(0,3).join(', ');
+  const meaning=local.id||localGloss(en)||en||'arti belum tersedia';
+  const on=local.on||(entry?.on_readings||[]).slice(0,4).join('・')||'–';
+  const kun=local.kun||(entry?.kun_readings||[]).slice(0,4).join('・')||'–';
+  return{k,meaning,on,kun,jlpt:`N${entry?.jlpt||'–'}`,en};
+}
+async function hydrateSRSAnswer(entry){
+  if(!entry||!srsCurrent||srsCurrent.entry.kanji!==entry.kanji)return;
+  const d=displaySRSData(entry);
+  if(d.en&&(!d.meaning||d.meaning===d.en||/[A-Za-z]{4,}/.test(d.meaning))){
+    const tr=await translate(d.en,'en','id');
+    if(tr&&srsCurrent&&srsCurrent.entry.kanji===entry.kanji)$('#srsAnswerMeaning').textContent=tr;
+  }
+  if((!d.on||d.on==='–')&&(!d.kun||d.kun==='–')){
+    try{const ex=await enrichKanji(entry.kanji);if(srsCurrent&&srsCurrent.entry.kanji===entry.kanji){$('#srsAnswerMeaning').textContent=ex.id||$('#srsAnswerMeaning').textContent;$('#srsAnswerReadings').textContent=`On’yomi: ${ex.on||'–'}   ·   Kun’yomi: ${ex.kun||'–'}`}}catch(e){}
+  }
+}
+function renderSRSLevels(entries,db,currentLevel){
+  const counts=srsCounts(entries,db);
+  $('#srsLevelGrid').innerHTML=Array.from({length:12},(_,i)=>{const lv=i+1;return `<div class="srsLevelCircleWrap" title="Level ${lv}: ${SRS_LEVEL_LABELS[lv]}"><span class="srsLevelBadge">${counts[lv]}</span><div class="srsLevelCircle ${lv===currentLevel?'current':''}">${lv}</div></div>`}).join('');
+}
+async function renderSRS(){
+  if(!jlptData){
+    $('#srsQueueLine').textContent='Memuat kumpulan kanji N5 sampai N1…';
+    $('#srsQuestionChar').textContent='漢';
+    await loadJLPTData();
+  }
+  const entries=srsAllEntries(),db=getSRS(),now=Date.now();
+  const dueCount=entries.filter(e=>{const st=db[e.kanji];return st&&st.tested&&Number(st.level)<12&&Number(st.nextReview||0)<=now}).length;
+  const testedCount=entries.filter(e=>db[e.kanji]?.tested).length;
+  $('#srsTotalStat').textContent=`${entries.length} kanji target · ${testedCount} sudah dites`;
+  $('#srsDueStat').textContent=`${dueCount} review jatuh tempo`;
+  const pick=nextSRSQuestion(entries,db);srsCurrent=pick;
+  const currentLevel=pick.entry?Number(srsStateFor(pick.entry.kanji,db).level)||1:0;
+  renderSRSLevels(entries,db,currentLevel);
+  $('#srsAnswerBox').hidden=true;$('#srsGradeActions').hidden=true;$('#srsRevealBtn').hidden=false;
+  if(!pick.entry){
+    $('#srsQuestionChar').textContent='✓';$('#srsQuestionMeta').textContent='Tidak ada soal yang jatuh tempo saat ini.';
+    $('#srsAnswerBox').hidden=false;$('#srsAnswerMeaning').textContent=pick.next?`Review berikutnya dalam ${formatWait((db[pick.next.kanji].nextReview||0)-Date.now())}.`:'Semua kanji sudah mencapai Level 12.';
+    $('#srsAnswerReadings').textContent='';$('#srsRevealBtn').hidden=true;$('#srsQueueLine').textContent='Antrean latihan selesai untuk saat ini.';return;
+  }
+  const st=srsStateFor(pick.entry.kanji,db),d=displaySRSData(pick.entry);
+  $('#srsQuestionChar').textContent=d.k;
+  $('#srsQuestionMeta').textContent=`${d.jlpt} · Level ${st.level} · ${pick.kind==='review'?'Review jatuh tempo':'Kanji baru'}`;
+  $('#srsAnswerMeaning').textContent=d.meaning;
+  $('#srsAnswerReadings').textContent=`On’yomi: ${d.on}   ·   Kun’yomi: ${d.kun}`;
+  $('#srsQueueLine').textContent=pick.kind==='review'?`Prioritas review: ${pick.dueCount} kanji sudah jatuh tempo.`:'Tidak ada review jatuh tempo. Menampilkan kanji yang belum pernah dites.';
+  hydrateSRSAnswer(pick.entry);
+}
+function revealSRS(){if(!srsCurrent?.entry)return;$('#srsAnswerBox').hidden=false;$('#srsRevealBtn').hidden=true;$('#srsGradeActions').hidden=false}
+function gradeSRS(remember){
+  if(!srsCurrent?.entry)return;
+  const k=srsCurrent.entry.kanji,db=getSRS(),old=srsStateFor(k,db),now=Date.now();
+  let level=Math.max(1,Math.min(12,Number(old.level)||1));
+  if(remember){
+    level=Math.min(12,level+1);
+    db[k]={level,tested:true,lastReviewed:now,nextReview:level>=12?null:now+SRS_LEVEL_MS[level],lastResult:'remember'};
+  }else{
+    level=Math.max(1,level-1);
+    db[k]={level,tested:true,lastReviewed:now,nextReview:now+10*60000,lastResult:'forget'};
+  }
+  saveSRS(db);renderSRS();
+}
+$('#srsRevealBtn').addEventListener('click',revealSRS);
+$('#srsRememberBtn').addEventListener('click',()=>gradeSRS(true));
+$('#srsForgetBtn').addEventListener('click',()=>gradeSRS(false));
 
 const JLPT_URL='https://raw.githubusercontent.com/Renairisu/jlpt_kanji_json_msgpack/refs/heads/main/kanji_jlpt_only.json';
 let jlptData=null,jlptLoading=null,jlptSelected=5,jlptPageIndex=0;
@@ -533,13 +685,13 @@ function jlptEntries(level){if(!jlptData)return[];return Object.values(jlptData)
 async function localizeJLPTCard(k,en){const el=document.querySelector(`[data-jlpt-meaning="${CSS.escape(k)}"]`);if(!el)return;const mapped=kanjiLocal[k]?.id||localGloss(en);if(mapped&&mapped.toLowerCase()!==String(en).toLowerCase()){el.textContent=mapped;return}const tr=await translate(en,'en','id');if(el&&tr)el.textContent=tr}
 function renderJLPTFolders(){const counts={};for(let l=1;l<=5;l++)counts[l]=jlptEntries(l).length;$('#jlptFolders').innerHTML=[5,4,3,2,1].map(l=>`<div class="jlptFolder ${l===jlptSelected?'active':''}" data-jlpt-level="${l}"><div><div class="jlptFolderName">N${l}</div><div class="jlptFolderText">Folder kanji</div></div><div class="jlptFolderCount">${counts[l]||'…'}</div></div>`).join('');document.querySelectorAll('.jlptFolder').forEach(x=>x.onclick=()=>{jlptSelected=Number(x.dataset.jlptLevel);jlptPageIndex=0;renderJLPT()})}
 function renderJLPT(){
-  renderJLPTFolders();const arr=jlptEntries(jlptSelected),per=12,pages=Math.max(1,Math.ceil(arr.length/per));jlptPageIndex=Math.min(jlptPageIndex,pages-1);const page=arr.slice(jlptPageIndex*per,(jlptPageIndex+1)*per);
-  $('#jlptSelectedTitle').textContent=`JLPT N${jlptSelected}`;$('#jlptSelectedSub').textContent=`${arr.length} kanji · arti dan bacaan`;
-  const srs=getSRS();$('#jlptGrid').innerHTML=page.length?page.map(x=>{const k=x.kanji||'',en=(x.meanings||[]).slice(0,2).join(', '),mapped=kanjiLocal[k]?.id||localGloss(en)||'menerjemahkan…';const on=(x.on_readings||[]).slice(0,3).join('・')||'–',kun=(x.kun_readings||[]).slice(0,3).join('・')||'–';return `<div class="jlptKanjiCard" data-open-kanji="${esc(k)}"><div class="jlptChar">${esc(k)}</div><div><div class="jlptMeaning" data-jlpt-meaning="${esc(k)}">${esc(mapped)}</div><div class="jlptReading">On: ${esc(on)}</div><div class="jlptReading">Kun: ${esc(kun)}</div></div><div class="jlptAdd"><button class="jlptAddBtn ${srs[k]?'added':''}" data-srs-kanji="${esc(k)}">${srs[k]?'✓ SRS':'＋ SRS'}</button></div></div>`}).join(''):'<div class="emptyState">Data level ini belum tersedia.</div>';
-  page.forEach(x=>{const en=(x.meanings||[]).slice(0,2).join(', ');if(en)localizeJLPTCard(x.kanji,en)});
+  renderJLPTFolders();const arr=jlptEntries(jlptSelected),per=9,pages=Math.max(1,Math.ceil(arr.length/per));jlptPageIndex=Math.min(jlptPageIndex,pages-1);const page=arr.slice(jlptPageIndex*per,(jlptPageIndex+1)*per);
+  $('#jlptSelectedTitle').textContent=`JLPT N${jlptSelected}`;$('#jlptSelectedSub').textContent=`${arr.length} kanji · arti dan cara baca`;
+  $('#jlptGrid').innerHTML=page.length?page.map(x=>{const k=x.kanji||'',en=(x.meanings||[]).slice(0,3).join(', '),mapped=kanjiLocal[k]?.id||localGloss(en)||'menerjemahkan…';const on=(x.on_readings||[]).slice(0,4).join('・')||'–',kun=(x.kun_readings||[]).slice(0,4).join('・')||'–';return `<div class="jlptKanjiCard" data-open-kanji="${esc(k)}"><div class="jlptChar">${esc(k)}</div><div class="jlptCardBody"><div class="jlptMeaning" data-jlpt-meaning="${esc(k)}">${esc(mapped)}</div><div class="jlptReading"><b>On:</b> ${esc(on)}</div><div class="jlptReading"><b>Kun:</b> ${esc(kun)}</div></div></div>`}).join(''):'<div class="emptyState">Data level ini belum tersedia.</div>';
+  page.forEach(x=>{const en=(x.meanings||[]).slice(0,3).join(', ');if(en)localizeJLPTCard(x.kanji,en)});
   $('#jlptPager').innerHTML=arr.length>per?`<button class="pagerBtn" id="jlptPrev">‹</button><span class="pagerInfo">${jlptPageIndex+1} / ${pages}</span><button class="pagerBtn" id="jlptNext">›</button>`:'';
   if($('#jlptPrev'))$('#jlptPrev').onclick=()=>{jlptPageIndex=Math.max(0,jlptPageIndex-1);renderJLPT()};if($('#jlptNext'))$('#jlptNext').onclick=()=>{jlptPageIndex=Math.min(pages-1,jlptPageIndex+1);renderJLPT()};
-  document.querySelectorAll('[data-open-kanji]').forEach(card=>card.addEventListener('dblclick',e=>{if(e.target.closest('button'))return;input.value=card.dataset.openKanji;switchPage('searchPage');searchWord()}));
+  document.querySelectorAll('[data-open-kanji]').forEach(card=>card.addEventListener('dblclick',()=>{input.value=card.dataset.openKanji;switchPage('searchPage');searchWord()}));
 }
 async function initJLPT(){if(!jlptData){$('#jlptDataStatus').textContent='Memuat dataset…';$('#jlptGrid').innerHTML='<div class="emptyState">Memuat folder JLPT…</div>';await loadJLPTData()}renderJLPT()}
 
