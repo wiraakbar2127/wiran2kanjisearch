@@ -5,9 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kanji Dictionary</title>
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%231f7a4c"/><text x="32" y="44" font-size="38" text-anchor="middle" fill="white" font-family="serif">漢</text></svg>'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
+<script type="module" src="https://code4fukui.github.io/kaki-jun/kaki-jun.js"></script>
 <style>
 :root{
-  --bg:#eaf5ec;--card:#ffffff;--ink:#173326;--muted:#668071;--line:#cfe2d4;
+  --bg:#eaf5ec;--card:#ffffff;--ink:#10291d;--muted:#4f6c5c;--line:#cfe2d4;
   --green:#1f7a4c;--green-dark:#145a38;--green-soft:#e8f6ed;--green-pale:#f5fbf7;
   --shadow:0 16px 42px rgba(20,90,56,.10)
 }
@@ -35,7 +39,7 @@ body::after{width:420px;height:420px;right:-160px;bottom:-160px;background:radia
 .search p{margin:0 0 18px;color:var(--muted);font-size:13px;line-height:1.6;max-width:760px}
 .inputRow{display:flex;gap:10px;position:relative;z-index:1}
 input{flex:1;min-width:0;border:1px solid #bcd7c4;border-radius:15px;padding:14px 16px;font-size:25px;outline:none;background:#fff;color:var(--ink)}
-input::placeholder{color:#90a99a}
+input::placeholder{color:#4f6c5c;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-weight:500;letter-spacing:0;font-size:.86em;opacity:1}
 input:focus{border-color:#4d9b6a;box-shadow:0 0 0 4px rgba(31,122,76,.10)}
 button{border:0;border-radius:15px;padding:0 22px;background:linear-gradient(145deg,var(--green),var(--green-dark));color:#fff;font-weight:800;cursor:pointer;min-width:84px;box-shadow:0 7px 18px rgba(31,122,76,.18)}
 button:hover{filter:brightness(.97)}button:disabled{opacity:.65;cursor:default}
@@ -47,14 +51,21 @@ button:hover{filter:brightness(.97)}button:disabled{opacity:.65;cursor:default}
 .reading{margin-top:6px;color:var(--muted);font-size:16px}.tag{display:inline-block;margin-top:8px;background:var(--green-soft);color:var(--green-dark);border-radius:999px;padding:5px 8px;font-size:10px}
 .badge{background:var(--green-soft);border:1px solid #c6e5d0;color:var(--green-dark);border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800}
 .meaningBox{margin-top:20px;border:1px solid var(--line);background:linear-gradient(180deg,#fbfefc,var(--green-pale));border-radius:16px;padding:16px}
-.label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#789083;margin-bottom:7px}.meaning{font-size:25px;font-weight:850;line-height:1.3}.loadingText{color:#8fa398;font-weight:600}
+.label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#5d7467;margin-bottom:7px}.meaning{font-size:25px;font-weight:850;line-height:1.3}.loadingText{color:#8fa398;font-weight:600}
 .breakdown{padding:24px}.breakdown h3{margin:0 0 5px;font-size:18px;color:var(--green-dark)}.sub{color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:14px}
 .charList{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.charCard{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#fff,#f8fcf9);padding:16px}
 .charHead{display:flex;align-items:center;gap:13px;padding-bottom:13px;border-bottom:1px solid var(--line)}
 .char{width:63px;height:63px;display:grid;place-items:center;background:var(--green-soft);border:1px solid #c6e5d0;border-radius:14px;font:700 43px/1 "Yu Mincho","Hiragino Mincho ProN",serif;color:var(--green-dark)}
-.charMeaning{font-size:15px;font-weight:850;line-height:1.4}.meta{display:grid;grid-template-columns:92px 1fr;gap:8px 11px;margin-top:14px;font-size:13px;line-height:1.5}.meta .k{color:#789083}.meta .v{font-weight:650;word-break:break-word}
+.charMeaning{font-size:15px;font-weight:850;line-height:1.4}.meta{display:grid;grid-template-columns:92px 1fr;gap:8px 11px;margin-top:14px;font-size:13px;line-height:1.5}.meta .k{color:#5d7467}.meta .v{font-weight:650;word-break:break-word}
 .jlpt{display:inline-flex;align-items:center;min-width:40px;justify-content:center;background:var(--green-dark);color:#fff;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:850}.jlpt.na{background:#e4eee7;color:#6c8073}
-.note{margin-top:15px;color:#72877a;font-size:10px;line-height:1.6;text-align:center}
+.strokeSection{margin-top:15px;padding-top:14px;border-top:1px dashed #cfe2d4}
+.strokeTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;color:var(--green-dark);font-size:12px;font-weight:800}
+.strokeSource{font-size:9px;font-weight:700;color:#5d7467;background:var(--green-soft);border-radius:999px;padding:4px 7px}
+.strokeViewer{min-height:210px;border:1px solid #d7e8dc;border-radius:15px;background:linear-gradient(180deg,#fbfefc,#f0f8f2);display:grid;place-items:center;overflow:hidden;padding:10px}
+.strokeViewer img{display:block;width:min(100%,240px);height:auto;max-height:240px;object-fit:contain;border-radius:10px;background:white}
+.strokeLoading{font-size:11px;color:#8aa092;text-align:center;line-height:1.5}
+.strokeViewer kaki-jun{display:block;width:100%;max-width:250px;margin:auto}
+.note{margin-top:15px;color:#526b5d;font-size:10px;line-height:1.6;text-align:center}
 @media(max-width:650px){.inputRow{flex-direction:column}button{min-height:49px}.search h2{font-size:27px}.word{font-size:56px}.wordTop{align-items:flex-start}.badge{display:none}.charList{grid-template-columns:1fr}.meta{grid-template-columns:82px 1fr}.search::after{font-size:54px}}
 </style>
 </head>
@@ -64,14 +75,14 @@ button:hover{filter:brightness(.97)}button:disabled{opacity:.65;cursor:default}
 <section class="card search">
 <h2>Cari kosakata kanji</h2>
 <p>Masukkan satu kanji atau kosakata Jepang. Arti kata utuh akan ditampilkan lebih dahulu, lalu setiap kanji dijelaskan dengan arti, On’yomi, Kun’yomi, jumlah stroke, dan level JLPT.</p>
-<div class="inputRow"><input id="wordInput" maxlength="20" placeholder="ketik kanji" autocomplete="off"><button id="goBtn">Cari</button></div>
+<div class="inputRow"><input id="wordInput" maxlength="20" placeholder="Ketik Kanji" autocomplete="off"><button id="goBtn">Cari</button></div>
 <div class="status" id="status">Mencari arti...</div><div class="error" id="error"></div>
 </section>
 <main class="results" id="results">
 <section class="card wordCard"><div class="wordTop"><div class="wordInfo"><div class="word" id="wordOut"></div><div><div class="reading" id="readingOut"></div><div class="tag" id="sourceOut"></div></div></div><div class="badge">ARTI KATA UTUH</div></div><div class="meaningBox"><div class="label">Arti Bahasa Indonesia</div><div class="meaning" id="meaningOut"></div></div></section>
-<section class="card breakdown"><h3>Bedah setiap kanji</h3><div class="sub">Arti inti karakter, On’yomi, Kun’yomi, jumlah stroke, dan level JLPT.</div><div class="charList" id="charList"></div></section>
+<section class="card breakdown"><h3>Bedah setiap kanji</h3><div class="sub">Arti inti karakter, On’yomi, Kun’yomi, jumlah stroke, level JLPT, dan animasi urutan penulisannya.</div><div class="charList" id="charList"></div></section>
 </main>
-<div class="note">Tanpa pencarian gambar. Data yang pernah berhasil dicari disimpan di browser agar pencarian berikutnya lebih cepat.</div>
+<div class="note">Arti dimuat lebih dahulu. Animasi urutan stroke dimuat terpisah agar pencarian tetap cepat.</div>
 </div>
 <script>
 const $=s=>document.querySelector(s),input=$('#wordInput'),results=$('#results'),statusBox=$('#status'),errorBox=$('#error'),goBtn=$('#goBtn');
@@ -101,8 +112,36 @@ async function getDirectWord(word){const cached=cacheGet('word:'+word);if(cached
 async function getDictionaryWord(word){const dict=await getJotobaWord(word);if(!dict?.en)return null;let id=await translate(dict.en,'en','id');if(!id||containsJapanese(id))id=localGloss(dict.en);if(!id)return null;const data={reading:dict.reading||'',id,source:'JMdict → Bahasa Indonesia'};cacheSet('word:'+word,data);return data}
 function showWord(data){if(!data)return;$('#readingOut').textContent=data.reading||$('#readingOut').textContent||'bacaan sedang dicari…';$('#meaningOut').textContent=data.id||'arti belum ditemukan';$('#meaningOut').classList.remove('loadingText');$('#sourceOut').textContent=data.source||'kamus'}
 function initialKanji(k){const local=kanjiLocal[k]||{};return{char:k,id:local.id||'memuat arti…',on:local.on||'…',kun:local.kun||'…',strokes:local.strokes??'…',jlpt:'…'}}
-function renderChar(c,i){return `<div class="charCard" id="charCard-${i}"><div class="charHead"><div class="char">${esc(c.char)}</div><div><div class="label">ARTI KANJI</div><div class="charMeaning" data-f="id">${esc(c.id)}</div></div></div><div class="meta"><div class="k">On’yomi</div><div class="v" data-f="on">${esc(c.on)}</div><div class="k">Kun’yomi</div><div class="v" data-f="kun">${esc(c.kun)}</div><div class="k">Stroke</div><div class="v" data-f="strokes">${esc(c.strokes)}</div><div class="k">JLPT</div><div class="v"><span class="jlpt na" data-f="jlpt">${esc(c.jlpt)}</span></div></div></div>`}
+function renderChar(c,i){return `<div class="charCard" id="charCard-${i}"><div class="charHead"><div class="char">${esc(c.char)}</div><div><div class="label">ARTI KANJI</div><div class="charMeaning" data-f="id">${esc(c.id)}</div></div></div><div class="meta"><div class="k">On’yomi</div><div class="v" data-f="on">${esc(c.on)}</div><div class="k">Kun’yomi</div><div class="v" data-f="kun">${esc(c.kun)}</div><div class="k">Stroke</div><div class="v" data-f="strokes">${esc(c.strokes)}</div><div class="k">JLPT</div><div class="v"><span class="jlpt na" data-f="jlpt">${esc(c.jlpt)}</span></div></div><div class="strokeSection"><div class="strokeTitle"><span>Urutan penulisan</span><span class="strokeSource" id="strokeSource-${i}">memuat…</span></div><div class="strokeViewer" id="stroke-${i}"><div class="strokeLoading">Memuat animasi stroke ${esc(c.char)}…</div></div></div></div>`}
 function updateChar(i,c){const box=document.getElementById(`charCard-${i}`);if(!box||!c)return;for(const f of ['id','on','kun','strokes']){const el=box.querySelector(`[data-f="${f}"]`);if(el)el.textContent=c[f]??'–'}const j=box.querySelector('[data-f="jlpt"]');if(j){j.textContent=c.jlpt||'–';j.className=(c.jlpt&&c.jlpt!=='–')?'jlpt':'jlpt na'}}
+async function getCommonsStrokeGif(k){
+  const cached=cacheGet('stroke-gif:'+k);if(cached?.url)return cached;
+  try{
+    const titles=`File:${k}-jorder.gif|File:${k}-order.gif`;
+    const url=`https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=imageinfo&iiprop=url|mime&titles=${encodeURIComponent(titles)}`;
+    const d=await fetchJSON(url,3200);
+    const pages=Object.values(d?.query?.pages||{}).filter(p=>p?.imageinfo?.[0]?.url);
+    if(!pages.length)return null;
+    pages.sort((a,b)=>Number(!String(a.title||'').includes('-jorder.gif'))-Number(!String(b.title||'').includes('-jorder.gif')));
+    const p=pages[0],info=p.imageinfo[0];
+    const data={url:info.url,title:p.title||'',source:String(p.title||'').includes('-jorder.gif')?'Wikimedia GIF JP':'Wikimedia GIF'};
+    cacheSet('stroke-gif:'+k,data);return data;
+  }catch(e){return null}
+}
+function showKanjivgFallback(k,i){
+  const slot=document.getElementById(`stroke-${i}`),src=document.getElementById(`strokeSource-${i}`);if(!slot)return;
+  slot.innerHTML=`<kaki-jun>${esc(k)}</kaki-jun>`;
+  if(src)src.textContent='KanjiVG';
+}
+async function loadStrokeAnimation(k,i){
+  const slot=document.getElementById(`stroke-${i}`),src=document.getElementById(`strokeSource-${i}`);if(!slot)return;
+  const gif=await getCommonsStrokeGif(k);
+  if(gif?.url){
+    const img=new Image();img.alt=`Animasi urutan stroke ${k}`;img.loading='lazy';img.referrerPolicy='no-referrer';
+    img.onload=()=>{if(slot.isConnected){slot.innerHTML='';slot.appendChild(img);if(src)src.textContent=gif.source}};
+    img.onerror=()=>showKanjivgFallback(k,i);img.src=gif.url;
+  }else showKanjivgFallback(k,i);
+}
 async function enrichKanji(k){const cached=cacheGet('kanji:'+k);if(cached)return cached;let api=null;try{api=await fetchJSON(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(k)}`,4200)}catch(e){}const local=kanjiLocal[k]||{},meanings=(api?.meanings||[]).filter(Boolean).slice(0,5);let id=local.id||'';if(!id&&meanings.length){id=localGloss(meanings.join(', '));if(id===meanings.join(', ')){const tr=await translate(meanings.join(', '),'en','id');if(tr)id=tr}}if(!id)id=meanings.join(', ')||'arti belum ditemukan';const data={char:k,id,on:(api?.on_readings||[]).slice(0,4).join('・')||local.on||'–',kun:(api?.kun_readings||[]).slice(0,4).join('・')||local.kun||'–',strokes:api?.stroke_count??local.strokes??'–',jlpt:api?.jlpt?`N${api.jlpt}`:'–'};cacheSet('kanji:'+k,data);return data}
 async function searchWord(){
   errorBox.classList.remove('show');const word=input.value.trim();
@@ -118,7 +157,7 @@ async function searchWord(){
     const dictP=getDictionaryWord(word).then(d=>{if(d)showWord(d);return d});
     Promise.allSettled([directP,dictP]).then(r=>{if($('#meaningOut').classList.contains('loadingText')){$('#meaningOut').textContent='arti kata belum ditemukan';$('#meaningOut').classList.remove('loadingText');$('#sourceOut').textContent='fallback'}});
   }
-  chars.forEach((k,i)=>{const cached=cacheGet('kanji:'+k);if(cached)updateChar(i,cached);enrichKanji(k).then(d=>updateChar(i,d)).catch(()=>{})});
+  chars.forEach((k,i)=>{const cached=cacheGet('kanji:'+k);if(cached)updateChar(i,cached);enrichKanji(k).then(d=>updateChar(i,d)).catch(()=>{});setTimeout(()=>loadStrokeAnimation(k,i),120+i*80)});
   setTimeout(()=>{statusBox.classList.remove('show');goBtn.disabled=false},500);
 }
 $('#goBtn').addEventListener('click',searchWord);input.addEventListener('keydown',e=>{if(e.key==='Enter')searchWord()});
