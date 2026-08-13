@@ -474,6 +474,28 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
   #jlptPage .jlptChar{width:50px;height:50px;font-size:33px}
 }
 </style>
+
+<style>
+/* ===== V28: JLPT 10 kanji per halaman ===== */
+#jlptPage .jlptGrid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(5,minmax(0,1fr));
+  gap:8px 10px;
+}
+#jlptPage .jlptKanjiCard{
+  padding:6px 9px;
+  grid-template-columns:50px minmax(0,1fr);
+}
+#jlptPage .jlptChar{width:50px;height:50px;font-size:33px}
+#jlptPage .jlptMeaning{font-size:10.5px;line-height:1.25;margin-bottom:3px}
+#jlptPage .jlptReading{font-size:8.5px;line-height:1.25}
+@media(max-width:900px){
+  #jlptPage .jlptGrid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}
+}
+@media(max-width:620px){
+  #jlptPage .jlptGrid{grid-template-columns:1fr;grid-template-rows:none}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -873,7 +895,7 @@ function jlptEntries(level){if(!jlptData)return[];return Object.values(jlptData)
 async function localizeJLPTCard(k,en){const el=document.querySelector(`[data-jlpt-meaning="${CSS.escape(k)}"]`);if(!el)return;const mapped=kanjiLocal[k]?.id||localGloss(en);if(mapped&&mapped.toLowerCase()!==String(en).toLowerCase()){el.textContent=mapped;return}const tr=await translate(en,'en','id');if(el&&tr)el.textContent=tr}
 function renderJLPTFolders(){const counts={};for(let l=1;l<=5;l++)counts[l]=jlptEntries(l).length;$('#jlptFolders').innerHTML=[5,4,3,2,1].map(l=>`<div class="jlptFolder ${l===jlptSelected?'active':''}" data-jlpt-level="${l}" role="button" tabindex="0"><div><div class="jlptFolderName">N${l}</div><div class="jlptFolderText">Folder kanji</div></div><div class="jlptFolderCount">${counts[l]||'…'}</div></div>`).join('')}
 function renderJLPT(){
-  renderJLPTFolders();const arr=jlptEntries(jlptSelected),per=9,pages=Math.max(1,Math.ceil(arr.length/per));jlptPageIndex=Math.min(jlptPageIndex,pages-1);const page=arr.slice(jlptPageIndex*per,(jlptPageIndex+1)*per);
+  renderJLPTFolders();const arr=jlptEntries(jlptSelected),per=10,pages=Math.max(1,Math.ceil(arr.length/per));jlptPageIndex=Math.min(jlptPageIndex,pages-1);const page=arr.slice(jlptPageIndex*per,(jlptPageIndex+1)*per);
   $('#jlptSelectedTitle').textContent=`JLPT N${jlptSelected}`;$('#jlptSelectedSub').textContent=`${arr.length} kanji · arti dan cara baca`;
   $('#jlptGrid').innerHTML=page.length?page.map(x=>{const k=x.kanji||'',en=(x.meanings||[]).slice(0,3).join(', '),mapped=kanjiLocal[k]?.id||localGloss(en)||'menerjemahkan…';const on=(x.on_readings||[]).slice(0,4).join('・')||'–',kun=(x.kun_readings||[]).slice(0,4).join('・')||'–';return `<div class="jlptKanjiCard" data-open-kanji="${esc(k)}"><div class="jlptChar">${esc(k)}</div><div class="jlptCardBody"><div class="jlptMeaning" data-jlpt-meaning="${esc(k)}">${esc(mapped)}</div><div class="jlptReading"><b>On:</b> ${esc(on)}</div><div class="jlptReading"><b>Kun:</b> ${esc(kun)}</div></div></div>`}).join(''):'<div class="emptyState">Data level ini belum tersedia.</div>';
   page.forEach(x=>{const en=(x.meanings||[]).slice(0,3).join(', ');if(en)localizeJLPTCard(x.kanji,en)});
@@ -888,7 +910,7 @@ $('#jlptFolders').addEventListener('click',e=>{const folder=e.target.closest('[d
 $('#jlptFolders').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const folder=e.target.closest('[data-jlpt-level]');if(folder){e.preventDefault();selectJLPTLevel(folder.dataset.jlptLevel)}});
 $('#jlptPager').addEventListener('click',e=>{
   if(e.target.closest('#jlptPrev')){jlptPageIndex=Math.max(0,jlptPageIndex-1);renderJLPT();return}
-  if(e.target.closest('#jlptNext')){const pages=Math.max(1,Math.ceil(jlptEntries(jlptSelected).length/9));jlptPageIndex=Math.min(pages-1,jlptPageIndex+1);renderJLPT()}
+  if(e.target.closest('#jlptNext')){const pages=Math.max(1,Math.ceil(jlptEntries(jlptSelected).length/10));jlptPageIndex=Math.min(pages-1,jlptPageIndex+1);renderJLPT()}
 });
 async function initJLPT(){if(!jlptData){$('#jlptDataStatus').textContent='Memuat dataset…';$('#jlptGrid').innerHTML='<div class="emptyState">Memuat folder JLPT…</div>';await loadJLPTData()}renderJLPT()}
 
