@@ -73,6 +73,57 @@ button:hover{filter:brightness(.98)}button:disabled{opacity:.65;cursor:default}
 .strokeViewer kaki-jun{display:block;width:min(100%,420px);max-width:420px;margin:0 auto;background:#fff;border-radius:10px;padding:6px}
 .note{margin-top:15px;color:#717c74;font-size:11px;line-height:1.6;text-align:center}
 @media(max-width:650px){.strokeViewer{width:fit-content;max-width:100%;padding:8px}.strokeViewer img{width:min(100%,340px);max-height:340px}.strokeViewer kaki-jun{width:min(100%,340px);max-width:340px}.inputRow{flex-direction:column}button{min-height:49px}.search h2{font-size:27px}.word{font-size:56px}.wordTop{align-items:flex-start}.badge{display:none}.charList{grid-template-columns:1fr}.meta{grid-template-columns:82px 1fr}.search::after{font-size:54px}}
+
+/* ===== V20: COMPACT ONE-SCREEN LAYOUT ===== */
+html,body{height:100%;overflow:hidden}
+body{min-height:100vh}
+.wrap{max-width:1180px;padding:10px 14px 7px;transform-origin:top center}
+.top{gap:9px;margin-bottom:8px}
+.logo{width:38px;height:38px;border-radius:11px;font-size:24px;box-shadow:0 5px 13px rgba(79,143,99,.16)}
+.brand h1{font-size:16px}.brand p{font-size:10px;margin-top:1px}
+.card{border-radius:15px;box-shadow:0 6px 18px rgba(40,70,50,.06)}
+.search{padding:11px 13px}
+.search h2{font-size:20px;line-height:1.1;margin:0 0 3px}
+.search p{font-size:10px;line-height:1.35;margin:0 0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inputRow{gap:7px}
+input{border-radius:10px;padding:8px 11px;font-size:16px;min-height:36px}
+button{border-radius:10px;padding:0 16px;min-width:66px;min-height:36px;font-size:12px}
+.status,.error{margin-top:6px;font-size:9px}.error{padding:6px 8px}
+.results{margin-top:8px;gap:8px}
+.wordCard{padding:10px 12px}
+.wordTop{gap:10px}.wordInfo{gap:10px}
+.word{font-size:45px}.reading{font-size:12px;margin-top:3px}.tag{font-size:8px;margin-top:4px;padding:3px 6px}
+.badge{font-size:8px;padding:4px 7px}
+.meaningBox{margin-top:7px;border-radius:10px;padding:7px 9px}
+.label{font-size:8px;margin-bottom:3px}.meaning{font-size:15px;line-height:1.25}
+.exampleBox{margin-top:6px;padding-top:6px}.exampleHead{margin-bottom:4px}.exampleTitle{font-size:10px}.exampleHint{font-size:8px}
+.exampleList{gap:4px}.exampleItem{border-radius:8px;padding:6px 8px}.exampleJP{font-size:13px;line-height:1.35}.exampleID{font-size:9px;line-height:1.35;margin-top:2px}
+.exampleLoading{font-size:9px;padding:2px 0}
+.breakdown{padding:9px 10px}.breakdown h3{font-size:13px;margin-bottom:1px}.sub{font-size:9px;line-height:1.3;margin-bottom:6px}
+.charList{gap:7px;align-items:stretch}
+.charCard{display:grid;grid-template-columns:minmax(0,1fr) 138px;grid-template-areas:"head stroke" "meta stroke";column-gap:8px;row-gap:4px;border-radius:11px;padding:7px;background:#fff;min-width:0}
+.charHead{grid-area:head;gap:7px;padding-bottom:5px}
+.char{width:42px;height:42px;border-radius:9px;font-size:29px;flex:0 0 auto}
+.charMeaning{font-size:10px;line-height:1.25}
+.meta{grid-area:meta;grid-template-columns:62px minmax(0,1fr);gap:3px 5px;margin-top:0;font-size:9px;line-height:1.25;align-content:start}
+.jlpt{min-width:30px;padding:2px 6px;font-size:8px}
+.strokeSection{grid-area:stroke;margin:0;padding:0 0 0 7px;border-top:0;border-left:1px dashed #d5e0d7;display:flex;flex-direction:column;justify-content:flex-start;min-width:0}
+.strokeTitle{gap:3px;margin-bottom:4px;font-size:10px;line-height:1.15}
+.strokeSource{font-size:7px;padding:2px 5px}
+.strokeViewer{width:126px;max-width:126px;padding:3px;border-radius:9px;background:#fff;margin:auto}
+.strokeViewer img{width:118px;max-width:118px;max-height:118px;border-radius:6px}
+.strokeLoading{font-size:8px;line-height:1.3;min-height:112px;display:grid;place-items:center}
+.strokeViewer kaki-jun{width:118px;max-width:118px;padding:2px;border-radius:6px}
+.note{margin-top:5px;font-size:8px;line-height:1.25}
+@media(max-width:800px){
+  .wrap{padding:7px 8px 5px}
+  .search p{display:none}
+  .brand p{display:none}
+  .charCard{grid-template-columns:minmax(0,1fr) 116px}
+  .strokeViewer{width:106px;max-width:106px}.strokeViewer img,.strokeViewer kaki-jun{width:100px;max-width:100px;max-height:100px}
+  .strokeLoading{min-height:94px}
+}
+
 </style>
 </head>
 <body>
@@ -205,24 +256,47 @@ async function getCommonsStrokeGif(k){
 function showKanjivgFallback(k,i){
   const slot=document.getElementById(`stroke-${i}`),src=document.getElementById(`strokeSource-${i}`);if(!slot)return;
   slot.innerHTML=`<kaki-jun>${esc(k)}</kaki-jun>`;
-  if(src)src.textContent='KanjiVG';
+  if(src)src.textContent='KanjiVG';fitPage();
 }
 async function loadStrokeAnimation(k,i){
   const slot=document.getElementById(`stroke-${i}`),src=document.getElementById(`strokeSource-${i}`);if(!slot)return;
   const gif=await getCommonsStrokeGif(k);
   if(gif?.url){
     const img=new Image();img.alt=`Animasi urutan stroke ${k}`;img.loading='lazy';img.referrerPolicy='no-referrer';
-    img.onload=()=>{if(slot.isConnected){slot.innerHTML='';slot.appendChild(img);if(src)src.textContent=gif.source}};
+    img.onload=()=>{if(slot.isConnected){slot.innerHTML='';slot.appendChild(img);if(src)src.textContent=gif.source;fitPage()}};
     img.onerror=()=>showKanjivgFallback(k,i);img.src=gif.url;
   }else showKanjivgFallback(k,i);
 }
 async function enrichKanji(k){const cached=cacheGet('kanji:'+k);if(cached)return cached;let api=null;try{api=await fetchJSON(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(k)}`,4200)}catch(e){}const local=kanjiLocal[k]||{},meanings=(api?.meanings||[]).filter(Boolean).slice(0,5);let id=local.id||'';if(!id&&meanings.length){id=localGloss(meanings.join(', '));if(id===meanings.join(', ')){const tr=await translate(meanings.join(', '),'en','id');if(tr)id=tr}}if(!id)id=meanings.join(', ')||'arti belum ditemukan';const data={char:k,id,on:(api?.on_readings||[]).slice(0,4).join('・')||local.on||'–',kun:(api?.kun_readings||[]).slice(0,4).join('・')||local.kun||'–',strokes:api?.stroke_count??local.strokes??'–',jlpt:api?.jlpt?`N${api.jlpt}`:'–'};cacheSet('kanji:'+k,data);return data}
+
+function setKanjiGrid(count){
+  const list=$('#charList');if(!list)return;
+  const cols=count<=1?1:count===2?2:count<=4?count:count<=6?3:count<=8?4:5;
+  list.style.gridTemplateColumns=`repeat(${cols},minmax(0,1fr))`;
+}
+let fitTimer=0;
+function fitPage(){
+  clearTimeout(fitTimer);
+  fitTimer=setTimeout(()=>{
+    const wrap=document.querySelector('.wrap');if(!wrap)return;
+    wrap.style.zoom='1';
+    const gap=6,availH=Math.max(220,window.innerHeight-gap*2),availW=Math.max(320,window.innerWidth-gap*2);
+    const naturalH=wrap.scrollHeight,naturalW=wrap.scrollWidth;
+    let scale=Math.min(1,availH/Math.max(1,naturalH),availW/Math.max(1,naturalW));
+    if(!Number.isFinite(scale)||scale<=0)scale=1;
+    wrap.style.zoom=String(Math.max(.28,scale));
+  },35);
+}
+const fitObserver=new MutationObserver(()=>fitPage());
+window.addEventListener('resize',fitPage);
+window.addEventListener('load',()=>{const w=document.querySelector('.wrap');if(w)fitObserver.observe(w,{subtree:true,childList:true,characterData:true});fitPage()});
+
 async function searchWord(){
   errorBox.classList.remove('show');const word=input.value.trim();
   if(!word||!hasKanji(word)){errorBox.textContent='Masukkan kata yang mengandung kanji, misalnya 維持, 改善, atau 電車.';errorBox.classList.add('show');return}
   goBtn.disabled=true;statusBox.classList.add('show');results.classList.add('show');
   $('#wordOut').textContent=word;$('#readingOut').textContent='bacaan sedang dicari…';$('#sourceOut').textContent='mencari…';$('#meaningOut').textContent='mencari arti…';$('#meaningOut').classList.add('loadingText');$('#exampleList').innerHTML='<div class="exampleLoading">Mencari contoh kalimat…</div>';setTimeout(()=>loadExamples(word),80);
-  const chars=kanjiChars(word);$('#charList').innerHTML=chars.map((k,i)=>renderChar(initialKanji(k),i)).join('');
+  const chars=kanjiChars(word);const charList=$('#charList');charList.innerHTML=chars.map((k,i)=>renderChar(initialKanji(k),i)).join('');setKanjiGrid(chars.length);fitPage();
   const local=vocabLocal[word];
   if(local)showWord({reading:local.reading,id:local.id,source:'kamus lokal terkurasi'});
   else{
@@ -232,7 +306,7 @@ async function searchWord(){
     Promise.allSettled([directP,dictP]).then(r=>{if($('#meaningOut').classList.contains('loadingText')){$('#meaningOut').textContent='arti kata belum ditemukan';$('#meaningOut').classList.remove('loadingText');$('#sourceOut').textContent='fallback'}});
   }
   chars.forEach((k,i)=>{const cached=cacheGet('kanji:'+k);if(cached)updateChar(i,cached);enrichKanji(k).then(d=>updateChar(i,d)).catch(()=>{});setTimeout(()=>loadStrokeAnimation(k,i),120+i*80)});
-  setTimeout(()=>{statusBox.classList.remove('show');goBtn.disabled=false},500);
+  setTimeout(()=>{statusBox.classList.remove('show');goBtn.disabled=false;fitPage()},500);
 }
 $('#goBtn').addEventListener('click',searchWord);input.addEventListener('keydown',e=>{if(e.key==='Enter')searchWord()});
 </script>
