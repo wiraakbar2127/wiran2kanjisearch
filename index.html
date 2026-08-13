@@ -385,6 +385,59 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
   .srsGradeActions{gap:18px}
   .srsRevealBtn.srsIconBtn{margin-right:6px}
 }
+
+/* ===== V30: online JLPT kanji detail + SRS Level 1 total ===== */
+.jlptKanjiCard{cursor:pointer!important}
+.jlptKanjiCard:hover{background:#f5faf6!important;border-color:#bcd2c1!important;transform:translateY(-1px)}
+.jlptKanjiCard:focus-visible{outline:3px solid rgba(88,150,105,.22);outline-offset:2px}
+
+.kanjiDetailModal[hidden]{display:none!important}
+.kanjiDetailModal{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:14px}
+.kanjiDetailBackdrop{position:absolute;inset:0;background:rgba(18,28,21,.42);backdrop-filter:blur(4px)}
+.kanjiDetailDialog{position:relative;width:min(1060px,96vw);height:min(720px,92vh);background:#f9fcfa;border:1px solid #cfddd2;border-radius:20px;box-shadow:0 24px 70px rgba(20,45,28,.18);padding:16px;display:flex;flex-direction:column;overflow:hidden}
+.kanjiDetailHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex:0 0 auto}
+.kanjiDetailHeadText{display:flex;align-items:center;gap:12px;min-width:0}
+.kanjiDetailHeroChar{width:62px;height:62px;border-radius:14px;background:#eaf5ec;border:1px solid #cfe1d3;display:grid;place-items:center;font:700 45px/1 "Yu Mincho","Noto Serif JP",serif;color:#111;flex:0 0 auto}
+.kanjiDetailTitle{font-size:19px;font-weight:900;color:#141814;line-height:1.2}
+.kanjiDetailSub{font-size:10px;color:#667168;margin-top:3px}
+.kanjiDetailClose{width:36px;height:36px;min-width:36px;min-height:36px;padding:0;border-radius:10px;background:#fff;color:#263029;border:1px solid #d8e2da;display:grid;place-items:center;font-size:23px;line-height:1;box-shadow:none}
+.kanjiDetailBody{display:grid;grid-template-columns:minmax(320px,.8fr) minmax(0,1.35fr);gap:14px;flex:1;min-height:0}
+.kanjiDetailLeft,.kanjiFamilyPanel{background:#fff;border:1px solid #dce7de;border-radius:16px;padding:14px;min-height:0}
+.kanjiDetailLeft{display:flex;flex-direction:column;gap:11px}
+.detailMeaningLabel,.familyTitle{font-size:9px;font-weight:900;color:#708077;letter-spacing:.06em;text-transform:uppercase}
+.detailMeaningValue{font-size:16px;font-weight:900;color:#111;line-height:1.4;min-height:25px}
+.detailMetaGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.detailMetaBox{background:#f7faf8;border:1px solid #e2eae4;border-radius:11px;padding:8px 10px;min-width:0}
+.detailMetaKey{font-size:8px;color:#738078;font-weight:800;margin-bottom:3px}
+.detailMetaValue{font-size:13px;font-weight:850;color:#111;line-height:1.3;overflow-wrap:anywhere}
+.detailStrokeWrap{flex:1;min-height:0;border-top:1px dashed #dce5de;padding-top:10px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.detailStrokeTitle{font-size:11px;font-weight:900;color:#1f2b22;margin-bottom:7px}
+.detailStrokeViewer{width:min(250px,100%);aspect-ratio:1;background:#fff;border:1px solid #dce6de;border-radius:13px;display:grid;place-items:center;overflow:hidden;padding:6px}
+.detailStrokeViewer img,.detailStrokeViewer kaki-jun{display:block;width:100%;height:100%;object-fit:contain;background:#fff}
+.detailStrokeStatus{font-size:9px;color:#758079;text-align:center}
+.kanjiFamilyPanel{display:flex;flex-direction:column;overflow:hidden}
+.familyHead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:10px;flex:0 0 auto}
+.familyHead h3{font-size:16px;margin:0;color:#141814}
+.familyHead p{font-size:9px;color:#728078;margin:2px 0 0}
+.familySource{font-size:8px;color:#56705c;background:#eef6f0;border:1px solid #d7e7db;border-radius:999px;padding:4px 7px;white-space:nowrap}
+.familyGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:8px;flex:1;min-height:0}
+.familyCard{border:1px solid #dfe8e1;border-radius:11px;background:#fbfdfb;padding:8px 10px;display:grid;grid-template-columns:minmax(64px,.42fr) minmax(0,1fr);gap:9px;align-items:center;min-width:0;overflow:hidden}
+.familyWord{font-size:18px;font-weight:900;color:#111;line-height:1.15;white-space:normal;overflow-wrap:anywhere}
+.familyReading{font-size:9px;font-weight:750;color:#5f6f64;margin-top:3px;line-height:1.25;overflow-wrap:anywhere}
+.familyMeaning{font-size:10.5px;font-weight:760;line-height:1.32;color:#1e261f;overflow-wrap:anywhere}
+.familyLoading,.detailError{grid-column:1/-1;height:100%;display:grid;place-items:center;text-align:center;color:#6b786e;font-size:11px;padding:24px}
+.detailError{color:#8b5757}
+body.kanji-detail-open{overflow:hidden!important}
+@media(max-width:760px){
+ .kanjiDetailModal{padding:8px}.kanjiDetailDialog{width:98vw;height:94vh;padding:11px;border-radius:16px}
+ .kanjiDetailHeroChar{width:50px;height:50px;font-size:37px}.kanjiDetailTitle{font-size:16px}
+ .kanjiDetailBody{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);gap:9px;overflow:auto}
+ .kanjiDetailLeft{display:grid;grid-template-columns:minmax(0,1fr) 130px;gap:8px;padding:10px}
+ .detailMeaningBlock,.detailMetaGrid{grid-column:1}.detailStrokeWrap{grid-column:2;grid-row:1/3;border-top:0;border-left:1px dashed #dce5de;padding:0 0 0 8px}
+ .detailStrokeViewer{width:115px}.detailMetaGrid{gap:5px}.detailMetaBox{padding:6px 7px}.detailMetaValue{font-size:11px}.detailMeaningValue{font-size:13px}
+ .kanjiFamilyPanel{padding:10px;min-height:420px}.familyGrid{grid-template-columns:1fr;grid-template-rows:none;overflow:auto}.familyCard{min-height:60px}.familyWord{font-size:17px}
+}
+
 </style>
 
 <style>
@@ -596,7 +649,7 @@ body.srs-modal-open{overflow:hidden!important}
 
 <div class="appPage secondaryPage" id="jlptPage">
   <section class="card secondaryShell">
-    <div class="pageHead"><div><h2>Folder Kanji JLPT</h2><p>Pilih level untuk melihat kanji, arti, dan cara bacanya.</p></div><div class="dataNote">Catatan: JLPT tidak menerbitkan daftar kanji resmi. Pengelompokan ini memakai dataset pembelajaran N5 sampai N1 yang diturunkan dari data KanjiAPI.</div></div>
+    <div class="pageHead"><div><h2>Folder Kanji JLPT</h2><p>Pilih level untuk melihat kanji, arti, dan cara bacanya. Klik satu kanji untuk membuka detail dan kata keluarganya.</p></div><div class="dataNote">Catatan: JLPT tidak menerbitkan daftar kanji resmi. Pengelompokan ini memakai dataset pembelajaran N5 sampai N1 yang diturunkan dari data KanjiAPI.</div></div>
     <div class="jlptFolders" id="jlptFolders"></div>
     <div class="jlptItemsPanel"><div class="panelBar"><div><div class="panelBarTitle" id="jlptSelectedTitle">JLPT N5</div><div class="panelBarSub" id="jlptSelectedSub">Memuat data…</div></div><div class="dataLoading" id="jlptDataStatus"></div></div><div class="jlptGrid" id="jlptGrid"></div><div class="pager" id="jlptPager"></div></div>
   </section>
@@ -617,6 +670,36 @@ body.srs-modal-open{overflow:hidden!important}
     <div class="pager srsLevelPager" id="srsLevelPager"></div>
   </section>
 </div>
+
+<div class="kanjiDetailModal" id="kanjiDetailModal" hidden>
+  <div class="kanjiDetailBackdrop" data-kanji-detail-close></div>
+  <section class="kanjiDetailDialog" role="dialog" aria-modal="true" aria-labelledby="kanjiDetailTitle">
+    <div class="kanjiDetailHead">
+      <div class="kanjiDetailHeadText">
+        <div class="kanjiDetailHeroChar" id="kanjiDetailChar">漢</div>
+        <div><div class="kanjiDetailTitle" id="kanjiDetailTitle">Detail Kanji</div><div class="kanjiDetailSub" id="kanjiDetailSub">Data dimuat langsung dari internet.</div></div>
+      </div>
+      <button class="kanjiDetailClose" id="kanjiDetailClose" type="button" aria-label="Tutup" title="Tutup">×</button>
+    </div>
+    <div class="kanjiDetailBody">
+      <section class="kanjiDetailLeft">
+        <div class="detailMeaningBlock"><div class="detailMeaningLabel">Arti</div><div class="detailMeaningValue" id="kanjiDetailMeaning">Memuat…</div></div>
+        <div class="detailMetaGrid">
+          <div class="detailMetaBox"><div class="detailMetaKey">On’yomi</div><div class="detailMetaValue" id="kanjiDetailOn">…</div></div>
+          <div class="detailMetaBox"><div class="detailMetaKey">Kun’yomi</div><div class="detailMetaValue" id="kanjiDetailKun">…</div></div>
+          <div class="detailMetaBox"><div class="detailMetaKey">Jumlah stroke</div><div class="detailMetaValue" id="kanjiDetailStrokes">…</div></div>
+          <div class="detailMetaBox"><div class="detailMetaKey">JLPT</div><div class="detailMetaValue" id="kanjiDetailJlpt">…</div></div>
+        </div>
+        <div class="detailStrokeWrap"><div class="detailStrokeTitle">Cara penulisan</div><div class="detailStrokeViewer" id="kanjiDetailStroke"><div class="detailStrokeStatus">Memuat urutan stroke…</div></div></div>
+      </section>
+      <section class="kanjiFamilyPanel">
+        <div class="familyHead"><div><h3>Kata keluarga</h3><p>Kosakata yang mengandung kanji ini dan cara bacanya.</p></div><div class="familySource">KanjiAPI · JMdict</div></div>
+        <div class="familyGrid" id="kanjiFamilyGrid"><div class="familyLoading">Memuat kata keluarga dari internet…</div></div>
+      </section>
+    </div>
+  </section>
+</div>
+
 <script>
 const $=s=>document.querySelector(s),input=$('#wordInput'),results=$('#results'),statusBox=$('#status'),errorBox=$('#error'),goBtn=$('#goBtn');
 const vocabLocal={
@@ -838,7 +921,11 @@ function srsAllEntries(){
 function srsStateFor(k,db){return db[k]||{level:1,tested:false,nextReview:null}}
 function srsCounts(entries,db){
   const c=Array(13).fill(0);
-  entries.forEach(e=>{const st=db[e.kanji];if(!st||!st.tested)return;const lv=Math.max(1,Math.min(12,Number(st.level)||1));c[lv]++});
+  entries.forEach(e=>{
+    const st=db[e.kanji];
+    const lv=(!st||!st.tested)?1:Math.max(1,Math.min(12,Number(st.level)||1));
+    c[lv]++;
+  });
   return c;
 }
 function formatWait(ms){
@@ -934,18 +1021,23 @@ let srsLevelView=1,srsLevelViewPage=0,srsLevelTimer=null;
 function srsLevelPerPage(){return window.innerWidth<=430?5:window.innerWidth<=720?6:9}
 function levelReviewedEntries(level){
   if(!jlptData)return[];
-  const db=getSRS();
+  const db=getSRS(),lv=Number(level);
   return srsAllEntries().filter(e=>{
     const st=db[e.kanji];
-    return st&&st.tested&&Number(st.level)===Number(level);
+    if(lv===1)return !st||!st.tested||Number(st.level)===1;
+    return st&&st.tested&&Number(st.level)===lv;
   }).sort((a,b)=>{
     const sa=db[a.kanji],sb=db[b.kanji];
-    if(Number(level)===12)return (sb.lastReviewed||0)-(sa.lastReviewed||0);
-    return (sa.nextReview??Infinity)-(sb.nextReview??Infinity);
+    if(lv===1){
+      const ta=sa?.tested?0:1,tb=sb?.tested?0:1;
+      if(ta!==tb)return ta-tb;
+    }
+    if(lv===12)return (sb?.lastReviewed||0)-(sa?.lastReviewed||0);
+    return (sa?.nextReview??Infinity)-(sb?.nextReview??Infinity);
   });
 }
 function reviewTimeLabel(st){
-  if(!st)return{label:'Belum dijadwalkan',cls:''};
+  if(!st||!st.tested)return{label:'Belum pernah dites',cls:''};
   if(Number(st.level)>=12)return{label:'Master · tidak dijadwalkan lagi',cls:'master'};
   if(!st.nextReview)return{label:'Belum dijadwalkan',cls:''};
   const ms=Number(st.nextReview)-Date.now();
@@ -958,11 +1050,11 @@ function renderSRSLevelBrowser(){
   srsLevelViewPage=Math.min(Math.max(0,srsLevelViewPage),pages-1);
   const page=arr.slice(srsLevelViewPage*srsLevelPerPage(),(srsLevelViewPage+1)*srsLevelPerPage());
   $('#srsLevelDialogTitle').textContent=`SRS Level ${srsLevelView}`;
-  $('#srsLevelDialogSub').textContent=`${SRS_LEVEL_LABELS[srsLevelView]} · ${arr.length} kanji yang sudah pernah dites`;
+  $('#srsLevelDialogSub').textContent=`${SRS_LEVEL_LABELS[srsLevelView]} · ${arr.length} kanji pada level ini`;
   $('#srsLevelList').innerHTML=page.length?page.map(entry=>{
     const d=displaySRSData(entry),st=db[entry.kanji],due=reviewTimeLabel(st);
     return `<article class="srsLevelItem"><div class="srsLevelItemChar">${esc(d.k)}</div><div><div class="srsLevelItemMeaning">${esc(d.meaning)}</div><div class="srsLevelItemMeta">${esc(d.jlpt)}</div></div><div class="srsLevelItemDue ${due.cls}"><span>${esc(due.label)}</span><span>L${srsLevelView}</span></div></article>`;
-  }).join(''):`<div class="srsLevelEmpty">Belum ada kanji yang sudah pernah dites pada Level ${srsLevelView}.</div>`;
+  }).join(''):`<div class="srsLevelEmpty">Belum ada kanji pada Level ${srsLevelView}.</div>`;
   $('#srsLevelPager').innerHTML=arr.length>srsLevelPerPage()?`<button type="button" class="pagerBtn" data-srs-level-page="prev" aria-label="Halaman sebelumnya">‹</button><span class="pagerInfo">${srsLevelViewPage+1} / ${pages}</span><button type="button" class="pagerBtn" data-srs-level-page="next" aria-label="Halaman berikutnya">›</button>`:'';
 }
 function openSRSLevel(level){
@@ -984,27 +1076,29 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#srsLevelModal'
 
 const JLPT_URL='https://raw.githubusercontent.com/Renairisu/jlpt_kanji_json_msgpack/refs/heads/main/kanji_jlpt_only.json';
 let jlptData=null,jlptLoading=null,jlptSelected=5,jlptPageIndex=0;
-const jlptFallback={
-5:'一七万三上下中九二五人今休何先入八六円出分前北十千午半南友右名四国土外大女子学小山川左年後日書月木本来東校毎気水火父生男白百目社空立耳花西見言話語読買車金長間雨電食高'.split(''),
-4:'不世主事京仕代会体作使借元兄公写冬切別勉動医去口古台合同味品員問図地堂場声売夏夕多夜妹姉始字室家少屋工市帰広店度建弟強待心思急悪意手持教文方旅族早明映画春昼曜有朝村林楽歌止正歩母池注海牛物犬理用田町病発県真着知短私秋究答紙終習考者肉自色英茶親計貸赤走起足転近送通週運道重野銀開院集青音題顔風飯館駅験鳥黒'.split(''),
-3:'与王玉界相定実進度現理動同事者会自発場思方地家目体社新世力意用主通業持道身多野考開教問正真味無海切重集員公画安親強使題足品着別音元特風夜空有起運料楽色帰歩広店町住売待古'.split(''),
-2:'並丸久乱乳亡互井仁介仏令仲件任似余価保信修俵個倍停健側備働像億兆児党兵具典内冷刀列初利刷副功加助努労勇勝包化卒協単博印参史司各向君告周命和商喜器囲固型堂塩士変夫失妻委季孫守完官定実客害宿察寺対局居届岩岸島州巣差市布希席帯帳常幕干平年幸幼庁広床底府庫庭式弓引弟弱強当形役徒得必念息悪悲想愛感慣成戦戸才打投折拾指放整料旗旅族昔星春昭昼暑暗曲有服期札材村束松板林枚果枝染柱栄根格案梅械森植極様標横橋機欠次歯歴死残段殺毒比毛氷永求決汽河油治法波泣泳洋洗活流消深温港湖湯満漁灯灰点無然焼照熱牧特犬犯状独率球産用由申留番異疑病痛登皆皮皿直相省看真眠石砂研破確示礼神票祭福科秒秘種積童競竹笑笛第筆等算管箱築簡米粉精糸約組細終紹経結給絵続緑線練置羊美羽翌習考者職育胃背胸能脳腹臓臣航船良芸若苦英薬血術表要覚観角解言記訪設許訳試説課調談議谷豆豊象貨貯費賞路身軍輪辞農辺返追退送逃逆速連進遊過達選郡部都配酒里量鉄録門関阪防降限除院険陽階雪静面順預領頭額顔願類飛養館首馬駅駐騒験骨髪魚鳥鳴麦黄鼻'.split(''),
-1:'丁丑且丘丙丞串丹乏乙乞亀井亘亜享亭亮仰企伎伏伐伯伴伸伺但佐佑佳併侍依俊俗俳俵倉倣倫偉偏健偶偽傍傑催債傷僚僧儀儒償優充克免兼冒冗冠冥凄准凝凡凶凸凹刃刈刑到刺削剖剛剣剤剥勘募勢匠匹升卓即却卵卸厄厘原厳又及双叔叙叡句只叶司吉吏吐吟呂呈呉哀哲唄唆唐唯唱啓喚喜喝喪嗣嘆嘱囚圏坑坪垂垣埋城域執培堀堅堤堪塀塁塊塑塔塗塚塾墓墜墨壁壇壊壌壮奇 奉 奔 奨 奪'.replace(/\s/g,'').split('')};
-function fallbackEntry(k,level){const l=kanjiLocal[k]||{};return{kanji:k,jlpt:level,meanings:l.id?[l.id]:[],on_readings:l.on&&l.on!=='–'?l.on.split('・'):[],kun_readings:l.kun&&l.kun!=='–'?l.kun.split('・'):[]}}
 async function loadJLPTData(){
   if(jlptData)return jlptData;if(jlptLoading)return jlptLoading;
-  jlptLoading=(async()=>{try{const d=await fetchJSON(JLPT_URL,6500);jlptData=d;$('#jlptDataStatus').textContent='Data lengkap aktif';return d}catch(e){const d={};for(const [lv,arr] of Object.entries(jlptFallback))for(const k of arr)d[k]=fallbackEntry(k,Number(lv));jlptData=d;$('#jlptDataStatus').textContent='Mode data cadangan';return d}})();return jlptLoading;
+  jlptLoading=(async()=>{
+    try{
+      const d=await fetchJSON(JLPT_URL,9000);
+      jlptData=d;$('#jlptDataStatus').textContent='Data online aktif';return d;
+    }catch(e){
+      jlptData={};
+      $('#jlptDataStatus').textContent='Gagal memuat data online';
+      $('#jlptGrid').innerHTML='<div class="emptyState">Data JLPT membutuhkan koneksi internet. Periksa koneksi lalu buka halaman JLPT lagi.</div>';
+      return jlptData;
+    }
+  })();return jlptLoading;
 }
 function jlptEntries(level){if(!jlptData)return[];return Object.values(jlptData).filter(x=>Number(x.jlpt)===Number(level)).sort((a,b)=>(a.freq_mainichi_shinbun??99999)-(b.freq_mainichi_shinbun??99999))}
-async function localizeJLPTCard(k,en){const el=document.querySelector(`[data-jlpt-meaning="${CSS.escape(k)}"]`);if(!el)return;const mapped=kanjiLocal[k]?.id||localGloss(en);if(mapped&&mapped.toLowerCase()!==String(en).toLowerCase()){el.textContent=mapped;return}const tr=await translate(en,'en','id');if(el&&tr)el.textContent=tr}
+async function localizeJLPTCard(k,en){const el=document.querySelector(`[data-jlpt-meaning="${CSS.escape(k)}"]`);if(!el)return;const tr=await translate(en,'en','id');if(!el)return;el.textContent=tr||en||'arti tidak tersedia'}
 function renderJLPTFolders(){const counts={};for(let l=1;l<=5;l++)counts[l]=jlptEntries(l).length;$('#jlptFolders').innerHTML=[5,4,3,2,1].map(l=>`<div class="jlptFolder ${l===jlptSelected?'active':''}" data-jlpt-level="${l}" role="button" tabindex="0"><div><div class="jlptFolderName">N${l}</div><div class="jlptFolderText">Folder kanji</div></div><div class="jlptFolderCount">${counts[l]||'…'}</div></div>`).join('')}
 function renderJLPT(){
   renderJLPTFolders();const arr=jlptEntries(jlptSelected),per=10,pages=Math.max(1,Math.ceil(arr.length/per));jlptPageIndex=Math.min(jlptPageIndex,pages-1);const page=arr.slice(jlptPageIndex*per,(jlptPageIndex+1)*per);
   $('#jlptSelectedTitle').textContent=`JLPT N${jlptSelected}`;$('#jlptSelectedSub').textContent=`${arr.length} kanji · arti dan cara baca`;
-  $('#jlptGrid').innerHTML=page.length?page.map(x=>{const k=x.kanji||'',en=(x.meanings||[]).slice(0,3).join(', '),mapped=kanjiLocal[k]?.id||localGloss(en)||'menerjemahkan…';const on=(x.on_readings||[]).slice(0,4).join('・')||'–',kun=(x.kun_readings||[]).slice(0,4).join('・')||'–';return `<div class="jlptKanjiCard" data-open-kanji="${esc(k)}"><div class="jlptChar">${esc(k)}</div><div class="jlptCardBody"><div class="jlptMeaning" data-jlpt-meaning="${esc(k)}">${esc(mapped)}</div><div class="jlptReading"><b>On:</b> ${esc(on)}</div><div class="jlptReading"><b>Kun:</b> ${esc(kun)}</div></div></div>`}).join(''):'<div class="emptyState">Data level ini belum tersedia.</div>';
+  $('#jlptGrid').innerHTML=page.length?page.map(x=>{const k=x.kanji||'',en=(x.meanings||[]).slice(0,3).join(', '),mapped=en?'menerjemahkan…':'arti tidak tersedia';const on=(x.on_readings||[]).slice(0,4).join('・')||'–',kun=(x.kun_readings||[]).slice(0,4).join('・')||'–';return `<div class="jlptKanjiCard" data-open-kanji="${esc(k)}" role="button" tabindex="0" aria-label="Buka detail kanji ${esc(k)}"><div class="jlptChar">${esc(k)}</div><div class="jlptCardBody"><div class="jlptMeaning" data-jlpt-meaning="${esc(k)}">${esc(mapped)}</div><div class="jlptReading"><b>On:</b> ${esc(on)}</div><div class="jlptReading"><b>Kun:</b> ${esc(kun)}</div></div></div>`}).join(''):'<div class="emptyState">Data level ini belum tersedia.</div>';
   page.forEach(x=>{const en=(x.meanings||[]).slice(0,3).join(', ');if(en)localizeJLPTCard(x.kanji,en)});
   $('#jlptPager').innerHTML=arr.length>per?`<button type="button" class="pagerBtn" id="jlptPrev" aria-label="Halaman sebelumnya">‹</button><span class="pagerInfo">${jlptPageIndex+1} / ${pages}</span><button type="button" class="pagerBtn" id="jlptNext" aria-label="Halaman berikutnya">›</button>`:'';
-  document.querySelectorAll('[data-open-kanji]').forEach(card=>card.addEventListener('dblclick',()=>{input.value=card.dataset.openKanji;switchPage('searchPage');searchWord()}));
 }
 function selectJLPTLevel(level){
   const n=Number(level);if(!Number.isFinite(n)||n<1||n>5)return;
@@ -1016,6 +1110,90 @@ $('#jlptPager').addEventListener('click',e=>{
   if(e.target.closest('#jlptPrev')){jlptPageIndex=Math.max(0,jlptPageIndex-1);renderJLPT();return}
   if(e.target.closest('#jlptNext')){const pages=Math.max(1,Math.ceil(jlptEntries(jlptSelected).length/10));jlptPageIndex=Math.min(pages-1,jlptPageIndex+1);renderJLPT()}
 });
+
+function familyPriority(entry){
+  let score=0;
+  for(const v of (entry?.variants||[])){
+    const p=v?.priorities||[];
+    score+=p.length*20;
+    if(p.some(x=>/^ichi1$|^news1$|^spec1$/.test(x)))score+=100;
+    if(p.some(x=>/^nf\d+/.test(x)))score+=40;
+  }
+  return score;
+}
+function selectFamilyWords(rows,k,limit=10){
+  const out=[],seen=new Set();
+  const sorted=[...(rows||[])].sort((a,b)=>familyPriority(b)-familyPriority(a));
+  for(const entry of sorted){
+    const variants=(entry?.variants||[]).filter(v=>String(v?.written||'').includes(k));
+    if(!variants.length)continue;
+    variants.sort((a,b)=>(b.priorities?.length||0)-(a.priorities?.length||0)||String(a.written||'').length-String(b.written||'').length);
+    const v=variants[0],written=clean(v?.written||''),reading=clean(v?.pronounced||'');
+    if(!written||seen.has(written+'|'+reading))continue;
+    const glosses=[];
+    for(const meaning of (entry?.meanings||[]).slice(0,2))for(const g of (meaning?.glosses||[]).slice(0,2)){const x=clean(g);if(x&&!glosses.includes(x))glosses.push(x)}
+    if(!glosses.length)continue;
+    seen.add(written+'|'+reading);out.push({written,reading,en:glosses.slice(0,2).join('; ')});
+    if(out.length>=limit)break;
+  }
+  return out;
+}
+async function loadDetailStroke(k){
+  const slot=$('#kanjiDetailStroke');if(!slot)return;
+  slot.innerHTML='<div class="detailStrokeStatus">Memuat urutan stroke…</div>';
+  try{
+    const gif=await getCommonsStrokeGif(k);
+    if(gif?.url){
+      const img=new Image();img.alt=`Urutan penulisan ${k}`;img.referrerPolicy='no-referrer';
+      img.onload=()=>{if(slot.isConnected){slot.innerHTML='';slot.appendChild(img)}};
+      img.onerror=()=>{slot.innerHTML=`<kaki-jun>${esc(k)}</kaki-jun>`};img.src=gif.url;
+    }else slot.innerHTML=`<kaki-jun>${esc(k)}</kaki-jun>`;
+  }catch(e){slot.innerHTML=`<kaki-jun>${esc(k)}</kaki-jun>`}
+}
+async function loadFamilyWords(k){
+  const grid=$('#kanjiFamilyGrid');if(!grid)return;
+  grid.innerHTML='<div class="familyLoading">Memuat kata keluarga dari KanjiAPI…</div>';
+  try{
+    const rows=await fetchJSON(`https://kanjiapi.dev/v1/words/${encodeURIComponent(k)}`,8500);
+    const words=selectFamilyWords(rows,k,10);
+    if(!words.length){grid.innerHTML='<div class="familyLoading">Kata keluarga belum ditemukan untuk kanji ini.</div>';return}
+    grid.innerHTML=words.map((w,i)=>`<article class="familyCard"><div><div class="familyWord">${esc(w.written)}</div><div class="familyReading">${esc(w.reading||'–')}</div></div><div class="familyMeaning" data-family-meaning="${i}">${esc(w.en)}</div></article>`).join('');
+    words.forEach(async(w,i)=>{
+      const tr=await translate(w.en,'en','id');
+      const el=grid.querySelector(`[data-family-meaning="${i}"]`);if(el&&tr)el.textContent=tr;
+    });
+  }catch(e){grid.innerHTML='<div class="detailError">Kata keluarga tidak dapat dimuat. Koneksi internet atau KanjiAPI sedang bermasalah.</div>'}
+}
+async function openKanjiDetail(k){
+  if(!k)return;
+  const modal=$('#kanjiDetailModal');modal.hidden=false;document.body.classList.add('kanji-detail-open');
+  $('#kanjiDetailChar').textContent=k;$('#kanjiDetailTitle').textContent=`Detail ${k}`;$('#kanjiDetailSub').textContent='Memuat data langsung dari internet…';
+  $('#kanjiDetailMeaning').textContent='Memuat…';$('#kanjiDetailOn').textContent='…';$('#kanjiDetailKun').textContent='…';$('#kanjiDetailStrokes').textContent='…';$('#kanjiDetailJlpt').textContent='…';
+  $('#kanjiFamilyGrid').innerHTML='<div class="familyLoading">Memuat kata keluarga dari internet…</div>';
+  loadDetailStroke(k);loadFamilyWords(k);
+  try{
+    const d=await fetchJSON(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(k)}`,7000);
+    if($('#kanjiDetailChar').textContent!==k)return;
+    const en=(d?.meanings||[]).slice(0,6).join(', ');
+    $('#kanjiDetailMeaning').textContent=en||'Arti tidak tersedia';
+    $('#kanjiDetailOn').textContent=(d?.on_readings||[]).join('・')||'–';
+    $('#kanjiDetailKun').textContent=(d?.kun_readings||[]).join('・')||'–';
+    $('#kanjiDetailStrokes').textContent=d?.stroke_count??'–';
+    $('#kanjiDetailJlpt').textContent=d?.jlpt?`N${d.jlpt}`:'–';
+    $('#kanjiDetailSub').textContent='Data karakter: KanjiAPI · kata keluarga: JMdict melalui KanjiAPI';
+    if(en){const tr=await translate(en,'en','id');if($('#kanjiDetailChar').textContent===k&&tr)$('#kanjiDetailMeaning').textContent=tr}
+  }catch(e){
+    $('#kanjiDetailMeaning').textContent='Detail kanji tidak dapat dimuat.';$('#kanjiDetailSub').textContent='Periksa koneksi internet lalu coba lagi.';
+  }
+  $('#kanjiDetailClose')?.focus();
+}
+function closeKanjiDetail(){const modal=$('#kanjiDetailModal');if(modal)modal.hidden=true;document.body.classList.remove('kanji-detail-open')}
+$('#jlptGrid').addEventListener('click',e=>{const card=e.target.closest('[data-open-kanji]');if(card)openKanjiDetail(card.dataset.openKanji)});
+$('#jlptGrid').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const card=e.target.closest('[data-open-kanji]');if(card){e.preventDefault();openKanjiDetail(card.dataset.openKanji)}});
+$('#kanjiDetailClose').addEventListener('click',closeKanjiDetail);
+$('#kanjiDetailModal').addEventListener('click',e=>{if(e.target.closest('[data-kanji-detail-close]'))closeKanjiDetail()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#kanjiDetailModal').hidden)closeKanjiDetail()});
+
 async function initJLPT(){if(!jlptData){$('#jlptDataStatus').textContent='Memuat dataset…';$('#jlptGrid').innerHTML='<div class="emptyState">Memuat folder JLPT…</div>';await loadJLPTData()}renderJLPT()}
 
 
