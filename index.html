@@ -185,11 +185,81 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
   .strokeViewer{width:116px;max-width:116px}.strokeViewer img,.strokeViewer kaki-jun{width:108px;max-width:108px;max-height:108px}
 }
 
+
+
+/* ===== V22: NAVIGATION + SRS + JLPT ===== */
+.top{justify-content:space-between}
+.brandSide{display:flex;align-items:center;gap:10px;min-width:0}
+.navTabs{display:flex;align-items:center;gap:7px;margin-left:auto}
+.navBtn{min-width:auto;min-height:32px;padding:0 13px;border-radius:10px;background:#fff;color:#2d3a30;border:1px solid #d6e2d8;box-shadow:none;font-size:11px;font-weight:750}
+.navBtn:hover{background:#f2f7f3;filter:none}
+.navBtn.active{background:#6eac7f;color:#fff;border-color:#609d72;box-shadow:0 4px 12px rgba(79,143,99,.15)}
+.appPage{display:none}.appPage.active{display:block}
+#searchPage.active{display:block}
+.secondaryPage{height:calc(100vh - 76px);min-height:430px;overflow:hidden}
+.secondaryShell{height:100%;display:flex;flex-direction:column;gap:10px;padding:12px 14px}
+.pageHead{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex:0 0 auto}
+.pageHead h2{margin:0;font-size:19px;color:#111}.pageHead p{margin:3px 0 0;font-size:9.5px;color:var(--muted);line-height:1.4}
+.pageStat{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.statPill{background:#f2f7f3;border:1px solid #d8e5da;color:#405849;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:750}
+
+/* SRS */
+.srsLayout{display:grid;grid-template-columns:1.03fr 1.7fr;gap:12px;flex:1;min-height:0}
+.levelPanel,.srsItemsPanel,.jlptItemsPanel{border:1px solid var(--line);border-radius:14px;background:#fbfdfb;padding:10px;min-height:0;overflow:hidden}
+.levelPanel{display:flex;flex-direction:column}
+.panelTitle{font-size:11.5px;font-weight:850;color:#111;margin-bottom:7px}
+.levelGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;flex:1;align-content:stretch}
+.levelCard{border:1px solid #d9e5db;border-radius:11px;background:#fff;padding:7px 8px;display:flex;align-items:center;justify-content:space-between;gap:7px;cursor:pointer;min-width:0}
+.levelCard:hover{background:#f3f8f4}.levelCard.active{border-color:#77ad86;background:#edf6ef;box-shadow:inset 0 0 0 1px #9bc4a6}
+.levelNum{font-size:11px;font-weight:900;color:#253229}.levelMeta{font-size:8px;color:#728078;white-space:nowrap}.levelCount{width:25px;height:25px;display:grid;place-items:center;border-radius:8px;background:#eef4ef;color:#3d5f47;font-size:10px;font-weight:850;flex:0 0 auto}
+.srsItemsPanel{display:flex;flex-direction:column}
+.panelBar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;flex:0 0 auto}
+.panelBarTitle{font-size:12px;font-weight:850}.panelBarSub{font-size:8.5px;color:var(--muted)}
+.srsItems{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;flex:1;min-height:0;align-content:start}
+.srsItem{border:1px solid #dde7df;border-radius:12px;background:#fff;padding:8px;display:grid;grid-template-columns:52px 1fr;gap:8px;min-width:0}
+.srsChar{width:52px;height:52px;border-radius:10px;background:#f1f7f2;border:1px solid #d9e5db;display:grid;place-items:center;font:700 35px/1 "Yu Mincho","Noto Serif JP",serif;color:#111}
+.srsMeaning{font-size:10.5px;font-weight:800;line-height:1.25;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.srsReading{font-size:8.5px;color:#667168;line-height:1.35;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srsActions{grid-column:1/-1;display:flex;gap:5px;justify-content:flex-end;margin-top:1px}.srsAction{min-width:auto;min-height:25px;padding:0 8px;border-radius:8px;font-size:8px;box-shadow:none}.srsForget{background:#fff;color:#6a4d4d;border-color:#e1cece}.srsRemember{background:#6eac7f;color:#fff;border-color:#609d72}.srsRemove{background:#fff;color:#68716a;border-color:#d9e0da}
+.emptyState{height:100%;min-height:120px;display:grid;place-items:center;text-align:center;color:#6d7970;font-size:10px;line-height:1.5;padding:20px}
+.pager{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:7px;flex:0 0 auto}.pagerBtn{min-width:30px;min-height:27px;padding:0 9px;background:#fff;color:#344038;border-color:#d7e1d9;box-shadow:none;font-size:9px}.pagerInfo{font-size:8.5px;color:#69756d;min-width:60px;text-align:center}
+.miniSrsBtn{min-width:auto;min-height:24px;padding:0 7px;font-size:8px;border-radius:8px;background:#fff;color:#4c7258;border:1px solid #bfd5c4;box-shadow:none;margin-top:5px}
+.miniSrsBtn.added{background:#eaf4ec;color:#3f694c;border-color:#afcdb7}
+
+/* JLPT */
+.jlptFolders{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;flex:0 0 auto}
+.jlptFolder{border:1px solid #d8e4da;background:#fff;border-radius:12px;padding:8px 9px;display:flex;align-items:center;justify-content:space-between;gap:6px;cursor:pointer}
+.jlptFolder:hover{background:#f4f8f5}.jlptFolder.active{background:#edf6ef;border-color:#7fb08c;box-shadow:inset 0 0 0 1px #a7cbb0}
+.jlptFolderName{font-size:14px;font-weight:900;color:#25402d}.jlptFolderText{font-size:8px;color:#718078;margin-top:1px}.jlptFolderCount{font-size:9px;font-weight:800;color:#50705a;background:#edf4ef;border-radius:999px;padding:4px 6px}
+.jlptItemsPanel{flex:1;display:flex;flex-direction:column}
+.jlptGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;flex:1;min-height:0;align-content:start}
+.jlptKanjiCard{border:1px solid #dce6de;border-radius:11px;background:#fff;padding:8px;display:grid;grid-template-columns:44px 1fr;gap:7px;min-width:0;cursor:pointer}
+.jlptKanjiCard:hover{background:#f7faf7;border-color:#c7d8ca}
+.jlptChar{width:44px;height:44px;border-radius:9px;background:#f2f7f3;display:grid;place-items:center;font:700 30px/1 "Yu Mincho","Noto Serif JP",serif;color:#111}
+.jlptMeaning{font-size:9.5px;font-weight:800;color:#111;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.jlptReading{font-size:8px;color:#69756d;line-height:1.3;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.jlptAdd{grid-column:1/-1;display:flex;justify-content:flex-end}.jlptAddBtn{min-width:auto;min-height:22px;padding:0 7px;border-radius:7px;font-size:7.5px;background:#fff;color:#4c7258;border-color:#bfd5c4;box-shadow:none}
+.dataNote{font-size:8px;color:#748078;line-height:1.35;max-width:720px}
+.dataLoading{font-size:9px;color:#667168}
+
+@media(max-width:900px){
+  .navBtn{padding:0 9px;font-size:9.5px}.secondaryPage{height:auto;min-height:calc(100vh - 76px);overflow:auto}.srsLayout{grid-template-columns:1fr}.levelGrid{grid-template-columns:repeat(4,1fr)}.jlptGrid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:700px){
+  .top{align-items:flex-start}.navTabs{gap:4px}.navBtn{padding:0 7px;min-height:29px}.brand p{display:none}.secondaryPage{overflow:auto}.srsItems{grid-template-columns:1fr}.levelGrid{grid-template-columns:repeat(3,1fr)}.jlptFolders{grid-template-columns:repeat(5,minmax(54px,1fr))}.jlptGrid{grid-template-columns:repeat(2,1fr)}
+}
+
 </style>
 </head>
 <body>
 <div class="wrap">
-<header class="top"><div class="logo">漢</div><div class="brand"><h1>Kanji Dictionary</h1><p>Kamus kanji cepat dan sederhana.</p></div></header>
+<header class="top">
+  <div class="brandSide"><div class="logo">漢</div><div class="brand"><h1>Kanji Dictionary</h1><p>Kamus dan ruang belajar kanji.</p></div></div>
+  <nav class="navTabs" aria-label="Navigasi utama">
+    <button class="navBtn active" data-page="searchPage">Cari</button>
+    <button class="navBtn" data-page="srsPage">SRS</button>
+    <button class="navBtn" data-page="jlptPage">JLPT</button>
+  </nav>
+</header>
+
+<div class="appPage active" id="searchPage">
 <section class="card search">
 <h2>Cari kosakata kanji</h2>
 <p>Masukkan satu kanji atau kosakata Jepang. Arti kata utuh akan ditampilkan lebih dahulu, lalu setiap kanji dijelaskan dengan arti, On’yomi, Kun’yomi, jumlah stroke, dan level JLPT.</p>
@@ -201,6 +271,25 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
 <section class="card breakdown"><h3>Bedah setiap kanji</h3><div class="sub">Arti inti karakter, On’yomi, Kun’yomi, jumlah stroke, level JLPT, dan animasi urutan penulisannya.</div><div class="charList" id="charList"></div></section>
 </main>
 <div class="note">Arti dimuat lebih dahulu. Animasi urutan stroke dimuat terpisah agar pencarian tetap cepat.</div>
+</div>
+
+<div class="appPage secondaryPage" id="srsPage">
+  <section class="card secondaryShell">
+    <div class="pageHead"><div><h2>SRS 12 Level</h2><p>Simpan kanji dari halaman Cari atau JLPT, kemudian naikkan levelnya saat sudah ingat.</p></div><div class="pageStat"><span class="statPill" id="srsTotalStat">0 kanji</span><span class="statPill" id="srsDueStat">0 perlu review</span></div></div>
+    <div class="srsLayout">
+      <div class="levelPanel"><div class="panelTitle">Level SRS</div><div class="levelGrid" id="srsLevelGrid"></div></div>
+      <div class="srsItemsPanel"><div class="panelBar"><div><div class="panelBarTitle" id="srsSelectedTitle">Level 1</div><div class="panelBarSub" id="srsSelectedSub">Kanji baru</div></div></div><div class="srsItems" id="srsItems"></div><div class="pager" id="srsPager"></div></div>
+    </div>
+  </section>
+</div>
+
+<div class="appPage secondaryPage" id="jlptPage">
+  <section class="card secondaryShell">
+    <div class="pageHead"><div><h2>Folder Kanji JLPT</h2><p>Pilih level untuk melihat kanji, arti, dan cara bacanya.</p></div><div class="dataNote">Catatan: JLPT tidak menerbitkan daftar kanji resmi. Pengelompokan ini memakai dataset pembelajaran N5 sampai N1 yang diturunkan dari data KanjiAPI.</div></div>
+    <div class="jlptFolders" id="jlptFolders"></div>
+    <div class="jlptItemsPanel"><div class="panelBar"><div><div class="panelBarTitle" id="jlptSelectedTitle">JLPT N5</div><div class="panelBarSub" id="jlptSelectedSub">Memuat data…</div></div><div class="dataLoading" id="jlptDataStatus"></div></div><div class="jlptGrid" id="jlptGrid"></div><div class="pager" id="jlptPager"></div></div>
+  </section>
+</div>
 </div>
 <script>
 const $=s=>document.querySelector(s),input=$('#wordInput'),results=$('#results'),statusBox=$('#status'),errorBox=$('#error'),goBtn=$('#goBtn');
@@ -298,7 +387,7 @@ async function loadExamples(word){
   renderExamples(word,rows);
 }
 function initialKanji(k){const local=kanjiLocal[k]||{};return{char:k,id:local.id||'memuat arti…',on:local.on||'…',kun:local.kun||'…',strokes:local.strokes??'…',jlpt:'…'}}
-function renderChar(c,i){return `<div class="charCard" id="charCard-${i}"><div class="charHead"><div class="char">${esc(c.char)}</div><div><div class="label">ARTI KANJI</div><div class="charMeaning" data-f="id">${esc(c.id)}</div></div></div><div class="meta"><div class="k">On’yomi</div><div class="v" data-f="on">${esc(c.on)}</div><div class="k">Kun’yomi</div><div class="v" data-f="kun">${esc(c.kun)}</div><div class="k">Stroke</div><div class="v" data-f="strokes">${esc(c.strokes)}</div><div class="k">JLPT</div><div class="v"><span class="jlpt na" data-f="jlpt">${esc(c.jlpt)}</span></div></div><div class="strokeSection"><div class="strokeTitle"><span>Urutan penulisan</span><span class="strokeSource" id="strokeSource-${i}">memuat…</span></div><div class="strokeViewer" id="stroke-${i}"><div class="strokeLoading">Memuat animasi stroke ${esc(c.char)}…</div></div></div></div>`}
+function renderChar(c,i){return `<div class="charCard" id="charCard-${i}"><div class="charHead"><div class="char">${esc(c.char)}</div><div><div class="label">ARTI KANJI</div><div class="charMeaning" data-f="id">${esc(c.id)}</div><button class="miniSrsBtn" data-srs-kanji="${esc(c.char)}">＋ SRS</button></div></div><div class="meta"><div class="k">On’yomi</div><div class="v" data-f="on">${esc(c.on)}</div><div class="k">Kun’yomi</div><div class="v" data-f="kun">${esc(c.kun)}</div><div class="k">Stroke</div><div class="v" data-f="strokes">${esc(c.strokes)}</div><div class="k">JLPT</div><div class="v"><span class="jlpt na" data-f="jlpt">${esc(c.jlpt)}</span></div></div><div class="strokeSection"><div class="strokeTitle"><span>Urutan penulisan</span><span class="strokeSource" id="strokeSource-${i}">memuat…</span></div><div class="strokeViewer" id="stroke-${i}"><div class="strokeLoading">Memuat animasi stroke ${esc(c.char)}…</div></div></div></div>`}
 function updateChar(i,c){const box=document.getElementById(`charCard-${i}`);if(!box||!c)return;for(const f of ['id','on','kun','strokes']){const el=box.querySelector(`[data-f="${f}"]`);if(el)el.textContent=c[f]??'–'}const j=box.querySelector('[data-f="jlpt"]');if(j){j.textContent=c.jlpt||'–';j.className=(c.jlpt&&c.jlpt!=='–')?'jlpt':'jlpt na'}}
 async function getCommonsStrokeGif(k){
   const cached=cacheGet('stroke-gif:'+k);if(cached?.url)return cached;
@@ -348,12 +437,14 @@ function fitPage(){
   clearTimeout(fitTimer);
   fitTimer=setTimeout(()=>{
     const wrap=document.querySelector('.wrap');if(!wrap)return;
+    if(window.innerWidth<=700||typeof activePage!=='undefined'&&activePage!=='searchPage'){wrap.style.zoom='1';return}
     wrap.style.zoom='1';
-    const gap=6,availH=Math.max(220,window.innerHeight-gap*2),availW=Math.max(320,window.innerWidth-gap*2);
+    const gap=7,availH=Math.max(260,window.innerHeight-gap*2),availW=Math.max(420,window.innerWidth-gap*2);
     const naturalH=wrap.scrollHeight,naturalW=wrap.scrollWidth;
-    let scale=Math.min(1,availH/Math.max(1,naturalH),availW/Math.max(1,naturalW));
+    let scale=Math.min(1.16,availH/Math.max(1,naturalH),availW/Math.max(1,naturalW));
+    if(!results.classList.contains('show'))scale=Math.min(1,scale);
     if(!Number.isFinite(scale)||scale<=0)scale=1;
-    wrap.style.zoom=String(Math.max(.28,scale));
+    wrap.style.zoom=String(Math.max(.34,scale));
   },35);
 }
 const fitObserver=new MutationObserver(()=>fitPage());
@@ -377,6 +468,82 @@ async function searchWord(){
   chars.forEach((k,i)=>{const cached=cacheGet('kanji:'+k);if(cached)updateChar(i,cached);enrichKanji(k).then(d=>updateChar(i,d)).catch(()=>{});setTimeout(()=>loadStrokeAnimation(k,i),120+i*80)});
   setTimeout(()=>{statusBox.classList.remove('show');goBtn.disabled=false;fitPage()},500);
 }
+
+
+/* ===== V22 APP PAGES, SRS, JLPT ===== */
+let activePage='searchPage';
+const navButtons=[...document.querySelectorAll('.navBtn')];
+function switchPage(id){
+  activePage=id;
+  document.querySelectorAll('.appPage').forEach(p=>p.classList.toggle('active',p.id===id));
+  navButtons.forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  document.querySelector('.wrap').style.zoom='1';
+  if(id==='srsPage')renderSRS();
+  if(id==='jlptPage')initJLPT();
+  if(id==='searchPage')fitPage();
+}
+navButtons.forEach(b=>b.addEventListener('click',()=>switchPage(b.dataset.page)));
+
+const SRS_KEY='kanji-srs-v1';
+const srsIntervals=[0,0,4,8,24,48,96,168,336,720,1440,2880,999999];
+const srsLabels=['','Baru','4 jam','8 jam','1 hari','2 hari','4 hari','1 minggu','2 minggu','1 bulan','2 bulan','4 bulan','Master'];
+let srsSelectedLevel=1,srsPageIndex=0;
+function getSRS(){try{return JSON.parse(localStorage.getItem(SRS_KEY)||'{}')}catch(e){return{}}}
+function saveSRS(data){try{localStorage.setItem(SRS_KEY,JSON.stringify(data))}catch(e){}}
+function nextReviewFor(level){if(level>=12)return null;return Date.now()+srsIntervals[Math.max(2,level+1)]*3600000}
+async function addKanjiToSRS(k){
+  if(!k)return;const db=getSRS();
+  if(db[k]){srsSelectedLevel=db[k].level||1;renderSRS();return}
+  let d=cacheGet('kanji:'+k)||await enrichKanji(k);
+  db[k]={char:k,level:1,addedAt:Date.now(),nextReview:Date.now(),data:d};saveSRS(db);
+  document.querySelectorAll(`[data-srs-kanji="${CSS.escape(k)}"]`).forEach(b=>{b.textContent='✓ SRS';b.classList.add('added')});
+  srsSelectedLevel=1;srsPageIndex=0;renderSRS();
+}
+function moveSRS(k,delta){const db=getSRS(),it=db[k];if(!it)return;it.level=Math.max(1,Math.min(12,(it.level||1)+delta));it.nextReview=delta>0?nextReviewFor(it.level):Date.now();db[k]=it;saveSRS(db);srsPageIndex=0;renderSRS()}
+function removeSRS(k){const db=getSRS();delete db[k];saveSRS(db);renderSRS()}
+function renderSRS(){
+  const db=getSRS(),items=Object.values(db),now=Date.now();
+  $('#srsTotalStat').textContent=`${items.length} kanji`;$('#srsDueStat').textContent=`${items.filter(x=>x.level<12&&(!x.nextReview||x.nextReview<=now)).length} perlu review`;
+  $('#srsLevelGrid').innerHTML=Array.from({length:12},(_,i)=>{const lv=i+1,c=items.filter(x=>(x.level||1)===lv).length;return `<div class="levelCard ${lv===srsSelectedLevel?'active':''}" data-level="${lv}"><div><div class="levelNum">Level ${lv}</div><div class="levelMeta">${srsLabels[lv]}</div></div><div class="levelCount">${c}</div></div>`}).join('');
+  document.querySelectorAll('.levelCard').forEach(x=>x.onclick=()=>{srsSelectedLevel=Number(x.dataset.level);srsPageIndex=0;renderSRS()});
+  const filtered=items.filter(x=>(x.level||1)===srsSelectedLevel).sort((a,b)=>(a.nextReview||0)-(b.nextReview||0));
+  $('#srsSelectedTitle').textContent=`Level ${srsSelectedLevel}`;$('#srsSelectedSub').textContent=srsLabels[srsSelectedLevel]+` · ${filtered.length} kanji`;
+  const per=6,pages=Math.max(1,Math.ceil(filtered.length/per));srsPageIndex=Math.min(srsPageIndex,pages-1);const page=filtered.slice(srsPageIndex*per,(srsPageIndex+1)*per);
+  $('#srsItems').innerHTML=page.length?page.map(it=>{const d=it.data||{},due=it.level>=12?'Selesai':(!it.nextReview||it.nextReview<=now?'Review sekarang':'Terjadwal');return `<div class="srsItem"><div class="srsChar">${esc(it.char)}</div><div><div class="srsMeaning">${esc(d.id||'arti belum tersedia')}</div><div class="srsReading">On: ${esc(d.on||'–')} · Kun: ${esc(d.kun||'–')}</div><div class="srsReading">${due}</div></div><div class="srsActions"><button class="srsAction srsRemove" data-remove="${esc(it.char)}">Hapus</button><button class="srsAction srsForget" data-forget="${esc(it.char)}">Lupa</button><button class="srsAction srsRemember" data-remember="${esc(it.char)}">Ingat</button></div></div>`}).join(''):'<div class="emptyState">Belum ada kanji di level ini.<br>Tambahkan kanji dari halaman Cari atau folder JLPT.</div>';
+  $('#srsItems').querySelectorAll('[data-remember]').forEach(b=>b.onclick=()=>moveSRS(b.dataset.remember,1));$('#srsItems').querySelectorAll('[data-forget]').forEach(b=>b.onclick=()=>moveSRS(b.dataset.forget,-1));$('#srsItems').querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeSRS(b.dataset.remove));
+  $('#srsPager').innerHTML=filtered.length>per?`<button class="pagerBtn" id="srsPrev">‹</button><span class="pagerInfo">${srsPageIndex+1} / ${pages}</span><button class="pagerBtn" id="srsNext">›</button>`:'';
+  if($('#srsPrev'))$('#srsPrev').onclick=()=>{srsPageIndex=Math.max(0,srsPageIndex-1);renderSRS()};if($('#srsNext'))$('#srsNext').onclick=()=>{srsPageIndex=Math.min(pages-1,srsPageIndex+1);renderSRS()};
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-srs-kanji]');if(b){e.preventDefault();addKanjiToSRS(b.dataset.srsKanji)}});
+
+const JLPT_URL='https://raw.githubusercontent.com/Renairisu/jlpt_kanji_json_msgpack/refs/heads/main/kanji_jlpt_only.json';
+let jlptData=null,jlptLoading=null,jlptSelected=5,jlptPageIndex=0;
+const jlptFallback={
+5:'一七万三上下中九二五人今休何先入八六円出分前北十千午半南友右名四国土外大女子学小山川左年後日書月木本来東校毎気水火父生男白百目社空立耳花西見言話語読買車金長間雨電食高'.split(''),
+4:'不世主事京仕代会体作使借元兄公写冬切別勉動医去口古台合同味品員問図地堂場声売夏夕多夜妹姉始字室家少屋工市帰広店度建弟強待心思急悪意手持教文方旅族早明映画春昼曜有朝村林楽歌止正歩母池注海牛物犬理用田町病発県真着知短私秋究答紙終習考者肉自色英茶親計貸赤走起足転近送通週運道重野銀開院集青音題顔風飯館駅験鳥黒'.split(''),
+3:'与王玉界相定実進度現理動同事者会自発場思方地家目体社新世力意用主通業持道身多野考開教問正真味無海切重集員公画安親強使題足品着別音元特風夜空有起運料楽色帰歩広店町住売待古'.split(''),
+2:'並丸久乱乳亡互井仁介仏令仲件任似余価保信修俵個倍停健側備働像億兆児党兵具典内冷刀列初利刷副功加助努労勇勝包化卒協単博印参史司各向君告周命和商喜器囲固型堂塩士変夫失妻委季孫守完官定実客害宿察寺対局居届岩岸島州巣差市布希席帯帳常幕干平年幸幼庁広床底府庫庭式弓引弟弱強当形役徒得必念息悪悲想愛感慣成戦戸才打投折拾指放整料旗旅族昔星春昭昼暑暗曲有服期札材村束松板林枚果枝染柱栄根格案梅械森植極様標横橋機欠次歯歴死残段殺毒比毛氷永求決汽河油治法波泣泳洋洗活流消深温港湖湯満漁灯灰点無然焼照熱牧特犬犯状独率球産用由申留番異疑病痛登皆皮皿直相省看真眠石砂研破確示礼神票祭福科秒秘種積童競竹笑笛第筆等算管箱築簡米粉精糸約組細終紹経結給絵続緑線練置羊美羽翌習考者職育胃背胸能脳腹臓臣航船良芸若苦英薬血術表要覚観角解言記訪設許訳試説課調談議谷豆豊象貨貯費賞路身軍輪辞農辺返追退送逃逆速連進遊過達選郡部都配酒里量鉄録門関阪防降限除院険陽階雪静面順預領頭額顔願類飛養館首馬駅駐騒験骨髪魚鳥鳴麦黄鼻'.split(''),
+1:'丁丑且丘丙丞串丹乏乙乞亀井亘亜享亭亮仰企伎伏伐伯伴伸伺但佐佑佳併侍依俊俗俳俵倉倣倫偉偏健偶偽傍傑催債傷僚僧儀儒償優充克免兼冒冗冠冥凄准凝凡凶凸凹刃刈刑到刺削剖剛剣剤剥勘募勢匠匹升卓即却卵卸厄厘原厳又及双叔叙叡句只叶司吉吏吐吟呂呈呉哀哲唄唆唐唯唱啓喚喜喝喪嗣嘆嘱囚圏坑坪垂垣埋城域執培堀堅堤堪塀塁塊塑塔塗塚塾墓墜墨壁壇壊壌壮奇 奉 奔 奨 奪'.replace(/\s/g,'').split('')};
+function fallbackEntry(k,level){const l=kanjiLocal[k]||{};return{kanji:k,jlpt:level,meanings:l.id?[l.id]:[],on_readings:l.on&&l.on!=='–'?l.on.split('・'):[],kun_readings:l.kun&&l.kun!=='–'?l.kun.split('・'):[]}}
+async function loadJLPTData(){
+  if(jlptData)return jlptData;if(jlptLoading)return jlptLoading;
+  jlptLoading=(async()=>{try{const d=await fetchJSON(JLPT_URL,6500);jlptData=d;$('#jlptDataStatus').textContent='Data lengkap aktif';return d}catch(e){const d={};for(const [lv,arr] of Object.entries(jlptFallback))for(const k of arr)d[k]=fallbackEntry(k,Number(lv));jlptData=d;$('#jlptDataStatus').textContent='Mode data cadangan';return d}})();return jlptLoading;
+}
+function jlptEntries(level){if(!jlptData)return[];return Object.values(jlptData).filter(x=>Number(x.jlpt)===Number(level)).sort((a,b)=>(a.freq_mainichi_shinbun??99999)-(b.freq_mainichi_shinbun??99999))}
+async function localizeJLPTCard(k,en){const el=document.querySelector(`[data-jlpt-meaning="${CSS.escape(k)}"]`);if(!el)return;const mapped=kanjiLocal[k]?.id||localGloss(en);if(mapped&&mapped.toLowerCase()!==String(en).toLowerCase()){el.textContent=mapped;return}const tr=await translate(en,'en','id');if(el&&tr)el.textContent=tr}
+function renderJLPTFolders(){const counts={};for(let l=1;l<=5;l++)counts[l]=jlptEntries(l).length;$('#jlptFolders').innerHTML=[5,4,3,2,1].map(l=>`<div class="jlptFolder ${l===jlptSelected?'active':''}" data-jlpt-level="${l}"><div><div class="jlptFolderName">N${l}</div><div class="jlptFolderText">Folder kanji</div></div><div class="jlptFolderCount">${counts[l]||'…'}</div></div>`).join('');document.querySelectorAll('.jlptFolder').forEach(x=>x.onclick=()=>{jlptSelected=Number(x.dataset.jlptLevel);jlptPageIndex=0;renderJLPT()})}
+function renderJLPT(){
+  renderJLPTFolders();const arr=jlptEntries(jlptSelected),per=12,pages=Math.max(1,Math.ceil(arr.length/per));jlptPageIndex=Math.min(jlptPageIndex,pages-1);const page=arr.slice(jlptPageIndex*per,(jlptPageIndex+1)*per);
+  $('#jlptSelectedTitle').textContent=`JLPT N${jlptSelected}`;$('#jlptSelectedSub').textContent=`${arr.length} kanji · arti dan bacaan`;
+  const srs=getSRS();$('#jlptGrid').innerHTML=page.length?page.map(x=>{const k=x.kanji||'',en=(x.meanings||[]).slice(0,2).join(', '),mapped=kanjiLocal[k]?.id||localGloss(en)||'menerjemahkan…';const on=(x.on_readings||[]).slice(0,3).join('・')||'–',kun=(x.kun_readings||[]).slice(0,3).join('・')||'–';return `<div class="jlptKanjiCard" data-open-kanji="${esc(k)}"><div class="jlptChar">${esc(k)}</div><div><div class="jlptMeaning" data-jlpt-meaning="${esc(k)}">${esc(mapped)}</div><div class="jlptReading">On: ${esc(on)}</div><div class="jlptReading">Kun: ${esc(kun)}</div></div><div class="jlptAdd"><button class="jlptAddBtn ${srs[k]?'added':''}" data-srs-kanji="${esc(k)}">${srs[k]?'✓ SRS':'＋ SRS'}</button></div></div>`}).join(''):'<div class="emptyState">Data level ini belum tersedia.</div>';
+  page.forEach(x=>{const en=(x.meanings||[]).slice(0,2).join(', ');if(en)localizeJLPTCard(x.kanji,en)});
+  $('#jlptPager').innerHTML=arr.length>per?`<button class="pagerBtn" id="jlptPrev">‹</button><span class="pagerInfo">${jlptPageIndex+1} / ${pages}</span><button class="pagerBtn" id="jlptNext">›</button>`:'';
+  if($('#jlptPrev'))$('#jlptPrev').onclick=()=>{jlptPageIndex=Math.max(0,jlptPageIndex-1);renderJLPT()};if($('#jlptNext'))$('#jlptNext').onclick=()=>{jlptPageIndex=Math.min(pages-1,jlptPageIndex+1);renderJLPT()};
+  document.querySelectorAll('[data-open-kanji]').forEach(card=>card.addEventListener('dblclick',e=>{if(e.target.closest('button'))return;input.value=card.dataset.openKanji;switchPage('searchPage');searchWord()}));
+}
+async function initJLPT(){if(!jlptData){$('#jlptDataStatus').textContent='Memuat dataset…';$('#jlptGrid').innerHTML='<div class="emptyState">Memuat folder JLPT…</div>';await loadJLPTData()}renderJLPT()}
+
+
 $('#goBtn').addEventListener('click',searchWord);input.addEventListener('keydown',e=>{if(e.key==='Enter')searchWord()});
 </script>
 </body>
