@@ -11,62 +11,66 @@
 <script type="module" src="https://code4fukui.github.io/kaki-jun/kaki-jun.js"></script>
 <style>
 :root{
-  --bg:#eaf5ec;--card:#ffffff;--ink:#10291d;--muted:#4f6c5c;--line:#cfe2d4;
-  --green:#1f7a4c;--green-dark:#145a38;--green-soft:#e8f6ed;--green-pale:#f5fbf7;
-  --shadow:0 16px 42px rgba(20,90,56,.10)
+  --bg:#eceeef;--card:#ffffff;--ink:#111111;--muted:#222222;--line:#d4d7da;
+  --green:#1f7a4c;--green-dark:#145a38;--green-soft:#eef1ef;--green-pale:#f5f6f6;
+  --shadow:0 14px 36px rgba(0,0,0,.08)
 }
 *{box-sizing:border-box}
 body{
   margin:0;min-height:100vh;color:var(--ink);
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:
-    linear-gradient(rgba(235,248,239,.92),rgba(235,248,239,.92)),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%2376a987' stroke-width='2' opacity='.32'%3E%3Cpath d='M18 150 C30 110 58 74 98 44'/%3E%3Cpath d='M48 112 C28 110 21 95 27 82 C45 81 55 91 48 112Z' fill='%2393bea0'/%3E%3Cpath d='M67 91 C69 70 83 62 99 66 C101 83 89 95 67 91Z' fill='%2393bea0'/%3E%3Cpath d='M96 56 C92 38 103 25 118 22 C127 38 119 53 96 56Z' fill='%2393bea0'/%3E%3Cpath d='M120 146 C126 117 139 94 160 77'/%3E%3Cpath d='M136 112 C123 107 120 96 125 87 C139 87 146 98 136 112Z' fill='%2393bea0'/%3E%3C/g%3E%3C/svg%3E");
+  background:linear-gradient(180deg,#f3f4f5 0%,#e6e8ea 100%);
   background-attachment:fixed;
 }
-body::before,body::after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(2px)}
-body::before{width:360px;height:360px;left:-120px;top:-100px;background:radial-gradient(circle,rgba(47,143,85,.20),transparent 68%)}
-body::after{width:420px;height:420px;right:-160px;bottom:-160px;background:radial-gradient(circle,rgba(92,166,112,.18),transparent 70%)}
+body::before,body::after{display:none}
 .wrap{max-width:940px;margin:auto;padding:28px 18px 58px}
 .top{display:flex;align-items:center;gap:12px;margin-bottom:22px}
 .logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,var(--green),var(--green-dark));color:#fff;display:grid;place-items:center;font:800 30px serif;box-shadow:0 9px 24px rgba(31,122,76,.27);border:1px solid rgba(255,255,255,.5)}
-.brand h1{margin:0;font-size:20px;color:var(--green-dark)}
+.brand h1{margin:0;font-size:20px;color:#111}
 .brand p{margin:3px 0 0;color:var(--muted);font-size:12px}
-.card{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);backdrop-filter:blur(5px)}
+.card{background:rgba(250,250,250,.98);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
 .search{padding:27px;position:relative;overflow:hidden}
-.search::after{content:"❧";position:absolute;right:18px;top:10px;font-size:70px;color:rgba(31,122,76,.08);transform:rotate(18deg);pointer-events:none}
-.search h2{margin:0 0 8px;font-size:31px;line-height:1.15;color:var(--green-dark)}
+.search::after{display:none}
+.search h2{margin:0 0 8px;font-size:31px;line-height:1.15;color:#111}
 .search p{margin:0 0 18px;color:var(--muted);font-size:13px;line-height:1.6;max-width:760px}
 .inputRow{display:flex;gap:10px;position:relative;z-index:1}
-input{flex:1;min-width:0;border:1px solid #bcd7c4;border-radius:15px;padding:14px 16px;font-size:25px;outline:none;background:#fff;color:var(--ink)}
-input::placeholder{color:#4f6c5c;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-weight:500;letter-spacing:0;font-size:.86em;opacity:1}
-input:focus{border-color:#4d9b6a;box-shadow:0 0 0 4px rgba(31,122,76,.10)}
-button{border:0;border-radius:15px;padding:0 22px;background:linear-gradient(145deg,var(--green),var(--green-dark));color:#fff;font-weight:800;cursor:pointer;min-width:84px;box-shadow:0 7px 18px rgba(31,122,76,.18)}
+input{flex:1;min-width:0;border:1px solid #c5c8cb;border-radius:15px;padding:14px 16px;font-size:25px;outline:none;background:#fff;color:#111}
+input::placeholder{color:#333;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-weight:500;letter-spacing:0;font-size:.86em;opacity:1}
+input:focus{border-color:#6f7377;box-shadow:0 0 0 4px rgba(0,0,0,.06)}
+button{border:0;border-radius:15px;padding:0 22px;background:#2f3235;color:#fff;font-weight:800;cursor:pointer;min-width:84px;box-shadow:0 7px 18px rgba(0,0,0,.12)}
 button:hover{filter:brightness(.97)}button:disabled{opacity:.65;cursor:default}
 .status,.error{display:none;margin-top:13px;font-size:12px}.status.show,.error.show{display:block}.status{color:var(--muted)}
 .error{color:#8b2f2f;background:#fff3f3;border:1px solid #efcccc;border-radius:12px;padding:11px 13px}
 .results{display:none;margin-top:18px;gap:18px}.results.show{display:grid}
 .wordCard{padding:24px}.wordTop{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.wordInfo{display:flex;gap:17px;align-items:flex-start}
-.word{font-family:"Yu Mincho","Hiragino Mincho ProN",serif;font-size:67px;line-height:1;font-weight:700;color:var(--green-dark)}
-.reading{margin-top:6px;color:var(--muted);font-size:16px}.tag{display:inline-block;margin-top:8px;background:var(--green-soft);color:var(--green-dark);border-radius:999px;padding:5px 8px;font-size:10px}
-.badge{background:var(--green-soft);border:1px solid #c6e5d0;color:var(--green-dark);border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800}
-.meaningBox{margin-top:20px;border:1px solid var(--line);background:linear-gradient(180deg,#fbfefc,var(--green-pale));border-radius:16px;padding:16px}
-.label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#5d7467;margin-bottom:7px}.meaning{font-size:25px;font-weight:850;line-height:1.3}.loadingText{color:#8fa398;font-weight:600}
-.breakdown{padding:24px}.breakdown h3{margin:0 0 5px;font-size:18px;color:var(--green-dark)}.sub{color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:14px}
-.charList{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.charCard{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#fff,#f8fcf9);padding:16px}
+.word{font-family:"Yu Mincho","Hiragino Mincho ProN",serif;font-size:67px;line-height:1;font-weight:700;color:#111}
+.reading{margin-top:6px;color:var(--muted);font-size:16px}.tag{display:inline-block;margin-top:8px;background:#eceeef;color:#111;border-radius:999px;padding:5px 8px;font-size:10px}
+.badge{background:#eceeef;border:1px solid #d4d7da;color:#111;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800}
+.meaningBox{margin-top:20px;border:1px solid var(--line);background:linear-gradient(180deg,#fff,#f4f5f6);border-radius:16px;padding:16px}
+.label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#222;margin-bottom:7px}.meaning{font-size:25px;font-weight:850;line-height:1.3}.loadingText{color:#444;font-weight:600}
+.exampleBox{margin-top:14px;border-top:1px solid var(--line);padding-top:15px}
+.exampleHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.exampleTitle{font-size:13px;font-weight:850;color:#111}.exampleHint{font-size:10px;color:#555}
+.exampleList{display:grid;gap:9px}.exampleItem{background:#f4f5f6;border:1px solid #dde0e2;border-radius:13px;padding:12px 13px}
+.exampleJP{font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;font-size:18px;line-height:1.65;color:#111}
+.exampleID{margin-top:5px;font-size:12px;line-height:1.55;color:#444}
+.exampleItem mark{background:#d9dde0;color:#000;border-radius:5px;padding:1px 4px;font-weight:850}
+.exampleLoading{font-size:12px;color:#555;padding:4px 0}
+.breakdown{padding:24px}.breakdown h3{margin:0 0 5px;font-size:18px;color:#111}.sub{color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:14px}
+.charList{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.charCard{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#fff,#f3f4f5);padding:16px}
 .charHead{display:flex;align-items:center;gap:13px;padding-bottom:13px;border-bottom:1px solid var(--line)}
-.char{width:63px;height:63px;display:grid;place-items:center;background:var(--green-soft);border:1px solid #c6e5d0;border-radius:14px;font:700 43px/1 "Yu Mincho","Hiragino Mincho ProN",serif;color:var(--green-dark)}
-.charMeaning{font-size:15px;font-weight:850;line-height:1.4}.meta{display:grid;grid-template-columns:92px 1fr;gap:8px 11px;margin-top:14px;font-size:13px;line-height:1.5}.meta .k{color:#5d7467}.meta .v{font-weight:650;word-break:break-word}
-.jlpt{display:inline-flex;align-items:center;min-width:40px;justify-content:center;background:var(--green-dark);color:#fff;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:850}.jlpt.na{background:#e4eee7;color:#6c8073}
-.strokeSection{margin-top:15px;padding-top:14px;border-top:1px dashed #cfe2d4}
-.strokeTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;color:var(--green-dark);font-size:12px;font-weight:800}
-.strokeSource{font-size:9px;font-weight:700;color:#5d7467;background:var(--green-soft);border-radius:999px;padding:4px 7px}
-.strokeViewer{min-height:210px;border:1px solid #d7e8dc;border-radius:15px;background:linear-gradient(180deg,#fbfefc,#f0f8f2);display:grid;place-items:center;overflow:hidden;padding:10px}
-.strokeViewer img{display:block;width:min(100%,240px);height:auto;max-height:240px;object-fit:contain;border-radius:10px;background:white}
-.strokeLoading{font-size:11px;color:#8aa092;text-align:center;line-height:1.5}
-.strokeViewer kaki-jun{display:block;width:100%;max-width:250px;margin:auto}
-.note{margin-top:15px;color:#526b5d;font-size:10px;line-height:1.6;text-align:center}
-@media(max-width:650px){.inputRow{flex-direction:column}button{min-height:49px}.search h2{font-size:27px}.word{font-size:56px}.wordTop{align-items:flex-start}.badge{display:none}.charList{grid-template-columns:1fr}.meta{grid-template-columns:82px 1fr}.search::after{font-size:54px}}
+.char{width:63px;height:63px;display:grid;place-items:center;background:#f0f1f2;border:1px solid #d4d7da;border-radius:14px;font:700 43px/1 "Yu Mincho","Hiragino Mincho ProN",serif;color:#111}
+.charMeaning{font-size:15px;font-weight:850;line-height:1.4}.meta{display:grid;grid-template-columns:92px 1fr;gap:8px 11px;margin-top:14px;font-size:13px;line-height:1.5}.meta .k{color:#222}.meta .v{font-weight:650;word-break:break-word}
+.jlpt{display:inline-flex;align-items:center;min-width:40px;justify-content:center;background:#242628;color:#fff;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:850}.jlpt.na{background:#e2e4e6;color:#4d5155}
+.strokeSection{margin-top:15px;padding-top:14px;border-top:1px dashed #cfd2d5}
+.strokeTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;color:#111;font-size:17px;font-weight:800}
+.strokeSource{font-size:11px;font-weight:700;color:#333;background:#e8eaec;border-radius:999px;padding:5px 8px}
+.strokeViewer{min-height:360px;border:1px solid #d7dadd;border-radius:15px;background:linear-gradient(180deg,#fff,#f2f3f4);display:grid;place-items:center;overflow:hidden;padding:12px}
+.strokeViewer img{display:block;width:min(100%,400px);height:auto;max-height:400px;object-fit:contain;border-radius:10px;background:white}
+.strokeLoading{font-size:14px;color:#444;text-align:center;line-height:1.5}
+.strokeViewer kaki-jun{display:block;width:100%;max-width:400px;margin:auto}
+.note{margin-top:15px;color:#222;font-size:11px;line-height:1.6;text-align:center}
+@media(max-width:650px){.strokeViewer{min-height:300px}.strokeViewer img{width:min(100%,340px);max-height:340px}.strokeViewer kaki-jun{max-width:340px}.inputRow{flex-direction:column}button{min-height:49px}.search h2{font-size:27px}.word{font-size:56px}.wordTop{align-items:flex-start}.badge{display:none}.charList{grid-template-columns:1fr}.meta{grid-template-columns:82px 1fr}.search::after{font-size:54px}}
 </style>
 </head>
 <body>
@@ -79,7 +83,7 @@ button:hover{filter:brightness(.97)}button:disabled{opacity:.65;cursor:default}
 <div class="status" id="status">Mencari arti...</div><div class="error" id="error"></div>
 </section>
 <main class="results" id="results">
-<section class="card wordCard"><div class="wordTop"><div class="wordInfo"><div class="word" id="wordOut"></div><div><div class="reading" id="readingOut"></div><div class="tag" id="sourceOut"></div></div></div><div class="badge">ARTI KATA UTUH</div></div><div class="meaningBox"><div class="label">Arti Bahasa Indonesia</div><div class="meaning" id="meaningOut"></div></div></section>
+<section class="card wordCard"><div class="wordTop"><div class="wordInfo"><div class="word" id="wordOut"></div><div><div class="reading" id="readingOut"></div><div class="tag" id="sourceOut"></div></div></div><div class="badge">ARTI KATA UTUH</div></div><div class="meaningBox"><div class="label">Arti Bahasa Indonesia</div><div class="meaning" id="meaningOut"></div></div><div class="exampleBox"><div class="exampleHead"><div class="exampleTitle">Contoh Kalimat</div><div class="exampleHint">kata yang dicari ditandai</div></div><div class="exampleList" id="exampleList"><div class="exampleLoading">Contoh kalimat akan muncul di sini.</div></div></div></section>
 <section class="card breakdown"><h3>Bedah setiap kanji</h3><div class="sub">Arti inti karakter, On’yomi, Kun’yomi, jumlah stroke, level JLPT, dan animasi urutan penulisannya.</div><div class="charList" id="charList"></div></section>
 </main>
 <div class="note">Arti dimuat lebih dahulu. Animasi urutan stroke dimuat terpisah agar pencarian tetap cepat.</div>
@@ -88,6 +92,25 @@ button:hover{filter:brightness(.97)}button:disabled{opacity:.65;cursor:default}
 const $=s=>document.querySelector(s),input=$('#wordInput'),results=$('#results'),statusBox=$('#status'),errorBox=$('#error'),goBtn=$('#goBtn');
 const vocabLocal={
 "維持":{reading:"いじ",id:"mempertahankan, menjaga, atau memelihara"},"改善":{reading:"かいぜん",id:"perbaikan atau peningkatan"},"火山":{reading:"かざん",id:"gunung berapi"},"電車":{reading:"でんしゃ",id:"kereta listrik"},"食事":{reading:"しょくじ",id:"makan atau santapan"},"学校":{reading:"がっこう",id:"sekolah"},"森林":{reading:"しんりん",id:"hutan"},"飛行機":{reading:"ひこうき",id:"pesawat terbang"},"自転車":{reading:"じてんしゃ",id:"sepeda"},"病院":{reading:"びょういん",id:"rumah sakit"},"図書館":{reading:"としょかん",id:"perpustakaan"},"空港":{reading:"くうこう",id:"bandara"},"海岸":{reading:"かいがん",id:"pantai atau pesisir"},"地震":{reading:"じしん",id:"gempa bumi"},"太陽":{reading:"たいよう",id:"matahari"},"月光":{reading:"げっこう",id:"cahaya bulan"},"料理":{reading:"りょうり",id:"masakan atau kegiatan memasak"}
+};
+const exampleLocal={
+  "維持":[{jp:"健康を維持するために、毎日運動しています。",id:"Saya berolahraga setiap hari untuk mempertahankan kesehatan."}],
+  "改善":[{jp:"会社は労働環境を改善しました。",id:"Perusahaan memperbaiki lingkungan kerja."}],
+  "火山":[{jp:"この島には大きな火山があります。",id:"Di pulau ini terdapat gunung berapi yang besar."}],
+  "電車":[{jp:"毎朝、電車で会社に行きます。",id:"Setiap pagi, saya pergi ke kantor dengan kereta listrik."}],
+  "食事":[{jp:"家族と一緒に食事をしました。",id:"Saya makan bersama keluarga."}],
+  "学校":[{jp:"私は毎日学校へ行きます。",id:"Saya pergi ke sekolah setiap hari."}],
+  "森林":[{jp:"この地域には豊かな森林が広がっています。",id:"Hutan yang lebat membentang di wilayah ini."}],
+  "飛行機":[{jp:"飛行機で東京へ行きました。",id:"Saya pergi ke Tokyo dengan pesawat terbang."}],
+  "自転車":[{jp:"私は自転車で駅まで行きます。",id:"Saya pergi ke stasiun dengan sepeda."}],
+  "病院":[{jp:"具合が悪いので病院へ行きます。",id:"Karena merasa kurang sehat, saya pergi ke rumah sakit."}],
+  "図書館":[{jp:"図書館で日本語の本を借りました。",id:"Saya meminjam buku bahasa Jepang di perpustakaan."}],
+  "空港":[{jp:"空港で友達を待っています。",id:"Saya sedang menunggu teman di bandara."}],
+  "海岸":[{jp:"週末に海岸を散歩しました。",id:"Pada akhir pekan, saya berjalan jalan di pesisir."}],
+  "地震":[{jp:"昨日、大きな地震がありました。",id:"Kemarin terjadi gempa bumi yang besar."}],
+  "太陽":[{jp:"太陽が東から昇ります。",id:"Matahari terbit dari arah timur."}],
+  "月光":[{jp:"月光が静かな湖を照らしています。",id:"Cahaya bulan menerangi danau yang tenang."}],
+  "料理":[{jp:"母は日本料理を作るのが好きです。",id:"Ibu saya suka memasak masakan Jepang."}]
 };
 const kanjiLocal={
 "維":{id:"serat, tali pengikat, mempertahankan",on:"イ",kun:"–",strokes:14},"持":{id:"memegang, memiliki, mempertahankan",on:"ジ",kun:"も.つ",strokes:9},"改":{id:"mengubah, memperbaiki",on:"カイ",kun:"あらた.める",strokes:7},"善":{id:"baik, kebaikan",on:"ゼン",kun:"よ.い",strokes:12},"火":{id:"api",on:"カ",kun:"ひ・ほ",strokes:4},"山":{id:"gunung",on:"サン・セン",kun:"やま",strokes:3},"電":{id:"listrik",on:"デン",kun:"–",strokes:13},"車":{id:"kendaraan, roda",on:"シャ",kun:"くるま",strokes:7},"食":{id:"makan, makanan",on:"ショク・ジキ",kun:"た.べる・く.う",strokes:9},"事":{id:"hal, perkara, urusan",on:"ジ・ズ",kun:"こと",strokes:8},"学":{id:"belajar, ilmu",on:"ガク",kun:"まな.ぶ",strokes:8},"校":{id:"sekolah, pemeriksaan",on:"コウ",kun:"–",strokes:10},"森":{id:"hutan lebat",on:"シン",kun:"もり",strokes:12},"林":{id:"hutan kecil, kumpulan pohon",on:"リン",kun:"はやし",strokes:8},"飛":{id:"terbang",on:"ヒ",kun:"と.ぶ",strokes:9},"行":{id:"pergi, berjalan, melakukan",on:"コウ・ギョウ",kun:"い.く・ゆ.く・おこな.う",strokes:6},"機":{id:"mesin, kesempatan",on:"キ",kun:"はた",strokes:16},"自":{id:"diri sendiri",on:"ジ・シ",kun:"みずか.ら",strokes:6},"転":{id:"berputar, berpindah",on:"テン",kun:"ころ.がる・ころ.ぶ",strokes:11}
@@ -110,7 +133,56 @@ async function translate(text,from,to){const key=`tr:${from}:${to}:${text}`,cach
 async function getJotobaWord(word){try{const d=await fetchJSON('https://jotoba.de/api/search/words',3600,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({query:word,language:'English',no_english:false})});const words=d?.words||[];let entry=words.find(x=>x?.reading?.kanji===word)||words[0];if(!entry)return null;const reading=entry?.reading?.kana||'',defs=[];for(const sense of (entry?.senses||[]).slice(0,3)){for(const g of (sense?.glosses||[])){const t=typeof g==='string'?g:(g?.gloss||g?.text||g?.value||'');if(t&&!defs.includes(t))defs.push(t)}}if(!defs.length)return null;return{reading,en:defs.slice(0,6).join(', ')}}catch(e){return null}}
 async function getDirectWord(word){const cached=cacheGet('word:'+word);if(cached)return cached;const id=await translate(word,'ja','id');if(!id||containsJapanese(id))return null;const data={reading:'',id,source:'terjemahan Jepang → Indonesia'};cacheSet('word:'+word,data);return data}
 async function getDictionaryWord(word){const dict=await getJotobaWord(word);if(!dict?.en)return null;let id=await translate(dict.en,'en','id');if(!id||containsJapanese(id))id=localGloss(dict.en);if(!id)return null;const data={reading:dict.reading||'',id,source:'JMdict → Bahasa Indonesia'};cacheSet('word:'+word,data);return data}
-function showWord(data){if(!data)return;$('#readingOut').textContent=data.reading||$('#readingOut').textContent||'bacaan sedang dicari…';$('#meaningOut').textContent=data.id||'arti belum ditemukan';$('#meaningOut').classList.remove('loadingText');$('#sourceOut').textContent=data.source||'kamus'}
+function showWord(data){if(!data)return;$('#readingOut').textContent=data.reading||$('#readingOut').textContent||'bacaan sedang dicari…';$('#meaningOut').textContent=data.id||'arti belum ditemukan';$('#meaningOut').classList.remove('loadingText');$('#sourceOut').textContent=data.source||'kamus';const w=$('#wordOut').textContent;if(w&&exampleLocal[w])renderExamples(w,exampleLocal[w])}
+function highlightExact(text,target){
+  const src=String(text||''),t=String(target||'').trim();
+  if(!t)return esc(src);
+  const i=src.indexOf(t);if(i<0)return esc(src);
+  return esc(src.slice(0,i))+'<mark>'+esc(t)+'</mark>'+esc(src.slice(i+t.length));
+}
+function meaningCandidates(meaning){
+  return String(meaning||'').split(/,|\s+atau\s+|\s+dan\s+|\//i).map(x=>x.trim()).filter(x=>x.length>=3);
+}
+function highlightMeaning(text,meaning){
+  const src=String(text||'');
+  for(const c of meaningCandidates(meaning)){
+    const i=src.toLocaleLowerCase('id').indexOf(c.toLocaleLowerCase('id'));
+    if(i>=0)return esc(src.slice(0,i))+'<mark>'+esc(src.slice(i,i+c.length))+'</mark>'+esc(src.slice(i+c.length));
+  }
+  return esc(src);
+}
+function renderExamples(word,items){
+  const box=$('#exampleList');if(!box)return;
+  const meaning=$('#meaningOut')?.textContent||'';
+  const cleanItems=(items||[]).filter(x=>x?.jp).slice(0,3);
+  if(!cleanItems.length){box.innerHTML='<div class="exampleLoading">Contoh kalimat belum ditemukan.</div>';return}
+  box.innerHTML=cleanItems.map(x=>`<div class="exampleItem"><div class="exampleJP">${highlightExact(x.jp,word)}</div><div class="exampleID">${highlightMeaning(x.id||'',meaning)}</div></div>`).join('');
+}
+async function getJotobaSentences(word){
+  const cached=cacheGet('examples:'+word);if(cached)return cached;
+  try{
+    const d=await fetchJSON('https://jotoba.de/api/search/sentences',4200,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({query:word,language:'English'})});
+    const rows=Array.isArray(d?.sentences)?d.sentences:[];
+    const out=[];
+    for(const r of rows){
+      const jp=clean(r?.content||'');if(!jp||!jp.includes(word))continue;
+      let id='';const en=clean(r?.translation||'');
+      if(en)id=await translate(en,'en','id');
+      if(!id)id=await translate(jp,'ja','id');
+      if(id)out.push({jp,id});
+      if(out.length>=3)break;
+    }
+    if(out.length)cacheSet('examples:'+word,out);
+    return out;
+  }catch(e){return[]}
+}
+async function loadExamples(word){
+  const box=$('#exampleList');if(!box)return;
+  box.innerHTML='<div class="exampleLoading">Mencari contoh kalimat…</div>';
+  if(exampleLocal[word]){renderExamples(word,exampleLocal[word]);return}
+  const rows=await getJotobaSentences(word);
+  renderExamples(word,rows);
+}
 function initialKanji(k){const local=kanjiLocal[k]||{};return{char:k,id:local.id||'memuat arti…',on:local.on||'…',kun:local.kun||'…',strokes:local.strokes??'…',jlpt:'…'}}
 function renderChar(c,i){return `<div class="charCard" id="charCard-${i}"><div class="charHead"><div class="char">${esc(c.char)}</div><div><div class="label">ARTI KANJI</div><div class="charMeaning" data-f="id">${esc(c.id)}</div></div></div><div class="meta"><div class="k">On’yomi</div><div class="v" data-f="on">${esc(c.on)}</div><div class="k">Kun’yomi</div><div class="v" data-f="kun">${esc(c.kun)}</div><div class="k">Stroke</div><div class="v" data-f="strokes">${esc(c.strokes)}</div><div class="k">JLPT</div><div class="v"><span class="jlpt na" data-f="jlpt">${esc(c.jlpt)}</span></div></div><div class="strokeSection"><div class="strokeTitle"><span>Urutan penulisan</span><span class="strokeSource" id="strokeSource-${i}">memuat…</span></div><div class="strokeViewer" id="stroke-${i}"><div class="strokeLoading">Memuat animasi stroke ${esc(c.char)}…</div></div></div></div>`}
 function updateChar(i,c){const box=document.getElementById(`charCard-${i}`);if(!box||!c)return;for(const f of ['id','on','kun','strokes']){const el=box.querySelector(`[data-f="${f}"]`);if(el)el.textContent=c[f]??'–'}const j=box.querySelector('[data-f="jlpt"]');if(j){j.textContent=c.jlpt||'–';j.className=(c.jlpt&&c.jlpt!=='–')?'jlpt':'jlpt na'}}
@@ -147,7 +219,7 @@ async function searchWord(){
   errorBox.classList.remove('show');const word=input.value.trim();
   if(!word||!hasKanji(word)){errorBox.textContent='Masukkan kata yang mengandung kanji, misalnya 維持, 改善, atau 電車.';errorBox.classList.add('show');return}
   goBtn.disabled=true;statusBox.classList.add('show');results.classList.add('show');
-  $('#wordOut').textContent=word;$('#readingOut').textContent='bacaan sedang dicari…';$('#sourceOut').textContent='mencari…';$('#meaningOut').textContent='mencari arti…';$('#meaningOut').classList.add('loadingText');
+  $('#wordOut').textContent=word;$('#readingOut').textContent='bacaan sedang dicari…';$('#sourceOut').textContent='mencari…';$('#meaningOut').textContent='mencari arti…';$('#meaningOut').classList.add('loadingText');$('#exampleList').innerHTML='<div class="exampleLoading">Mencari contoh kalimat…</div>';setTimeout(()=>loadExamples(word),80);
   const chars=kanjiChars(word);$('#charList').innerHTML=chars.map((k,i)=>renderChar(initialKanji(k),i)).join('');
   const local=vocabLocal[word];
   if(local)showWord({reading:local.reading,id:local.id,source:'kamus lokal terkurasi'});
