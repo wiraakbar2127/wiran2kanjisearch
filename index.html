@@ -612,6 +612,14 @@ body.srs-modal-open{overflow:hidden!important}
 }
 @media(max-width:430px){.srsLevelList{grid-template-columns:1fr}}
 
+/* ===== V37: BUSHU INFO IN EACH KANJI CARD ===== */
+.bushuValue{display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0}
+.bushuGlyph{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 5px;border-radius:7px;background:#edf5ef;border:1px solid #d4e2d7;color:#1f2c23;font:700 16px/1 "Yu Mincho","Noto Serif JP",serif}
+.bushuReading{color:#52645a;font-weight:750;font-size:.94em}
+.bushuBase{color:#66736a;font-size:.92em}
+.bushuMeaning{color:#32473a;font-weight:750}
+.bushuLoading{color:#7a857d;font-style:italic;font-weight:500}
+
 /* ===== V32: aligned landing, translator search, smooth SRS ===== */
 .wrap{
   --home-shift:clamp(0px,18vh,230px);
@@ -819,7 +827,7 @@ body.home-centered .meaningChoices{display:none!important}
 <div class="candidateBackWrap" id="candidateBackWrap" hidden><button class="candidateBackBtn" id="candidateBackBtn" type="button">← Back</button></div>
 <main class="results" id="results">
 <section class="card wordCard"><div class="wordTop"><div class="wordInfo"><div class="word" id="wordOut"></div><div><div class="reading" id="readingOut"></div><div class="tag" id="sourceOut"></div></div></div><div class="badge">ARTI KATA UTUH</div></div><div class="meaningBox"><div class="label">Arti Bahasa Indonesia</div><div class="meaning" id="meaningOut"></div></div><div class="exampleBox"><div class="exampleHead"><div class="exampleTitle">Contoh Kalimat</div><div class="exampleHint">kata yang dicari ditandai</div></div><div class="exampleList" id="exampleList"><div class="exampleLoading">Contoh kalimat akan muncul di sini.</div></div></div></section>
-<section class="card breakdown"><h3>Bedah setiap kanji</h3><div class="sub">Arti inti karakter, On’yomi, Kun’yomi, jumlah stroke, level JLPT, dan animasi urutan penulisannya.</div><div class="charList" id="charList"></div></section>
+<section class="card breakdown"><h3>Bedah setiap kanji</h3><div class="sub">Arti inti karakter, On’yomi, Kun’yomi, bushu beserta cara baca Jepang dan artinya, jumlah stroke, level JLPT, dan animasi urutan penulisannya.</div><div class="charList" id="charList"></div></section>
 </main>
 <div class="note">Arti dimuat lebih dahulu. Animasi urutan stroke dimuat terpisah agar pencarian tetap cepat.</div>
 </div>
@@ -1185,9 +1193,113 @@ async function loadExamples(word){
   const rows=await getJotobaSentences(word);
   renderExamples(word,rows);
 }
-function initialKanji(k){const local=kanjiLocal[k]||{};return{char:k,id:local.id||'memuat arti…',on:local.on||'…',kun:local.kun||'…',strokes:local.strokes??'…',jlpt:'…'}}
-function renderChar(c,i){return `<div class="charCard" id="charCard-${i}"><div class="charHead"><div class="char">${esc(c.char)}</div><div><div class="label">ARTI KANJI</div><div class="charMeaning" data-f="id">${esc(c.id)}</div></div></div><div class="meta"><div class="k">On’yomi</div><div class="v" data-f="on">${esc(c.on)}</div><div class="k">Kun’yomi</div><div class="v" data-f="kun">${esc(c.kun)}</div><div class="k">Stroke</div><div class="v" data-f="strokes">${esc(c.strokes)}</div><div class="k">JLPT</div><div class="v"><span class="jlpt na" data-f="jlpt">${esc(c.jlpt)}</span></div></div><div class="strokeSection"><div class="strokeTitle"><span>Urutan penulisan</span><span class="strokeSource" id="strokeSource-${i}">memuat…</span></div><div class="strokeViewer" id="stroke-${i}"><div class="strokeLoading">Memuat animasi stroke ${esc(c.char)}…</div></div></div></div>`}
+function initialKanji(k){const local=kanjiLocal[k]||{};return{char:k,id:local.id||'memuat arti…',on:local.on||'…',kun:local.kun||'…',bushu:'memuat…',strokes:local.strokes??'…',jlpt:'…'}}
+function renderChar(c,i){return `<div class="charCard" id="charCard-${i}"><div class="charHead"><div class="char">${esc(c.char)}</div><div><div class="label">ARTI KANJI</div><div class="charMeaning" data-f="id">${esc(c.id)}</div></div></div><div class="meta"><div class="k">On’yomi</div><div class="v" data-f="on">${esc(c.on)}</div><div class="k">Kun’yomi</div><div class="v" data-f="kun">${esc(c.kun)}</div><div class="k">Bushu</div><div class="v bushuValue" data-f="bushu"><span class="bushuLoading">memuat…</span></div><div class="k">Stroke</div><div class="v" data-f="strokes">${esc(c.strokes)}</div><div class="k">JLPT</div><div class="v"><span class="jlpt na" data-f="jlpt">${esc(c.jlpt)}</span></div></div><div class="strokeSection"><div class="strokeTitle"><span>Urutan penulisan</span><span class="strokeSource" id="strokeSource-${i}">memuat…</span></div><div class="strokeViewer" id="stroke-${i}"><div class="strokeLoading">Memuat animasi stroke ${esc(c.char)}…</div></div></div></div>`}
 function updateChar(i,c){const box=document.getElementById(`charCard-${i}`);if(!box||!c)return;for(const f of ['id','on','kun','strokes']){const el=box.querySelector(`[data-f="${f}"]`);if(el)el.textContent=c[f]??'–'}const j=box.querySelector('[data-f="jlpt"]');if(j){j.textContent=c.jlpt||'–';j.className=(c.jlpt&&c.jlpt!=='–')?'jlpt':'jlpt na'}}
+const BUSHU_VARIANT_BASE={
+  '亻':'人','𠆢':'人','⺅':'人','氵':'水','氺':'水','扌':'手','忄':'心','⺗':'心','礻':'示','衤':'衣','艹':'艸','䒑':'艸','辶':'辵','⻌':'辵','⻍':'辵','阝':'阜','⻖':'阜','⻏':'邑','刂':'刀','灬':'火','爫':'爪','爿':'爿','牜':'牛','犭':'犬','王':'玉','耂':'老','⺮':'竹','糹':'糸','纟':'糸','罒':'网','⺲':'网','⺳':'网','月':'月','⺼':'肉','飠':'食','饣':'食','钅':'金','釒':'金','门':'門','镸':'長','髟':'髟','攵':'攴','夂':'夂','彡':'彡','冫':'冫','宀':'宀','疒':'疒','穴':'穴','目':'目','石':'石','禾':'禾','米':'米','虫':'虫','言':'言','讠':'言','貝':'貝','贝':'貝','足':'足','車':'車','车':'車','雨':'雨','頁':'頁','页':'頁','馬':'馬','马':'馬','魚':'魚','鱼':'魚','鳥':'鳥','鸟':'鳥','黒':'黑','黑':'黑'
+};
+const BUSHU_READING_JA={
+  // Bentuk varian yang lazim dipakai sebagai komponen kanji
+  '亻':'にんべん','𠆢':'ひとやね','⺅':'にんべん','氵':'さんずい','氺':'したみず','扌':'てへん','忄':'りっしんべん','⺗':'したごころ',
+  '礻':'しめすへん','衤':'ころもへん','艹':'くさかんむり','䒑':'くさかんむり','辶':'しんにょう','⻌':'しんにょう','⻍':'しんにょう',
+  '刂':'りっとう','灬':'れっか','爫':'つめかんむり','牜':'うしへん','犭':'けものへん','王':'たまへん','耂':'おいかんむり',
+  '⺮':'たけかんむり','糹':'いとへん','罒':'あみがしら','⺲':'あみがしら','⺳':'あみがしら','⺼':'にくづき',
+  '飠':'しょくへん','钅':'かねへん','釒':'かねへん','攵':'のぶん','冫':'にすい','讠':'ごんべん',
+  // Nama bushu dasar yang sering muncul
+  '一':'いち','丨':'ぼう','丶':'てん','丿':'の','乙':'おつ','亅':'はねぼう','二':'に','亠':'なべぶた','人':'ひと','儿':'にんにょう',
+  '入':'いる','八':'はち','冂':'けいがまえ','冖':'わかんむり','冫':'にすい','几':'つくえ','凵':'うけばこ','刀':'かたな','力':'ちから',
+  '勹':'つつみがまえ','匕':'さじ','匚':'はこがまえ','匸':'かくしがまえ','十':'じゅう','卜':'ぼくのと','卩':'ふしづくり','厂':'がんだれ',
+  '厶':'む','又':'また','口':'くち','囗':'くにがまえ','土':'つち','士':'さむらい','夂':'ふゆがしら','夊':'すいにょう','夕':'ゆうべ',
+  '大':'だい','女':'おんな','子':'こ','宀':'うかんむり','寸':'すん','小':'しょう','尢':'まげあし','尸':'しかばね','屮':'てつ','山':'やま',
+  '巛':'まがりかわ','工':'たくみ','己':'おのれ','巾':'はば','干':'ほす','幺':'いとがしら','广':'まだれ','廴':'えんにょう','廾':'にじゅうあし',
+  '弋':'しきがまえ','弓':'ゆみ','彐':'けいがしら','彡':'さんづくり','彳':'ぎょうにんべん','心':'こころ','戈':'ほこづくり','戶':'とだれ',
+  '手':'て','支':'しにょう','攴':'ぼくづくり','文':'ぶん','斗':'とます','斤':'おのづくり','方':'ほう','无':'むにょう','日':'ひ','曰':'ひらび',
+  '月':'つき','木':'き','欠':'あくび','止':'とめる','歹':'がつへん','殳':'るまた','毋':'なかれ','比':'くらべる','毛':'け','氏':'うじ',
+  '气':'きがまえ','水':'みず','火':'ひ','爪':'つめ','父':'ちち','爻':'こう','爿':'しょうへん','片':'かた','牙':'きば','牛':'うし',
+  '犬':'いぬ','玄':'げん','玉':'たま','瓜':'うり','瓦':'かわら','甘':'あまい','生':'うまれる','用':'もちいる','田':'た','疋':'ひき',
+  '疒':'やまいだれ','癶':'はつがしら','白':'しろ','皮':'けがわ','皿':'さら','目':'め','矛':'ほこ','矢':'や','石':'いし','示':'しめす',
+  '禸':'ぐうのあし','禾':'のぎ','穴':'あなかんむり','立':'たつ','竹':'たけ','米':'こめ','糸':'いと','缶':'ほとぎ','网':'あみ',
+  '羊':'ひつじ','羽':'はね','老':'おい','而':'しかして','耒':'らいすき','耳':'みみ','聿':'ふでづくり','肉':'にく','臣':'しん','自':'みずから',
+  '至':'いたる','臼':'うす','舌':'した','舛':'ます','舟':'ふね','艮':'こん','色':'いろ','艸':'くさ','虍':'とらがしら','虫':'むし',
+  '血':'ち','行':'ぎょう','衣':'ころも','襾':'にし','見':'みる','角':'つの','言':'げん','谷':'たに','豆':'まめ','豕':'いのこ',
+  '豸':'むじなへん','貝':'かい','赤':'あか','走':'はしる','足':'あし','身':'み','車':'くるま','辛':'からい','辰':'しんのたつ',
+  '辵':'しんにょう','邑':'おおざと','酉':'ひよみのとり','釆':'のごめ','里':'さと','金':'かね','長':'ながい','門':'もん','阜':'こざと',
+  '隶':'れいづくり','隹':'ふるとり','雨':'あめ','青':'あお','非':'あらず','面':'めん','革':'かわへん','韋':'なめしがわ','韭':'にら',
+  '音':'おと','頁':'おおがい','風':'かぜ','飛':'とぶ','食':'しょく','首':'くび','香':'かおり','馬':'うま','骨':'ほね','高':'たかい',
+  '髟':'かみがしら','鬥':'とうがまえ','鬯':'ちょう','鬲':'かなえ','鬼':'おに','魚':'うお','鳥':'とり','鹵':'ろ','鹿':'しか','麥':'むぎ',
+  '麻':'あさ','黃':'き','黄':'き','黍':'きび','黑':'くろ','黒':'くろ','黹':'ぬいとり','黽':'べん','鼎':'かなえ','鼓':'つづみ','鼠':'ねずみ',
+  '鼻':'はな','齊':'せい','齒':'は','龍':'りゅう','龜':'かめ','龠':'やく'
+};
+function normalizeBushuReading(r){return String(r||'').replace(/[.-]/g,'').trim()}
+async function getBushuReading(shape,base,position){
+  // Beberapa bentuk identik memiliki nama berbeda menurut asal radikalnya.
+  if((shape==='阝'||shape==='⻖'||shape==='⻏')&&base==='阜')return 'こざとへん';
+  if((shape==='阝'||shape==='⻖'||shape==='⻏')&&base==='邑')return 'おおざと';
+  if((shape==='月'||shape==='⺼')&&base==='肉')return 'にくづき';
+  if(BUSHU_READING_JA[shape])return BUSHU_READING_JA[shape];
+  if(BUSHU_READING_JA[base])return BUSHU_READING_JA[base];
+  const key='bushu-reading:'+base,cached=cacheGet(key);if(cached)return cached;
+  let reading='';
+  try{
+    const d=await fetchJSON(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(base)}`,3200);
+    reading=normalizeBushuReading((d?.kun_readings||[])[0]||(d?.name_readings||[])[0]||(d?.on_readings||[])[0]);
+  }catch(e){}
+  if(!reading)reading='bacaan belum ditemukan';
+  cacheSet(key,reading);return reading;
+}
+const BUSHU_MEANING_ID={
+  '人':'orang','水':'air','手':'tangan','心':'hati, perasaan','示':'altar, tanda','衣':'pakaian','艸':'rumput, tumbuhan','辵':'berjalan, pergerakan','阜':'bukit, tanah tinggi','邑':'kota, wilayah','刀':'pisau','火':'api','爪':'cakar','牛':'sapi','犬':'anjing','玉':'giok, permata','老':'tua','竹':'bambu','糸':'benang','网':'jaring','肉':'daging','食':'makan, makanan','金':'logam, emas','門':'gerbang','長':'panjang','攴':'memukul, mengetuk','冫':'es','宀':'atap','疒':'sakit','穴':'gua, lubang','目':'mata','石':'batu','禾':'padi, tanaman biji','米':'beras','虫':'serangga','言':'ucapan, kata','貝':'kerang, uang','足':'kaki','車':'kendaraan','雨':'hujan','頁':'kepala, halaman','馬':'kuda','魚':'ikan','鳥':'burung','黑':'hitam','木':'pohon, kayu','山':'gunung','川':'sungai','土':'tanah','日':'matahari, hari','月':'bulan','女':'perempuan','子':'anak','口':'mulut','耳':'telinga','力':'tenaga, kekuatan','田':'sawah','白':'putih','立':'berdiri','糸':'benang','貝':'kerang, uang','見':'melihat','走':'berlari, berjalan','雨':'hujan','青':'biru, hijau','音':'suara','頁':'kepala, halaman','骨':'tulang','高':'tinggi','髟':'rambut panjang','鬥':'bertarung','鬲':'kawah berkaki tiga','鬼':'roh, hantu','鹿':'rusa','麻':'rami','黄':'kuning','黍':'jewawut','黹':'sulaman','黽':'katak','鼎':'kuali berkaki tiga','鼓':'genderang','鼠':'tikus','鼻':'hidung','齊':'rata, seragam','齒':'gigi','龍':'naga','龜':'kura-kura','龠':'seruling'
+};
+function kanjiVGFileName(k){const cp=[...String(k||'')][0]?.codePointAt(0);return Number.isFinite(cp)?cp.toString(16).padStart(5,'0')+'.svg':''}
+async function fetchText(url,timeout=4200){const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),timeout);try{const r=await fetch(url,{signal:ctl.signal,cache:'force-cache'});if(!r.ok)throw new Error(String(r.status));return await r.text()}finally{clearTimeout(tm)}}
+function parseKanjiVGBushu(svgText){
+  try{
+    const doc=new DOMParser().parseFromString(svgText,'image/svg+xml');
+    const nodes=[...doc.getElementsByTagName('*')];
+    const radicalNodes=nodes.filter(el=>el.getAttribute('kvg:radical')||el.getAttributeNS('http://kanjivg.tagaini.net','radical'));
+    if(!radicalNodes.length)return null;
+    const preferred=radicalNodes.find(el=>String(el.getAttribute('kvg:radical')||el.getAttributeNS('http://kanjivg.tagaini.net','radical')||'').toLowerCase()==='general')||radicalNodes[0];
+    const shape=preferred.getAttribute('kvg:element')||preferred.getAttributeNS('http://kanjivg.tagaini.net','element')||'';
+    const original=preferred.getAttribute('kvg:original')||preferred.getAttributeNS('http://kanjivg.tagaini.net','original')||'';
+    const position=preferred.getAttribute('kvg:position')||preferred.getAttributeNS('http://kanjivg.tagaini.net','position')||'';
+    if(!shape&&!original)return null;
+    const base=original||BUSHU_VARIANT_BASE[shape]||shape;
+    return {shape:shape||base,base,position};
+  }catch(e){return null}
+}
+async function getBushuMeaning(base){
+  if(!base)return 'arti belum ditemukan';
+  if(BUSHU_MEANING_ID[base])return BUSHU_MEANING_ID[base];
+  const key='bushu-meaning:'+base,cached=cacheGet(key);if(cached)return cached;
+  let meaning='';
+  try{
+    const d=await fetchJSON(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(base)}`,3200);
+    const en=(d?.meanings||[]).filter(Boolean).slice(0,3).join(', ');
+    if(en){meaning=localGloss(en);if(!meaning||meaning===en){const tr=await translate(en,'en','id');if(tr)meaning=tr}if(!meaning)meaning=en}
+  }catch(e){}
+  if(!meaning)meaning='arti belum ditemukan';cacheSet(key,meaning);return meaning;
+}
+async function getBushuInfo(k){
+  const key='bushu:v2:'+k,cached=cacheGet(key);if(cached)return cached;
+  const file=kanjiVGFileName(k);if(!file)return null;
+  let svg='';
+  const urls=[`https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji/${file}`,`https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${file}`];
+  for(const url of urls){try{svg=await fetchText(url,4200);if(svg)break}catch(e){}}
+  if(!svg)return null;
+  const parsed=parseKanjiVGBushu(svg);if(!parsed)return null;
+  const [meaning,reading]=await Promise.all([getBushuMeaning(parsed.base),getBushuReading(parsed.shape,parsed.base,parsed.position)]);
+  const data={...parsed,meaning,reading};cacheSet(key,data);return data;
+}
+function updateBushu(i,b){
+  const box=document.getElementById(`charCard-${i}`),el=box?.querySelector('[data-f="bushu"]');if(!el)return;
+  if(!b){el.innerHTML='<span class="bushuLoading">bushu belum ditemukan</span>';return}
+  const baseNote=b.base&&b.base!==b.shape?`<span class="bushuBase">asal ${esc(b.base)}</span>`:'';
+  el.innerHTML=`<span class="bushuGlyph">${esc(b.shape||b.base||'–')}</span><span class="bushuReading">${esc(b.reading||'bacaan belum ditemukan')}</span>${baseNote}<span class="bushuMeaning">${esc(b.meaning||'arti belum ditemukan')}</span>`;
+  fitPage();
+}
+async function loadBushu(k,i){try{updateBushu(i,await getBushuInfo(k))}catch(e){updateBushu(i,null)}}
+
 async function getCommonsStrokeGif(k){
   const cached=cacheGet('stroke-gif:'+k);if(cached?.url)return cached;
   try{
@@ -1260,7 +1372,7 @@ function updateHomeShift(){
   const topMarginBottom=parseFloat(topStyle.marginBottom)||0;
   const groupHeight=top.offsetHeight+topMarginBottom+searchCard.offsetHeight;
   const centered=(window.innerHeight-groupHeight)/2-paddingTop;
-  const upwardOffset=Math.min(165,Math.max(80,window.innerHeight*.14));
+  const upwardOffset=Math.min(220,Math.max(130,window.innerHeight*.20));
   const shift=Math.max(4,centered-upwardOffset);
   wrap.style.setProperty('--home-shift',`${Math.round(shift)}px`);
 }
@@ -1297,7 +1409,7 @@ async function displayWordDetails(word,{reverseQuery='',sourceHint='',fromChoice
     const dictP=getDictionaryWord(word).then(d=>{if(d)showWord({...d,source:sourceHint||(reverseQuery?'Indonesia → Jepang · '+d.source:d.source)});return d});
     Promise.allSettled([directP,dictP]).then(()=>{if($('#meaningOut').classList.contains('loadingText')){$('#meaningOut').textContent='arti kata belum ditemukan';$('#meaningOut').classList.remove('loadingText');$('#sourceOut').textContent=sourceHint||'fallback'}});
   }
-  chars.forEach((k,i)=>{const cached=cacheGet('kanji:'+k);if(cached)updateChar(i,cached);enrichKanji(k).then(d=>updateChar(i,d)).catch(()=>{});setTimeout(()=>loadStrokeAnimation(k,i),120+i*80)});
+  chars.forEach((k,i)=>{const cached=cacheGet('kanji:'+k);if(cached)updateChar(i,cached);enrichKanji(k).then(d=>updateChar(i,d)).catch(()=>{});loadBushu(k,i);setTimeout(()=>loadStrokeAnimation(k,i),120+i*80)});
 }
 
 let pendingMeaningQuery='';
