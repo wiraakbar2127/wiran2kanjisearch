@@ -203,8 +203,34 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
 .navBtn{min-width:auto;min-height:32px;padding:0 13px;border-radius:10px;background:#fff;color:#2d3a30;border:1px solid #d6e2d8;box-shadow:none;font-size:11px;font-weight:750}
 .navBtn:hover{background:#f2f7f3;filter:none}
 .navBtn.active{background:#6eac7f;color:#fff;border-color:#609d72;box-shadow:0 4px 12px rgba(79,143,99,.15)}
-.appPage{display:none}.appPage.active{display:block}
+/* Page swap dibuat bertahap agar kartu/tabel tidak muncul mendadak. */
+.appPage{
+  display:none;
+  opacity:0;
+  transform:translateY(9px) scale(.997);
+  transform-origin:top center;
+  will-change:opacity,transform;
+}
+.appPage.active{
+  display:block;
+  opacity:1;
+  transform:translateY(0) scale(1);
+  transition:opacity .28s cubic-bezier(.22,.72,.24,1),transform .34s cubic-bezier(.22,.72,.24,1);
+}
+.appPage.active.pageEntering{
+  opacity:0;
+  transform:translateY(10px) scale(.996);
+}
+.appPage.active.pageLeaving{
+  opacity:0;
+  transform:translateY(-7px) scale(.997);
+  pointer-events:none;
+  transition:opacity .15s ease,transform .18s cubic-bezier(.4,0,1,1);
+}
 #searchPage.active{display:block}
+.secondaryShell,#searchPage>.search,#searchPage>.results{backface-visibility:hidden}
+.navBtn{transition:background .22s ease,color .22s ease,border-color .22s ease,box-shadow .22s ease,transform .18s ease}
+.navBtn:active{transform:translateY(1px)}
 .secondaryPage{height:calc(100vh - 76px);min-height:430px;overflow:hidden}
 .secondaryShell{height:100%;display:flex;flex-direction:column;gap:10px;padding:12px 14px}
 .pageHead{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex:0 0 auto}
@@ -588,7 +614,7 @@ body.srs-modal-open{overflow:hidden!important}
 
 /* ===== V32: aligned landing, translator search, smooth SRS ===== */
 .wrap{
-  --home-shift:clamp(0px,24vh,320px);
+  --home-shift:clamp(0px,18vh,230px);
   transform:translateY(0);
   transform-origin:top center;
   transition:transform .46s cubic-bezier(.22,.72,.24,1);
@@ -616,6 +642,7 @@ body.home-centered .top,body.home-centered #searchPage .search{
   min-height:36px;
   font-weight:850;
 }
+#searchPage .inputRow{gap:14px}
 body.home-centered #searchPage .note{display:none}
 body.home-centered #results{display:none!important}
 
@@ -638,8 +665,116 @@ body.home-centered #results{display:none!important}
   .srsControls,.srsGradeActions{gap:16px!important}
 }
 @media (prefers-reduced-motion:reduce){
-  .wrap,.top,#searchPage .search,.srsQuestionCard{transition:none}
+  .wrap,.top,#searchPage .search,.srsQuestionCard,.appPage.active,.navBtn{transition:none}
   .srsAnswerBox.srsRememberFeedback,.srsAnswerBox.srsForgetFeedback{animation:none}
+}
+
+
+/* ===== V34: SEARCH POSITION + INDONESIAN CANDIDATE LIST ===== */
+.meaningChoices{
+  display:none;
+  width:100%;
+  margin:12px auto 0;
+  padding:14px;
+}
+.meaningChoices.show{display:block}
+.meaningChoicesHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:9px;
+}
+.meaningChoicesHead h3{margin:0;font-size:15px;font-weight:850;color:#24352b}
+.meaningChoicesHint{font-size:11px;color:#7b887f;white-space:nowrap}
+.meaningChoiceList{display:flex;flex-direction:column;gap:7px}
+.meaningChoice{
+  width:100%;
+  border:1px solid #d7e1da;
+  background:#fff;
+  border-radius:12px;
+  padding:10px 13px;
+  text-align:left;
+  cursor:pointer;
+  display:grid;
+  grid-template-columns:minmax(120px,.85fr) minmax(120px,1fr) minmax(180px,1.55fr);
+  align-items:center;
+  gap:16px;
+  transition:background .16s ease,border-color .16s ease,transform .16s ease;
+}
+.meaningChoice:hover{background:#f5faf6;border-color:#b9d0bf;transform:translateY(-1px)}
+.meaningChoice:active{transform:translateY(0)}
+.meaningChoiceWord{display:block;font-size:25px;line-height:1.25;font-weight:850;color:#21382a;letter-spacing:.01em}
+.meaningChoiceReading{font-size:14px;line-height:1.4;font-weight:700;color:#68766d;word-break:break-word}
+.meaningChoiceMeaning{font-size:13px;line-height:1.45;font-weight:750;color:#34443a;text-align:right;word-break:break-word}
+body.home-centered .meaningChoices{display:none!important}
+@media(max-width:700px){
+  .meaningChoices{padding:12px}
+  .meaningChoicesHead{align-items:flex-start;flex-direction:column;gap:2px}
+  .meaningChoicesHint{white-space:normal}
+  .meaningChoice{grid-template-columns:auto minmax(72px,.8fr) minmax(100px,1.35fr);gap:8px;padding:9px 10px}
+  .meaningChoiceWord{font-size:21px}
+  .meaningChoiceReading{font-size:12px}
+  .meaningChoiceMeaning{font-size:11px}
+  #searchPage .inputRow{gap:10px}
+}
+
+
+/* ===== V35: HIGHER SEARCH + CLEAR BUTTON + CANDIDATE BACK ===== */
+.searchInputWrap{
+  position:relative;
+  flex:1;
+  min-width:0;
+  display:flex;
+}
+.searchInputWrap input{
+  width:100%;
+  padding-right:48px;
+}
+.clearSearchBtn{
+  position:absolute;
+  top:50%;
+  right:9px;
+  transform:translateY(-50%);
+  width:31px;
+  height:31px;
+  min-width:31px;
+  min-height:31px;
+  padding:0;
+  border-radius:50%;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+  color:#7b877f;
+  font:500 25px/1 Arial,sans-serif;
+  display:none;
+  place-items:center;
+}
+.clearSearchBtn.show{display:grid}
+.clearSearchBtn:hover{background:#eef4ef;color:#33463a;filter:none}
+.clearSearchBtn:focus-visible{outline:2px solid #8ab697;outline-offset:1px}
+.candidateBackWrap{
+  width:100%;
+  margin:10px auto 4px;
+}
+.candidateBackWrap[hidden]{display:none!important}
+.candidateBackBtn{
+  min-width:auto;
+  min-height:34px;
+  padding:0 13px;
+  border-radius:10px;
+  background:#fff;
+  color:#42604b;
+  border:1px solid #cbdacf;
+  box-shadow:none;
+  font-size:11px;
+  font-weight:800;
+}
+.candidateBackBtn:hover{background:#f2f7f3;filter:none}
+@media(max-width:700px){
+  .searchInputWrap{width:100%}
+  .clearSearchBtn{right:8px}
+  .candidateBackWrap{margin-top:8px}
 }
 
 /* ===== SRS LEVEL CIRCLES: COMPACT SPACING ===== */
@@ -674,9 +809,14 @@ body.home-centered #results{display:none!important}
 <div class="appPage active" id="searchPage">
 <section class="card search">
 <h2>Cari kanji atau arti</h2>
-<div class="inputRow"><input id="wordInput" maxlength="40" placeholder="Ketik kanji atau arti Indonesia" autocomplete="off"><button id="goBtn">Cari</button></div>
+<div class="inputRow"><div class="searchInputWrap"><input id="wordInput" maxlength="40" placeholder="Kanji, romaji, hiragana, katakana, atau arti Indonesia" autocomplete="off"><button id="clearSearchBtn" class="clearSearchBtn" type="button" aria-label="Hapus pencarian" title="Hapus">×</button></div><button id="goBtn">Cari</button></div>
 <div class="status" id="status">Mencari arti...</div><div class="error" id="error"></div>
 </section>
+<section class="card meaningChoices" id="meaningChoices" aria-live="polite">
+  <div class="meaningChoicesHead"><h3 id="meaningChoicesTitle">Pilih kosakata Jepang</h3><div class="meaningChoicesHint">Klik salah satu untuk membuka detail</div></div>
+  <div class="meaningChoiceList" id="meaningChoiceList"></div>
+</section>
+<div class="candidateBackWrap" id="candidateBackWrap" hidden><button class="candidateBackBtn" id="candidateBackBtn" type="button">← Back</button></div>
 <main class="results" id="results">
 <section class="card wordCard"><div class="wordTop"><div class="wordInfo"><div class="word" id="wordOut"></div><div><div class="reading" id="readingOut"></div><div class="tag" id="sourceOut"></div></div></div><div class="badge">ARTI KATA UTUH</div></div><div class="meaningBox"><div class="label">Arti Bahasa Indonesia</div><div class="meaning" id="meaningOut"></div></div><div class="exampleBox"><div class="exampleHead"><div class="exampleTitle">Contoh Kalimat</div><div class="exampleHint">kata yang dicari ditandai</div></div><div class="exampleList" id="exampleList"><div class="exampleLoading">Contoh kalimat akan muncul di sini.</div></div></div></section>
 <section class="card breakdown"><h3>Bedah setiap kanji</h3><div class="sub">Arti inti karakter, On’yomi, Kun’yomi, jumlah stroke, level JLPT, dan animasi urutan penulisannya.</div><div class="charList" id="charList"></div></section>
@@ -773,7 +913,7 @@ body.home-centered #results{display:none!important}
 </div>
 
 <script>
-const $=s=>document.querySelector(s),input=$('#wordInput'),results=$('#results'),statusBox=$('#status'),errorBox=$('#error'),goBtn=$('#goBtn');
+const $=s=>document.querySelector(s),input=$('#wordInput'),results=$('#results'),statusBox=$('#status'),errorBox=$('#error'),goBtn=$('#goBtn'),clearSearchBtn=$('#clearSearchBtn'),meaningChoices=$('#meaningChoices'),meaningChoiceList=$('#meaningChoiceList'),meaningChoicesTitle=$('#meaningChoicesTitle'),candidateBackWrap=$('#candidateBackWrap'),candidateBackBtn=$('#candidateBackBtn');
 const vocabLocal={
 "維持":{reading:"いじ",id:"mempertahankan, menjaga, atau memelihara"},"改善":{reading:"かいぜん",id:"perbaikan atau peningkatan"},"火山":{reading:"かざん",id:"gunung berapi"},"電車":{reading:"でんしゃ",id:"kereta listrik"},"食事":{reading:"しょくじ",id:"makan atau santapan"},"学校":{reading:"がっこう",id:"sekolah"},"森林":{reading:"しんりん",id:"hutan"},"飛行機":{reading:"ひこうき",id:"pesawat terbang"},"自転車":{reading:"じてんしゃ",id:"sepeda"},"病院":{reading:"びょういん",id:"rumah sakit"},"図書館":{reading:"としょかん",id:"perpustakaan"},"空港":{reading:"くうこう",id:"bandara"},"海岸":{reading:"かいがん",id:"pantai atau pesisir"},"地震":{reading:"じしん",id:"gempa bumi"},"太陽":{reading:"たいよう",id:"matahari"},"月光":{reading:"げっこう",id:"cahaya bulan"},"料理":{reading:"りょうり",id:"masakan atau kegiatan memasak"}
 };
@@ -818,50 +958,182 @@ async function getJotobaWord(word){try{const d=await fetchJSON('https://jotoba.d
 async function getDirectWord(word){const cached=cacheGet('word:'+word);if(cached)return cached;const id=await translate(word,'ja','id');if(!id||containsJapanese(id))return null;const data={reading:'',id,source:'terjemahan Jepang → Indonesia'};cacheSet('word:'+word,data);return data}
 async function getDictionaryWord(word){const dict=await getJotobaWord(word);if(!dict?.en)return null;let id=await translate(dict.en,'en','id');if(!id||containsJapanese(id))id=localGloss(dict.en);if(!id)return null;const data={reading:dict.reading||'',id,source:'JMdict → Bahasa Indonesia'};cacheSet('word:'+word,data);return data}
 function normalizeMeaningText(s){return String(s||'').toLocaleLowerCase('id').normalize('NFKC').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim()}
-function localMeaningMatch(query){
-  const q=normalizeMeaningText(query);if(!q)return null;let best=null;
+function localMeaningCandidates(query){
+  const q=normalizeMeaningText(query);if(!q)return [];
+  const out=[];
   const consider=(word,data,kind)=>{
     const full=normalizeMeaningText(data?.id||'');if(!full)return;
     const parts=String(data.id||'').split(/,|\s+atau\s+|\s+dan\s+|\//i).map(normalizeMeaningText).filter(Boolean);
-    let score=0;if(full===q)score=120;else if(parts.includes(q))score=105;else if(full.startsWith(q+' '))score=82;else if(full.includes(q))score=64;
-    if(kind==='vocab'&&score>=105)score+=6;
-    if(score&&(!best||score>best.score))best={word,score,source:kind==='vocab'?'kamus lokal kosakata':'kamus lokal kanji'};
+    let score=0;
+    if(full===q)score=132;
+    else if(parts.includes(q))score=122;
+    else if(full.startsWith(q+' '))score=100;
+    else if(full.includes(q))score=88;
+    else if(q.length>=4&&parts.some(p=>p.includes(q)||q.includes(p)))score=78;
+    if(score)out.push({word,reading:clean(data?.reading||''),id:clean(data?.id||''),score,source:kind==='vocab'?'kamus lokal kosakata':'kamus lokal kanji',kind});
   };
   Object.entries(vocabLocal).forEach(([word,data])=>consider(word,data,'vocab'));
   Object.entries(kanjiLocal).forEach(([word,data])=>consider(word,data,'kanji'));
-  return best;
+  return out.sort((a,b)=>b.score-a.score);
 }
-async function getJotobaKanjiFromMeaning(query){
+function englishMeaningScore(gloss,query){
+  const g=String(gloss||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  const q=String(query||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  if(!g||!q)return 0;
+  if(g===q)return 112;
+  if(g.startsWith(q+' '))return 104;
+  if(g.includes(q))return 96;
+  if(q.length>=4&&q.includes(g))return 88;
+  return 0;
+}
+async function getJotobaMeaningCandidates(query){
   try{
-    const d=await fetchJSON('https://jotoba.de/api/search/words',4200,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({query,language:'English',no_english:false})});
+    const d=await fetchJSON('https://jotoba.de/api/search/words',4400,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({query,language:'English',no_english:false})});
     const words=Array.isArray(d?.words)?d.words:[];
-    for(const entry of words){
-      const written=clean(entry?.reading?.kanji||'');
-      if(written&&hasKanji(written))return{word:written,reading:clean(entry?.reading?.kana||''),source:'JMdict berdasarkan arti'};
-    }
-  }catch(e){}
-  return null;
+    const out=[];
+    words.slice(0,24).forEach((entry,index)=>{
+      const written=clean(entry?.reading?.kanji||'');if(!written||!hasKanji(written))return;
+      const glosses=[];
+      for(const sense of (entry?.senses||[]).slice(0,4))for(const g of (sense?.glosses||[])){
+        const t=typeof g==='string'?g:(g?.gloss||g?.text||g?.value||'');if(t)glosses.push(t);
+      }
+      let score=0;for(const g of glosses)score=Math.max(score,englishMeaningScore(g,query));
+      if(!score&&index<5)score=72-index*2;
+      if(score)out.push({word:written,reading:clean(entry?.reading?.kana||''),en:glosses.slice(0,4).join(', '),score,source:'JMdict berdasarkan arti'});
+    });
+    return out;
+  }catch(e){return []}
 }
-async function resolveMeaningToKanji(query){
-  const key='reverse:'+normalizeMeaningText(query),cached=cacheGet(key);if(cached?.word&&hasKanji(cached.word))return cached;
-  const local=localMeaningMatch(query);
-  if(local&&local.score>=100){const hit={word:local.word,source:local.source};cacheSet(key,hit);return hit}
+async function resolveMeaningCandidates(query){
+  const key='reverse-candidates:'+normalizeMeaningText(query),cached=cacheGet(key);
+  if(Array.isArray(cached)&&cached.length)return cached.filter(x=>x?.word&&hasKanji(x.word));
+  const pool=[];
+  const add=(item)=>{if(item?.word&&hasKanji(item.word))pool.push(item)};
+  const local=localMeaningCandidates(query);
+  local.filter(x=>x.kind==='vocab').forEach(add);
   const ja=clean(await translate(query,'id','ja'));
-  if(ja&&hasKanji(ja)){const hit={word:ja,source:'terjemahan Indonesia → Jepang'};cacheSet(key,hit);return hit}
-  if(local?.word){const hit={word:local.word,source:local.source};cacheSet(key,hit);return hit}
+  if(ja&&hasKanji(ja))add({word:ja,id:query,score:116,source:'terjemahan Indonesia → Jepang'});
   const en=clean(await translate(query,'id','en'));
-  if(en){const hit=await getJotobaKanjiFromMeaning(en);if(hit){cacheSet(key,hit);return hit}}
-  return null;
+  if(en){const remote=await getJotobaMeaningCandidates(en);remote.forEach(add)}
+  if(!pool.length)local.filter(x=>x.kind==='kanji').forEach(add);
+  if(!pool.length&&ja&&hasKanji(ja))add({word:ja,id:query,score:116,source:'terjemahan Indonesia → Jepang'});
+  const byWord=new Map();
+  for(const item of pool){const prev=byWord.get(item.word);if(!prev||item.score>prev.score)byWord.set(item.word,item)}
+  let items=[...byWord.values()].sort((a,b)=>b.score-a.score);
+  if(items.length){const best=items[0].score;items=items.filter(x=>x.score>=Math.max(70,best-28)).slice(0,8)}
+  cacheSet(key,items);return items;
 }
-async function resolveKanaToKanji(query){
-  try{
-    const d=await fetchJSON('https://jotoba.de/api/search/words',4200,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({query,language:'English',no_english:false})});
-    const words=Array.isArray(d?.words)?d.words:[];
-    const exact=words.find(x=>clean(x?.reading?.kana||'')===query&&hasKanji(clean(x?.reading?.kanji||'')));
-    const entry=exact||words.find(x=>hasKanji(clean(x?.reading?.kanji||'')));
-    if(entry)return{word:clean(entry.reading.kanji),source:'pencarian bacaan Jepang'};
-  }catch(e){}
-  return null;
+async function hydrateMeaningCandidates(items,query){
+  return Promise.all(items.map(async x=>{
+    const local=vocabLocal[x.word]||kanjiLocal[x.word]||{};
+    let reading=clean(x.reading||local.reading||'');
+    let id=clean(x.id||local.id||'');
+    let en=clean(x.en||'');
+    if((!reading||!id)&&(!en||!reading)){
+      const dict=await getJotobaWord(x.word);
+      if(dict){reading=reading||clean(dict.reading||'');en=en||clean(dict.en||'')}
+    }
+    if(!id&&en){
+      const tr=await translate(en,'en','id');
+      if(tr&&!containsJapanese(tr))id=clean(tr);
+      if(!id){const gloss=localGloss(en);if(gloss&&gloss!==en)id=clean(gloss)}
+    }
+    if(!id){
+      const direct=await translate(x.word,'ja','id');
+      if(direct&&!containsJapanese(direct))id=clean(direct);
+    }
+    return {...x,reading:reading||'—',id:id||query||'arti belum ditemukan'};
+  }));
+}
+let lastMeaningChoiceQuery='',lastMeaningChoiceItems=[],pendingChoiceMode='meaning';
+function hideMeaningChoices(){meaningChoices?.classList.remove('show');if(meaningChoiceList)meaningChoiceList.innerHTML=''}
+function hideCandidateBack(){if(candidateBackWrap)candidateBackWrap.hidden=true}
+function showCandidateBack(){if(candidateBackWrap)candidateBackWrap.hidden=false}
+function renderMeaningChoices(query,items,{mode='meaning'}={}){
+  pendingChoiceMode=mode;lastMeaningChoiceQuery=query;lastMeaningChoiceItems=Array.isArray(items)?items:[];
+  hideCandidateBack();results.classList.remove('show');
+  if(meaningChoicesTitle)meaningChoicesTitle.textContent=mode==='reading'?`Pilihan bacaan untuk “${query}”`:`Pilihan untuk “${query}”`;
+  meaningChoiceList.innerHTML=items.map((x,i)=>`<button class="meaningChoice" type="button" data-meaning-choice="${i}" data-word="${esc(x.word)}"><span class="meaningChoiceWord">${esc(x.word)}</span><span class="meaningChoiceReading">${esc(x.reading||'—')}</span><span class="meaningChoiceMeaning">${esc(x.id||query)}</span></button>`).join('');
+  meaningChoices.classList.add('show');fitPage();
+}
+
+function isKanaText(s){return /^[\u3040-\u30ffー・\s]+$/.test(String(s||''))&&/[\u3040-\u30ff]/.test(String(s||''))}
+function kataToHira(s){return [...String(s||'')].map(ch=>{const c=ch.charCodeAt(0);return c>=0x30A1&&c<=0x30F6?String.fromCharCode(c-0x60):ch}).join('')}
+function normalizeKana(s){return kataToHira(String(s||'').normalize('NFKC')).replace(/[\s・]/g,'').trim()}
+function normalizeRomaji(s){return String(s||'').normalize('NFKC').toLowerCase().replace(/[āáàâä]/g,'aa').replace(/[īíìîï]/g,'ii').replace(/[ūúùûü]/g,'uu').replace(/[ēéèêë]/g,'ee').replace(/[ōóòôö]/g,'ou').replace(/[^a-z'\-\s]/g,'').replace(/[\s\-]+/g,'').trim()}
+function romajiToHiragana(value){
+  let r=normalizeRomaji(value);if(!r)return'';
+  const map={
+    kya:'きゃ',kyu:'きゅ',kyo:'きょ',gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',sha:'しゃ',shu:'しゅ',sho:'しょ',sya:'しゃ',syu:'しゅ',syo:'しょ',
+    ja:'じゃ',ju:'じゅ',jo:'じょ',jya:'じゃ',jyu:'じゅ',jyo:'じょ',cha:'ちゃ',chu:'ちゅ',cho:'ちょ',cya:'ちゃ',cyu:'ちゅ',cyo:'ちょ',
+    nya:'にゃ',nyu:'にゅ',nyo:'にょ',hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ',bya:'びゃ',byu:'びゅ',byo:'びょ',pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ',
+    mya:'みゃ',myu:'みゅ',myo:'みょ',rya:'りゃ',ryu:'りゅ',ryo:'りょ',dya:'ぢゃ',dyu:'ぢゅ',dyo:'ぢょ',
+    shi:'し',chi:'ち',tsu:'つ',dzu:'づ',dji:'ぢ',
+    fa:'ふぁ',fi:'ふぃ',fe:'ふぇ',fo:'ふぉ',fyu:'ふゅ',va:'ゔぁ',vi:'ゔぃ',vu:'ゔ',ve:'ゔぇ',vo:'ゔぉ',
+    ti:'てぃ',tu:'とぅ',di:'でぃ',du:'どぅ',she:'しぇ',je:'じぇ',che:'ちぇ',tsa:'つぁ',tsi:'つぃ',tse:'つぇ',tso:'つぉ',
+    ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',
+    sa:'さ',si:'し',su:'す',se:'せ',so:'そ',za:'ざ',zi:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',
+    ta:'た',te:'て',to:'と',da:'だ',de:'で',do:'ど',ji:'じ',
+    na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',ha:'は',hi:'ひ',fu:'ふ',hu:'ふ',he:'へ',ho:'ほ',
+    ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',
+    ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',ya:'や',yu:'ゆ',yo:'よ',ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',
+    wa:'わ',wo:'を',wi:'うぃ',we:'うぇ',
+    a:'あ',i:'い',u:'う',e:'え',o:'お'
+  };
+  let out='',i=0;
+  while(i<r.length){
+    if(r[i]==="'"){i++;continue}
+    if(i+1<r.length&&r[i]===r[i+1]&&/[bcdfghjklmpqrstvwxyz]/.test(r[i])&&r[i]!=='n'){out+='っ';i++;continue}
+    if(r[i]==='n'){
+      const next=r[i+1]||'';
+      if(!next){out+='ん';i++;continue}
+      if(next==="'"){out+='ん';i+=2;continue}
+      if(next==='n'){out+='ん';i++;continue}
+      if(!/[aiueoy]/.test(next)){out+='ん';i++;continue}
+    }
+    let hit='';
+    for(const len of [4,3,2,1]){const part=r.slice(i,i+len);if(map[part]){hit=part;break}}
+    if(hit){out+=map[hit];i+=hit.length}else{i++}
+  }
+  return out;
+}
+function readingEntryGlosses(entry){
+  const glosses=[];
+  for(const sense of (entry?.senses||[]).slice(0,4))for(const g of (sense?.glosses||[])){
+    const t=typeof g==='string'?g:(g?.gloss||g?.text||g?.value||'');if(t&&!glosses.includes(t))glosses.push(t);
+  }
+  return glosses.slice(0,5);
+}
+async function resolveReadingCandidates(query,{romaji=false}={}){
+  const original=clean(query),converted=romaji?romajiToHiragana(original):normalizeKana(original);
+  if(!converted)return[];
+  const cacheKey=`reading-candidates:${romaji?'romaji':'kana'}:${converted}`;
+  const cached=cacheGet(cacheKey);if(Array.isArray(cached)&&cached.length)return cached;
+  const variants=[converted];
+  if(!romaji&&original!==converted)variants.unshift(original);
+  const pool=[];
+  for(const q of [...new Set(variants)]){
+    try{
+      const d=await fetchJSON('https://jotoba.de/api/search/words',4400,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({query:q,language:'English',no_english:false})});
+      const words=Array.isArray(d?.words)?d.words:[];
+      words.slice(0,24).forEach((entry,index)=>{
+        const reading=clean(entry?.reading?.kana||'');
+        const word=clean(entry?.reading?.kanji||reading);if(!word||!containsJapanese(word))return;
+        const normalizedReading=normalizeKana(reading||word);
+        let score=88-Math.min(index,12);
+        if(normalizedReading===converted)score=145-index*.1;
+        else if(normalizedReading.startsWith(converted))score=118-index*.1;
+        else if(normalizedReading.includes(converted))score=102-index*.1;
+        const glosses=readingEntryGlosses(entry);
+        pool.push({word,reading,en:glosses.join(', '),score,source:romaji?'pencarian romaji':'pencarian kana Jepang'});
+      });
+    }catch(e){}
+  }
+  const byWord=new Map();
+  for(const item of pool){const prev=byWord.get(item.word);if(!prev||item.score>prev.score)byWord.set(item.word,item)}
+  let items=[...byWord.values()].sort((a,b)=>b.score-a.score);
+  if(items.length){const best=items[0].score;items=items.filter(x=>x.score>=Math.max(86,best-34)).slice(0,8)}
+  cacheSet(cacheKey,items);return items;
 }
 function showWord(data){if(!data)return;$('#readingOut').textContent=data.reading||$('#readingOut').textContent||'bacaan sedang dicari…';$('#meaningOut').textContent=data.id||'arti belum ditemukan';$('#meaningOut').classList.remove('loadingText');$('#sourceOut').textContent=data.source||'kamus';const w=$('#wordOut').textContent;if(w&&exampleLocal[w])renderExamples(w,exampleLocal[w])}
 function highlightExact(text,target){
@@ -948,6 +1220,7 @@ async function enrichKanji(k){const cached=cacheGet('kanji:'+k);if(cached)return
 
 function setKanjiGrid(count){
   const list=$('#charList');if(!list)return;
+  if(!count||count<1){list.style.gridTemplateColumns='1fr';return}
   const w=window.innerWidth;
   let cols=1;
   if(w>=1180){
@@ -986,13 +1259,17 @@ function updateHomeShift(){
   const paddingTop=parseFloat(wrapStyle.paddingTop)||0;
   const topMarginBottom=parseFloat(topStyle.marginBottom)||0;
   const groupHeight=top.offsetHeight+topMarginBottom+searchCard.offsetHeight;
-  const shift=Math.max(0,(window.innerHeight-groupHeight)/2-paddingTop);
+  const centered=(window.innerHeight-groupHeight)/2-paddingTop;
+  const upwardOffset=Math.min(165,Math.max(80,window.innerHeight*.14));
+  const shift=Math.max(4,centered-upwardOffset);
   wrap.style.setProperty('--home-shift',`${Math.round(shift)}px`);
 }
 function setHomeCentered(centered){
   document.body.classList.toggle('home-centered',!!centered);
   if(centered){
     results.classList.remove('show');
+    hideMeaningChoices();
+    hideCandidateBack();
     statusBox.classList.remove('show');
     errorBox.classList.remove('show');
     requestAnimationFrame(updateHomeShift);
@@ -1005,53 +1282,136 @@ let lastResolvedSearchWord='';
 window.addEventListener('resize',()=>{const gridWord=results.classList.contains('show')&&lastResolvedSearchWord?lastResolvedSearchWord:input.value.trim();setKanjiGrid(kanjiChars(gridWord).length||1);updateHomeShift();fitPage()});
 window.addEventListener('load',()=>{const w=document.querySelector('.wrap');if(w)fitObserver.observe(w,{subtree:true,childList:true,characterData:true});updateHomeShift();fitPage()});
 
-async function searchWord(){
-  errorBox.classList.remove('show');const raw=input.value.trim();
-  if(!raw){errorBox.textContent='Ketik kanji, kosakata Jepang, atau arti dalam Bahasa Indonesia.';errorBox.classList.add('show');return}
-  setHomeCentered(false);goBtn.disabled=true;statusBox.classList.add('show');statusBox.textContent='Mencari arti...';
-  let word=raw,reverseQuery='';
-  if(!hasKanji(raw)){
-    statusBox.textContent=containsJapanese(raw)?'Mencari bentuk kanji dari bacaan Jepang...':'Menerjemahkan arti ke kanji Jepang...';
-    const resolved=containsJapanese(raw)?await resolveKanaToKanji(raw):await resolveMeaningToKanji(raw);
-    if(!resolved?.word||!hasKanji(resolved.word)){
-      statusBox.classList.remove('show');goBtn.disabled=false;
-      errorBox.textContent=containsJapanese(raw)?'Bentuk kanji untuk bacaan tersebut belum ditemukan.':'Kanji untuk arti tersebut belum ditemukan. Coba kata yang lebih spesifik, misalnya sekolah, gunung, cinta, atau rumah sakit.';
-      errorBox.classList.add('show');fitPage();return;
-    }
-    word=resolved.word;reverseQuery=containsJapanese(raw)?'':raw;
-  }
-  lastResolvedSearchWord=word;results.classList.add('show');
-  $('#wordOut').textContent=word;$('#readingOut').textContent='bacaan sedang dicari…';$('#sourceOut').textContent=reverseQuery?'Indonesia → Jepang':'mencari…';$('#meaningOut').textContent=reverseQuery?raw:'mencari arti…';$('#meaningOut').classList.toggle('loadingText',!reverseQuery);$('#exampleList').innerHTML='<div class="exampleLoading">Mencari contoh kalimat…</div>';setTimeout(()=>loadExamples(word),80);
-  const chars=kanjiChars(word);const charList=$('#charList');charList.innerHTML=chars.map((k,i)=>renderChar(initialKanji(k),i)).join('');setKanjiGrid(chars.length);fitPage();
+async function displayWordDetails(word,{reverseQuery='',sourceHint='',fromChoices=false}={}){
+  hideMeaningChoices();if(fromChoices)showCandidateBack();else hideCandidateBack();lastResolvedSearchWord=word;results.classList.add('show');
+  $('#wordOut').textContent=word;$('#readingOut').textContent='bacaan sedang dicari…';$('#sourceOut').textContent=sourceHint||(reverseQuery?'Indonesia → Jepang':'mencari…');$('#meaningOut').textContent=reverseQuery?reverseQuery:'mencari arti…';$('#meaningOut').classList.toggle('loadingText',!reverseQuery);$('#exampleList').innerHTML='<div class="exampleLoading">Mencari contoh kalimat…</div>';setTimeout(()=>loadExamples(word),80);
+  const chars=kanjiChars(word);const charList=$('#charList');
+  if(chars.length)charList.innerHTML=chars.map((k,i)=>renderChar(initialKanji(k),i)).join('');
+  else charList.innerHTML='<div class="emptyState">Kosakata ini tidak menggunakan kanji. Arti dan cara bacanya tetap ditampilkan di bagian atas.</div>';
+  setKanjiGrid(chars.length);fitPage();
   const local=vocabLocal[word];
-  if(local)showWord({reading:local.reading,id:local.id,source:reverseQuery?'Indonesia → Jepang · kamus lokal':'kamus lokal terkurasi'});
+  if(local)showWord({reading:local.reading,id:local.id,source:sourceHint||(reverseQuery?'Indonesia → Jepang · kamus lokal':'kamus lokal terkurasi')});
   else{
-    const cached=cacheGet('word:'+word);if(cached)showWord(cached);
-    const directP=getDirectWord(word).then(d=>{if(d)showWord({...d,source:reverseQuery?'Indonesia → Jepang · '+d.source:d.source});return d});
-    const dictP=getDictionaryWord(word).then(d=>{if(d)showWord({...d,source:reverseQuery?'Indonesia → Jepang · '+d.source:d.source});return d});
-    Promise.allSettled([directP,dictP]).then(()=>{if($('#meaningOut').classList.contains('loadingText')){$('#meaningOut').textContent='arti kata belum ditemukan';$('#meaningOut').classList.remove('loadingText');$('#sourceOut').textContent='fallback'}});
+    const cached=cacheGet('word:'+word);if(cached)showWord({...cached,source:sourceHint||cached.source});
+    const directP=getDirectWord(word).then(d=>{if(d)showWord({...d,source:sourceHint||(reverseQuery?'Indonesia → Jepang · '+d.source:d.source)});return d});
+    const dictP=getDictionaryWord(word).then(d=>{if(d)showWord({...d,source:sourceHint||(reverseQuery?'Indonesia → Jepang · '+d.source:d.source)});return d});
+    Promise.allSettled([directP,dictP]).then(()=>{if($('#meaningOut').classList.contains('loadingText')){$('#meaningOut').textContent='arti kata belum ditemukan';$('#meaningOut').classList.remove('loadingText');$('#sourceOut').textContent=sourceHint||'fallback'}});
   }
   chars.forEach((k,i)=>{const cached=cacheGet('kanji:'+k);if(cached)updateChar(i,cached);enrichKanji(k).then(d=>updateChar(i,d)).catch(()=>{});setTimeout(()=>loadStrokeAnimation(k,i),120+i*80)});
-  setTimeout(()=>{statusBox.classList.remove('show');goBtn.disabled=false;fitPage()},500);
+}
+
+let pendingMeaningQuery='';
+async function searchWord(){
+  errorBox.classList.remove('show');const raw=input.value.trim();
+  if(!raw){errorBox.textContent='Ketik kanji, romaji, hiragana, katakana, atau arti dalam Bahasa Indonesia.';errorBox.classList.add('show');return}
+  setHomeCentered(false);hideMeaningChoices();hideCandidateBack();results.classList.remove('show');goBtn.disabled=true;statusBox.classList.add('show');statusBox.textContent='Mencari arti...';
+  if(hasKanji(raw)){
+    pendingMeaningQuery='';pendingChoiceMode='meaning';await displayWordDetails(raw);statusBox.classList.remove('show');goBtn.disabled=false;fitPage();return;
+  }
+  if(isKanaText(raw)){
+    statusBox.textContent='Mencari kosakata dari hiragana / katakana...';
+    const candidates=await resolveReadingCandidates(raw,{romaji:false});
+    if(!candidates.length){
+      statusBox.classList.remove('show');goBtn.disabled=false;errorBox.textContent='Kosakata untuk bacaan hiragana / katakana tersebut belum ditemukan.';errorBox.classList.add('show');fitPage();return;
+    }
+    pendingMeaningQuery=raw;pendingChoiceMode='reading';
+    const detailed=await hydrateMeaningCandidates(candidates,raw);
+    if(detailed.length===1){await displayWordDetails(detailed[0].word,{sourceHint:'pencarian hiragana / katakana'});}
+    else renderMeaningChoices(raw,detailed,{mode:'reading'});
+    statusBox.classList.remove('show');goBtn.disabled=false;fitPage();return;
+  }
+  const latinOnly=/^[A-Za-zÀ-ÖØ-öø-ÿ'\-\s]+$/.test(raw);
+  if(latinOnly){
+    statusBox.textContent='Mencari romaji dan arti Indonesia...';
+    const [readingHits,meaningHits]=await Promise.all([resolveReadingCandidates(raw,{romaji:true}),resolveMeaningCandidates(raw)]);
+    const strongMeaning=meaningHits.some(x=>Number(x.score||0)>=122);
+    let mode='meaning',pool=[];
+    if(readingHits.length&&!meaningHits.length){mode='reading';pool=readingHits;}
+    else if(!readingHits.length&&meaningHits.length){mode='meaning';pool=meaningHits;}
+    else if(readingHits.length&&meaningHits.length){
+      if(strongMeaning){mode='meaning';pool=meaningHits;}
+      else{
+        mode='reading';
+        const combined=[...readingHits,...meaningHits.map(x=>({...x,source:x.source||'arti Bahasa Indonesia'}))];
+        const byWord=new Map();for(const x of combined){const p=byWord.get(x.word);if(!p||Number(x.score||0)>Number(p.score||0))byWord.set(x.word,x)}
+        pool=[...byWord.values()].sort((a,b)=>Number(b.score||0)-Number(a.score||0)).slice(0,8);
+      }
+    }
+    if(!pool.length){
+      statusBox.classList.remove('show');goBtn.disabled=false;errorBox.textContent='Kosakata Jepang atau arti tersebut belum ditemukan. Coba ejaan romaji lain atau kata Indonesia yang lebih spesifik.';errorBox.classList.add('show');fitPage();return;
+    }
+    pendingMeaningQuery=raw;pendingChoiceMode=mode;
+    statusBox.textContent='Menyiapkan cara baca dan arti...';
+    const detailed=await hydrateMeaningCandidates(pool,raw);
+    if(detailed.length===1){
+      const hit=detailed[0];
+      if(mode==='reading')await displayWordDetails(hit.word,{sourceHint:'pencarian romaji'});
+      else await displayWordDetails(hit.word,{reverseQuery:raw,sourceHint:hit.source||'Indonesia → Jepang'});
+    }else renderMeaningChoices(raw,detailed,{mode});
+    statusBox.classList.remove('show');goBtn.disabled=false;fitPage();return;
+  }
+  statusBox.classList.remove('show');goBtn.disabled=false;errorBox.textContent='Format pencarian belum dikenali. Gunakan kanji, romaji, hiragana, katakana, atau Bahasa Indonesia.';errorBox.classList.add('show');fitPage();
 }
 
 
 /* ===== V22 APP PAGES, SRS, JLPT ===== */
 let activePage='searchPage';
 const navButtons=[...document.querySelectorAll('.navBtn')];
+let pageSwitching=false;
+const PAGE_EXIT_MS=150;
+const PAGE_ENTER_MS=340;
 function switchPage(id){
-  activePage=id;
-  document.querySelectorAll('.appPage').forEach(p=>p.classList.toggle('active',p.id===id));
-  navButtons.forEach(b=>b.classList.toggle('active',b.dataset.page===id));
-  document.querySelector('.wrap').style.zoom='1';
-  if(id==='searchPage'){
-    setHomeCentered(true);
-    fitPage();
+  const current=document.getElementById(activePage);
+  const target=document.getElementById(id);
+  if(!target)return;
+
+  /* Klik tab yang sama tetap mempertahankan perilaku khusus halaman Cari. */
+  if(id===activePage){
+    if(id==='searchPage'){
+      setHomeCentered(true);
+      fitPage();
+    }else{
+      setHomeCentered(false);
+      if(id==='srsPage')renderSRS();
+      if(id==='jlptPage')initJLPT();
+    }
     return;
   }
-  setHomeCentered(false);
-  if(id==='srsPage')renderSRS();
-  if(id==='jlptPage')initJLPT();
+  if(pageSwitching)return;
+  pageSwitching=true;
+
+  /* Saat meninggalkan landing Cari, header ikut bergerak ke workspace sambil fade-out. */
+  if(id!=='searchPage')setHomeCentered(false);
+  if(current)current.classList.add('pageLeaving');
+
+  setTimeout(()=>{
+    if(current)current.classList.remove('active','pageLeaving','pageEntering');
+
+    activePage=id;
+    navButtons.forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+    document.querySelector('.wrap').style.zoom='1';
+
+    /* Siapkan isi sebelum frame masuk agar tidak terjadi flash konten kosong. */
+    if(id==='srsPage')renderSRS();
+    if(id==='jlptPage')initJLPT();
+
+    target.classList.add('active','pageEntering');
+
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        target.classList.remove('pageEntering');
+        if(id==='searchPage')setHomeCentered(true);
+        else setHomeCentered(false);
+        fitPage();
+      });
+    });
+
+    setTimeout(()=>{
+      target.classList.remove('pageEntering');
+      pageSwitching=false;
+      fitPage();
+    },PAGE_ENTER_MS);
+  },PAGE_EXIT_MS);
 }
 navButtons.forEach(b=>b.addEventListener('click',()=>switchPage(b.dataset.page)));
 
@@ -1396,7 +1756,33 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#kanjiDetailMod
 async function initJLPT(){if(!jlptData){$('#jlptDataStatus').textContent='Memuat dataset…';$('#jlptGrid').innerHTML='<div class="emptyState">Memuat folder JLPT…</div>';await loadJLPTData()}renderJLPT()}
 
 
-$('#goBtn').addEventListener('click',searchWord);input.addEventListener('keydown',e=>{if(e.key==='Enter')searchWord()});
+meaningChoiceList?.addEventListener('click',async e=>{
+  const btn=e.target.closest('[data-meaning-choice]');if(!btn)return;
+  const word=btn.dataset.word;if(!word)return;
+  const query=pendingMeaningQuery||input.value.trim();
+  statusBox.classList.add('show');statusBox.textContent='Membuka detail kosakata...';
+  if(pendingChoiceMode==='reading')await displayWordDetails(word,{sourceHint:'pilihan berdasarkan bacaan Jepang',fromChoices:true});
+  else await displayWordDetails(word,{reverseQuery:query,sourceHint:'pilihan terjemahan Indonesia → Jepang',fromChoices:true});
+  statusBox.classList.remove('show');fitPage();
+});
+candidateBackBtn?.addEventListener('click',()=>{
+  if(!lastMeaningChoiceItems.length)return;
+  hideCandidateBack();
+  results.classList.remove('show');
+  renderMeaningChoices(lastMeaningChoiceQuery||pendingMeaningQuery||input.value.trim(),lastMeaningChoiceItems,{mode:pendingChoiceMode});
+  requestAnimationFrame(()=>meaningChoices?.scrollIntoView({behavior:'smooth',block:'start'}));
+  fitPage();
+});
+function updateClearSearchButton(){clearSearchBtn?.classList.toggle('show',!!input.value)}
+clearSearchBtn?.addEventListener('click',()=>{
+  input.value='';pendingMeaningQuery='';pendingChoiceMode='meaning';lastResolvedSearchWord='';lastMeaningChoiceQuery='';lastMeaningChoiceItems=[];
+  results.classList.remove('show');hideMeaningChoices();hideCandidateBack();statusBox.classList.remove('show');errorBox.classList.remove('show');
+  updateClearSearchButton();setHomeCentered(true);input.focus();fitPage();
+});
+$('#goBtn').addEventListener('click',searchWord);
+input.addEventListener('input',updateClearSearchButton);
+input.addEventListener('keydown',e=>{if(e.key==='Enter')searchWord()});
+updateClearSearchButton();
 </script>
 </body>
 </html>
