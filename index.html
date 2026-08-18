@@ -428,7 +428,7 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
 .kanjiDetailTitle{font-size:19px;font-weight:900;color:#141814;line-height:1.2}
 .kanjiDetailSub{font-size:10px;color:#667168;margin-top:3px;white-space:normal;overflow-wrap:anywhere}
 .kanjiDetailActions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex:0 0 auto;margin-left:auto}
-.kanjiDetailJlptBadge{display:inline-flex;align-items:center;justify-content:center;min-width:70px;height:32px;padding:0 11px;border-radius:10px;border:1px solid transparent;font-size:11px;font-weight:900;letter-spacing:.02em;white-space:nowrap;transition:background .18s ease,color .18s ease,border-color .18s ease}
+.kanjiDetailJlptBadge{display:inline-flex;align-items:center;justify-content:center;width:62px;height:62px;min-width:62px;padding:0;border-radius:14px;border:1px solid transparent;font-size:27px;line-height:1;font-weight:900;letter-spacing:-.02em;white-space:nowrap;transition:background .18s ease,color .18s ease,border-color .18s ease;flex:0 0 auto}
 .kanjiDetailJlptBadge.is-loading,.kanjiDetailJlptBadge.is-none{background:#f2f5f3;border-color:#dce4de;color:#6f7a73}
 .kanjiDetailJlptBadge.jlpt-n5{background:#eaf6ed;border-color:#c8e4d0;color:#2f7d4c}
 .kanjiDetailJlptBadge.jlpt-n4{background:#eaf3fb;border-color:#c9def1;color:#326fa7}
@@ -466,7 +466,7 @@ body.kanji-detail-open{overflow:hidden!important}
 @media(max-width:760px){
  .kanjiDetailModal{padding:8px}.kanjiDetailDialog{width:98vw;height:94vh;padding:11px;border-radius:16px}
  .kanjiDetailHeroChar{width:50px;height:50px;font-size:37px}.kanjiDetailTitle{font-size:16px}
- .kanjiDetailHead{gap:8px}.kanjiDetailHeadText{gap:9px}.kanjiDetailActions{gap:6px}.kanjiDetailJlptBadge{min-width:60px;height:29px;padding:0 8px;font-size:10px}.kanjiDetailClose{width:32px;height:32px;min-width:32px;min-height:32px}
+ .kanjiDetailHead{gap:8px}.kanjiDetailHeadText{gap:9px}.kanjiDetailActions{gap:6px}.kanjiDetailJlptBadge{width:50px;height:50px;min-width:50px;font-size:22px;border-radius:12px}.kanjiDetailClose{width:32px;height:32px;min-width:32px;min-height:32px}
  .kanjiDetailBody{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);gap:9px;overflow:auto}
  .kanjiDetailLeft{display:grid;grid-template-columns:minmax(0,1fr) 130px;gap:8px;padding:10px}
  .detailMeaningBlock,.detailMetaGrid{grid-column:1}.detailStrokeWrap{grid-column:2;grid-row:1/3;border-top:0;border-left:1px dashed #dce5de;padding:0 0 0 8px}
@@ -930,7 +930,7 @@ body.home-centered .meaningChoices{display:none!important}
         <div class="kanjiDetailHeadCopy"><div class="kanjiDetailTitle" id="kanjiDetailTitle">Detail Kanji</div><div class="kanjiDetailSub" id="kanjiDetailSub">Data dimuat langsung dari internet.</div></div>
       </div>
       <div class="kanjiDetailActions">
-        <div class="kanjiDetailJlptBadge is-loading" id="kanjiDetailJlpt" aria-label="Level JLPT">JLPT …</div>
+        <div class="kanjiDetailJlptBadge is-loading" id="kanjiDetailJlpt" aria-label="Level JLPT">…</div>
         <button class="kanjiDetailClose" id="kanjiDetailClose" type="button" aria-label="Tutup" title="Tutup">×</button>
       </div>
     </div>
@@ -1893,7 +1893,7 @@ async function openKanjiDetail(k){
   $('#kanjiDetailChar').textContent=k;$('#kanjiDetailTitle').textContent=`Detail ${k}`;$('#kanjiDetailSub').textContent='Memuat data langsung dari internet…';
   $('#kanjiDetailMeaning').textContent='Memuat…';$('#kanjiDetailOn').textContent='…';$('#kanjiDetailKun').textContent='…';$('#kanjiDetailBushuu').textContent='…';$('#kanjiDetailStrokes').textContent='…';
   const detailJlpt=$('#kanjiDetailJlpt');
-  detailJlpt.className='kanjiDetailJlptBadge is-loading';detailJlpt.textContent='JLPT …';
+  detailJlpt.className='kanjiDetailJlptBadge is-loading';detailJlpt.textContent='…';
   $('#kanjiFamilyGrid').innerHTML='<div class="familyLoading">Memuat kata keluarga dari internet…</div>';
   loadDetailStroke(k);loadFamilyWords(k);
   getKanjiBushuu(k).then(b=>{if($('#kanjiDetailChar').textContent===k)$('#kanjiDetailBushuu').textContent=b||'–'}).catch(()=>{if($('#kanjiDetailChar').textContent===k)$('#kanjiDetailBushuu').textContent='–'});
@@ -1908,15 +1908,15 @@ async function openKanjiDetail(k){
     const jlptLevel=Number(d?.jlpt);
     if(jlptLevel>=1&&jlptLevel<=5){
       detailJlpt.className=`kanjiDetailJlptBadge jlpt-n${jlptLevel}`;
-      detailJlpt.textContent=`JLPT N${jlptLevel}`;
+      detailJlpt.textContent=`N${jlptLevel}`;
     }else{
       detailJlpt.className='kanjiDetailJlptBadge is-none';
-      detailJlpt.textContent='JLPT –';
+      detailJlpt.textContent='–';
     }
     $('#kanjiDetailSub').textContent='Data karakter: KanjiAPI · kata keluarga: JMdict melalui KanjiAPI';
     if(en){const tr=await translate(en,'en','id');if($('#kanjiDetailChar').textContent===k&&tr)$('#kanjiDetailMeaning').textContent=tr}
   }catch(e){
-    detailJlpt.className='kanjiDetailJlptBadge is-none';detailJlpt.textContent='JLPT –';
+    detailJlpt.className='kanjiDetailJlptBadge is-none';detailJlpt.textContent='–';
     $('#kanjiDetailMeaning').textContent='Detail kanji tidak dapat dimuat.';$('#kanjiDetailSub').textContent='Periksa koneksi internet lalu coba lagi.';
   }
   $('#kanjiDetailClose')?.focus();
