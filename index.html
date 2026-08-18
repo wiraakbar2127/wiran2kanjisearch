@@ -422,10 +422,19 @@ button{font-size:12.5px;min-height:38px;padding:0 18px}
 .kanjiDetailBackdrop{position:absolute;inset:0;background:rgba(18,28,21,.42);backdrop-filter:blur(4px)}
 .kanjiDetailDialog{position:relative;width:min(1060px,96vw);height:min(720px,92vh);background:#f9fcfa;border:1px solid #cfddd2;border-radius:20px;box-shadow:0 24px 70px rgba(20,45,28,.18);padding:16px;display:flex;flex-direction:column;overflow:hidden}
 .kanjiDetailHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex:0 0 auto}
-.kanjiDetailHeadText{display:flex;align-items:center;gap:12px;min-width:0}
+.kanjiDetailHeadText{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.kanjiDetailHeadCopy{min-width:0;flex:1}
 .kanjiDetailHeroChar{width:62px;height:62px;border-radius:14px;background:#eaf5ec;border:1px solid #cfe1d3;display:grid;place-items:center;font:700 45px/1 "Yu Mincho","Noto Serif JP",serif;color:#111;flex:0 0 auto}
 .kanjiDetailTitle{font-size:19px;font-weight:900;color:#141814;line-height:1.2}
-.kanjiDetailSub{font-size:10px;color:#667168;margin-top:3px}
+.kanjiDetailSub{font-size:10px;color:#667168;margin-top:3px;white-space:normal;overflow-wrap:anywhere}
+.kanjiDetailActions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex:0 0 auto;margin-left:auto}
+.kanjiDetailJlptBadge{display:inline-flex;align-items:center;justify-content:center;min-width:70px;height:32px;padding:0 11px;border-radius:10px;border:1px solid transparent;font-size:11px;font-weight:900;letter-spacing:.02em;white-space:nowrap;transition:background .18s ease,color .18s ease,border-color .18s ease}
+.kanjiDetailJlptBadge.is-loading,.kanjiDetailJlptBadge.is-none{background:#f2f5f3;border-color:#dce4de;color:#6f7a73}
+.kanjiDetailJlptBadge.jlpt-n5{background:#eaf6ed;border-color:#c8e4d0;color:#2f7d4c}
+.kanjiDetailJlptBadge.jlpt-n4{background:#eaf3fb;border-color:#c9def1;color:#326fa7}
+.kanjiDetailJlptBadge.jlpt-n3{background:#fff6df;border-color:#ecd9a5;color:#96680f}
+.kanjiDetailJlptBadge.jlpt-n2{background:#fff0e7;border-color:#f0cdb8;color:#b45420}
+.kanjiDetailJlptBadge.jlpt-n1{background:#fdecef;border-color:#efc7cd;color:#a43b47}
 .kanjiDetailClose{width:36px;height:36px;min-width:36px;min-height:36px;padding:0;border-radius:10px;background:#fff;color:#263029;border:1px solid #d8e2da;display:grid;place-items:center;font-size:23px;line-height:1;box-shadow:none}
 .kanjiDetailBody{display:grid;grid-template-columns:minmax(320px,.8fr) minmax(0,1.35fr);gap:14px;flex:1;min-height:0}
 .kanjiDetailLeft,.kanjiFamilyPanel{background:#fff;border:1px solid #dce7de;border-radius:16px;padding:14px;min-height:0}
@@ -457,6 +466,7 @@ body.kanji-detail-open{overflow:hidden!important}
 @media(max-width:760px){
  .kanjiDetailModal{padding:8px}.kanjiDetailDialog{width:98vw;height:94vh;padding:11px;border-radius:16px}
  .kanjiDetailHeroChar{width:50px;height:50px;font-size:37px}.kanjiDetailTitle{font-size:16px}
+ .kanjiDetailHead{gap:8px}.kanjiDetailHeadText{gap:9px}.kanjiDetailActions{gap:6px}.kanjiDetailJlptBadge{min-width:60px;height:29px;padding:0 8px;font-size:10px}.kanjiDetailClose{width:32px;height:32px;min-width:32px;min-height:32px}
  .kanjiDetailBody{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);gap:9px;overflow:auto}
  .kanjiDetailLeft{display:grid;grid-template-columns:minmax(0,1fr) 130px;gap:8px;padding:10px}
  .detailMeaningBlock,.detailMetaGrid{grid-column:1}.detailStrokeWrap{grid-column:2;grid-row:1/3;border-top:0;border-left:1px dashed #dce5de;padding:0 0 0 8px}
@@ -917,9 +927,12 @@ body.home-centered .meaningChoices{display:none!important}
     <div class="kanjiDetailHead">
       <div class="kanjiDetailHeadText">
         <div class="kanjiDetailHeroChar" id="kanjiDetailChar">漢</div>
-        <div><div class="kanjiDetailTitle" id="kanjiDetailTitle">Detail Kanji</div><div class="kanjiDetailSub" id="kanjiDetailSub">Data dimuat langsung dari internet.</div></div>
+        <div class="kanjiDetailHeadCopy"><div class="kanjiDetailTitle" id="kanjiDetailTitle">Detail Kanji</div><div class="kanjiDetailSub" id="kanjiDetailSub">Data dimuat langsung dari internet.</div></div>
       </div>
-      <button class="kanjiDetailClose" id="kanjiDetailClose" type="button" aria-label="Tutup" title="Tutup">×</button>
+      <div class="kanjiDetailActions">
+        <div class="kanjiDetailJlptBadge is-loading" id="kanjiDetailJlpt" aria-label="Level JLPT">JLPT …</div>
+        <button class="kanjiDetailClose" id="kanjiDetailClose" type="button" aria-label="Tutup" title="Tutup">×</button>
+      </div>
     </div>
     <div class="kanjiDetailBody">
       <section class="kanjiDetailLeft">
@@ -927,8 +940,8 @@ body.home-centered .meaningChoices{display:none!important}
         <div class="detailMetaGrid">
           <div class="detailMetaBox"><div class="detailMetaKey">On’yomi</div><div class="detailMetaValue" id="kanjiDetailOn">…</div></div>
           <div class="detailMetaBox"><div class="detailMetaKey">Kun’yomi</div><div class="detailMetaValue" id="kanjiDetailKun">…</div></div>
+          <div class="detailMetaBox"><div class="detailMetaKey">Bushuu</div><div class="detailMetaValue" id="kanjiDetailBushuu">…</div></div>
           <div class="detailMetaBox"><div class="detailMetaKey">Jumlah stroke</div><div class="detailMetaValue" id="kanjiDetailStrokes">…</div></div>
-          <div class="detailMetaBox"><div class="detailMetaKey">JLPT</div><div class="detailMetaValue" id="kanjiDetailJlpt">…</div></div>
         </div>
         <div class="detailStrokeWrap"><div class="detailStrokeTitle">Cara penulisan</div><div class="detailStrokeViewer" id="kanjiDetailStroke"><div class="detailStrokeStatus">Memuat urutan stroke…</div></div></div>
       </section>
@@ -1767,6 +1780,11 @@ function jlptMatchesSearch(entry){
 }
 function jlptFilteredEntries(level){return jlptEntries(level).filter(jlptMatchesSearch)}
 async function localizeJLPTCard(k,en){const el=document.querySelector(`[data-jlpt-meaning="${CSS.escape(k)}"]`);if(!el)return;const tr=await translate(en,'en','id');if(!el)return;el.textContent=tr||en||'arti tidak tersedia'}
+async function localizeJLPTBushuu(k){
+  const bushuu=await getKanjiBushuu(k);
+  const el=document.querySelector(`[data-jlpt-bushuu="${CSS.escape(k)}"]`);
+  if(el)el.textContent=bushuu||'–';
+}
 function renderJLPTFolders(){const counts={};for(let l=1;l<=5;l++)counts[l]=jlptEntries(l).length;$('#jlptFolders').innerHTML=[5,4,3,2,1].map(l=>`<div class="jlptFolder ${l===jlptSelected?'active':''}" data-jlpt-level="${l}" role="button" tabindex="0"><div><div class="jlptFolderName">N${l}</div><div class="jlptFolderText">Folder kanji</div></div><div class="jlptFolderCount">${counts[l]||'…'}</div></div>`).join('')}
 function jlptKanjiFromQuery(){
   if(!jlptQuery||!jlptData)return[];
@@ -1873,9 +1891,12 @@ async function openKanjiDetail(k){
   if(!k)return;
   const modal=$('#kanjiDetailModal');modal.hidden=false;document.body.classList.add('kanji-detail-open');
   $('#kanjiDetailChar').textContent=k;$('#kanjiDetailTitle').textContent=`Detail ${k}`;$('#kanjiDetailSub').textContent='Memuat data langsung dari internet…';
-  $('#kanjiDetailMeaning').textContent='Memuat…';$('#kanjiDetailOn').textContent='…';$('#kanjiDetailKun').textContent='…';$('#kanjiDetailStrokes').textContent='…';$('#kanjiDetailJlpt').textContent='…';
+  $('#kanjiDetailMeaning').textContent='Memuat…';$('#kanjiDetailOn').textContent='…';$('#kanjiDetailKun').textContent='…';$('#kanjiDetailBushuu').textContent='…';$('#kanjiDetailStrokes').textContent='…';
+  const detailJlpt=$('#kanjiDetailJlpt');
+  detailJlpt.className='kanjiDetailJlptBadge is-loading';detailJlpt.textContent='JLPT …';
   $('#kanjiFamilyGrid').innerHTML='<div class="familyLoading">Memuat kata keluarga dari internet…</div>';
   loadDetailStroke(k);loadFamilyWords(k);
+  getKanjiBushuu(k).then(b=>{if($('#kanjiDetailChar').textContent===k)$('#kanjiDetailBushuu').textContent=b||'–'}).catch(()=>{if($('#kanjiDetailChar').textContent===k)$('#kanjiDetailBushuu').textContent='–'});
   try{
     const d=await fetchJSON(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(k)}`,7000);
     if($('#kanjiDetailChar').textContent!==k)return;
@@ -1884,10 +1905,18 @@ async function openKanjiDetail(k){
     $('#kanjiDetailOn').textContent=(d?.on_readings||[]).join('・')||'–';
     $('#kanjiDetailKun').textContent=(d?.kun_readings||[]).join('・')||'–';
     $('#kanjiDetailStrokes').textContent=d?.stroke_count??'–';
-    $('#kanjiDetailJlpt').textContent=d?.jlpt?`N${d.jlpt}`:'–';
+    const jlptLevel=Number(d?.jlpt);
+    if(jlptLevel>=1&&jlptLevel<=5){
+      detailJlpt.className=`kanjiDetailJlptBadge jlpt-n${jlptLevel}`;
+      detailJlpt.textContent=`JLPT N${jlptLevel}`;
+    }else{
+      detailJlpt.className='kanjiDetailJlptBadge is-none';
+      detailJlpt.textContent='JLPT –';
+    }
     $('#kanjiDetailSub').textContent='Data karakter: KanjiAPI · kata keluarga: JMdict melalui KanjiAPI';
     if(en){const tr=await translate(en,'en','id');if($('#kanjiDetailChar').textContent===k&&tr)$('#kanjiDetailMeaning').textContent=tr}
   }catch(e){
+    detailJlpt.className='kanjiDetailJlptBadge is-none';detailJlpt.textContent='JLPT –';
     $('#kanjiDetailMeaning').textContent='Detail kanji tidak dapat dimuat.';$('#kanjiDetailSub').textContent='Periksa koneksi internet lalu coba lagi.';
   }
   $('#kanjiDetailClose')?.focus();
